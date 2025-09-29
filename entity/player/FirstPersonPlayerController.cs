@@ -17,6 +17,7 @@ public partial class FirstPersonPlayerController : PlayerController
         set
         {
             _cameraPivot = value;
+            _cameraPivot.SetAsTopLevel(true);
             _cameraOffset = _cameraPivot.GlobalPosition - Entity.GlobalPosition;
             _cameraPivot.OnCameraMoved = () =>
             {
