@@ -4,9 +4,57 @@ using RougeLiteGame.entity.camera;
 namespace RougeLiteGame.entity.player;
 
 [GlobalClass]
-public abstract partial class PlayerController : EntityController
+public partial class PlayerController : EntityController
 {
     
+    private CameraController _cameraController;
+    [Export] private bool _lerpMovement;
+    private Vector3 _cameraOffset;
+    
+    [Export] private CameraController CameraController
+    {
+        get => _cameraController;
+        set
+        {
+            _cameraController = value;
+            _isCameraInitialized = false;
+        }
+    }
+
+    private bool _isCameraInitialized;
+
+    public override void _PhysicsProcess(double delta)
+    {
+        
+        base._PhysicsProcess(delta);
+        // the code below must be executed after the base._PhysicsProcess(delta) as it relies on the Entity's position
+        
+        if (CameraController == null) return;
+
+        if (!_isCameraInitialized)
+        {
+            SetupCameraController();
+        }
+        
+        CameraController.GlobalPosition = Entity.GlobalPosition + _cameraOffset;
+            
+        Vector3 rotation = Entity.Rotation;
+        float yRotation = CameraController.Yaw;
+        if (_lerpMovement)
+        {
+            yRotation = Mathf.LerpAngle(rotation.Y, CameraController.Yaw, 0.1f);
+        }
+        
+        Entity.Rotation = new Vector3(rotation.X, yRotation, rotation.Z);
+    }
+
+    private void SetupCameraController()
+    {
+        _cameraController.SetAsTopLevel(true);
+        _cameraOffset = _cameraController.GlobalPosition - Entity.GlobalPosition;
+        _isCameraInitialized = true;
+    }
+
     protected override Vector3 MovementProcess(double delta)
     {
         float speed = MovementSpeed();
