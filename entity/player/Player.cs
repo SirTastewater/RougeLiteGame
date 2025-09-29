@@ -2,6 +2,5 @@ using Godot;
 
 namespace RougeLiteGame.entity.player;
 
-[GlobalClass] public partial class Player : Entity
-{
-}
+[GlobalClass]
+public partial class Player : Entity;
