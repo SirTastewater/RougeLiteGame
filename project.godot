@@ -11,9 +11,19 @@ config_version=5
 [application]
 
 config/name="RougeLiteGame"
-config/features=PackedStringArray("4.5", "Forward Plus")
+config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[dotnet]
+
+project/assembly_name="RougeLiteGame"
+
+[physics]
+
+2d/physics_engine="Dummy"
+3d/physics_engine="Jolt Physics"
 
 [rendering]
 
-renderer/rendering_method="forward_plus"
+anti_aliasing/quality/msaa_3d=1
+anti_aliasing/quality/use_taa=true
