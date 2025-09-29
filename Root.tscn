@@ -67,7 +67,6 @@ text = "Test"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.408, 0)
 script = ExtResource("3_170dk")
 _mouseInput = true
-metadata/_custom_type_script = "uid://db6kyog3exfvw"
 
 [node name="View" type="Camera3D" parent="Player/CameraController"]
 transform = Transform3D(1, 0, 0, 0, 0.9994537, -0.033050507, 0, 0.033050478, 0.99945366, 0, 0, -0.424)
