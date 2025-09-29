@@ -1,68 +1,37 @@
+using System;
 using Godot;
 using RougeLiteGame.entity.camera;
 
 namespace RougeLiteGame.entity.player;
 
-[GlobalClass] public partial class PlayerController : EntityController
+/// <summary>
+/// The PlayerController class manages player-specific logic for controlling movement.
+/// </summary>
+/// <remarks>
+/// Inherits from <see cref="EntityController"/> to provide movement and state management.
+/// Implements <see cref="ICameraActor"/> to act as a camera attachment point for the camera controller.
+/// </remarks>
+[GlobalClass] public partial class PlayerController : EntityController, ICameraActor
 {
+    #region Constants
+    private const float Tolerance = 0.01f;
+    #endregion
+    
     #region Attribtutes
     private CameraController _cameraController;
-    private Vector3 _cameraOffset;
-    private bool _isCameraInitialized;
+    private Vector3 _relativeCameraPosition ;
+    private bool _computedRelativeCameraPosition;
     #endregion
     
-    #region Camera Settings
     [Export]
-    private CameraController CameraController
+    private CameraController CameraController 
+    { get => _cameraController; set { _cameraController = value;
+        if (IsEntityConnected() && Entity.IsInsideTree()) { InitializeCamera(); }
+    } }
+
+    protected override void EntityReady()
     {
-        get => _cameraController;
-        set
-        {
-            _cameraController = value;
-            _isCameraInitialized = false;
-        }
-    }
-    
-    // this also is a preparation for implementing a third-person camera
-    // Lerping in first person is not a good idea 
-    [Export] private bool _lerpMovement; 
-    #endregion
-
-    /**
-     * Utility method to set up the camera controller.
-     * It will set the camera controller as a top-level node and will
-     * compute the offset between the camera and the entity to correctly move the camera with the entity.
-     *
-     * I've done it this way, because if we decide to also add third-person camera, the entities rotation won't be
-     * attached to the camera.
-     */
-    private void SetupCameraController()
-    {
-        _cameraController.SetAsTopLevel(true);
-        _cameraOffset = _cameraController.GlobalPosition - Entity.GlobalPosition;
-        _isCameraInitialized = true;
-    }
-
-    public override void _PhysicsProcess(double delta)
-    {
-        base._PhysicsProcess(delta);
-        // the code below must be executed after the base._PhysicsProcess(delta) as it relies on the Entity's position
-
-        if (CameraController == null) return;
-
-        // TODO: we might need to move this out the physics process to save that computation 
-        if (!_isCameraInitialized) 
-        {
-            SetupCameraController();
-        }
-        
-        CameraController.GlobalPosition = Entity.GlobalPosition + _cameraOffset;
-
-        Vector3 rotation = Entity.Rotation;
-        float yRotation = CameraController.Yaw;
-        if (_lerpMovement) yRotation = Mathf.LerpAngle(rotation.Y, CameraController.Yaw, 0.1f);
-
-        Entity.Rotation = new Vector3(rotation.X, yRotation, rotation.Z);
+        InitializeCamera();
     }
 
     protected override Vector3 MovementProcess(double delta)
@@ -73,6 +42,7 @@ namespace RougeLiteGame.entity.player;
         if (Input.IsActionJustPressed("jump") && Entity.IsOnFloor()) velocity.Y += JumpVelocity;
         
         Vector2 inputDir = Input.GetVector("left", "right", "forward", "backward");
+        
         Vector3 direction = (Entity.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 
         if (direction != Vector3.Zero)
@@ -97,5 +67,40 @@ namespace RougeLiteGame.entity.player;
     protected override bool IsSprinting()
     {
         return Input.IsActionPressed("sprint");
+    }
+
+    public void CameraProcess(Node3D camera, float yaw, float pitch) // called every frame, be careful adding any code here
+    {
+        camera.GlobalPosition = Entity.GlobalPosition + _relativeCameraPosition;   
+        
+        Vector3 rotation = Entity.Rotation;
+        if(FloatEquals(yaw, rotation.Y) && FloatEquals(pitch, rotation.X)) return;
+        
+        Entity.Rotation = new Vector3(rotation.X, yaw, rotation.Z);
+    }
+
+    private void InitializeCamera()
+    {
+        _cameraController.Actor = this;
+        _relativeCameraPosition = _cameraController.GlobalPosition - Entity.GlobalPosition;
+        _computedRelativeCameraPosition = true;
+    }
+
+    /// <summary>
+    /// Determins whether two floating-point numbers differ by more than a predefined tolerance.
+    /// </summary>
+    /// <param name="a">The first float value to compare.</param>
+    /// <param name="b">The second float value to compare.</param>
+    /// <returns>
+    /// <c>true</c> if the absolute difference between <paramref name="a"/> and <paramref name="b"/> 
+    /// is greater than the allowed <c>Tolerance</c>; otherwise, <c>false</c>.
+    /// </returns>
+    /// <remarks>
+    /// This method is useful for comparing floating-point numbers where exact equality is unreliable 
+    /// due to precision errors.
+    /// </remarks>
+    private static bool FloatEquals(float a, float b)
+    {
+        return Math.Abs(a - b) < Tolerance;
     }
 }

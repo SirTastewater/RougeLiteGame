@@ -27,4 +27,5 @@ shape = SubResource("ConvexPolygonShape3D_sntwv")
 
 [node name="glasses" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42735392, -0.325386)
+layers = 512
 mesh = SubResource("BoxMesh_o3s7f")
