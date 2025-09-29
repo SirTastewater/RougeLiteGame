@@ -1,4 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=8 format=3 uid="uid://b6as4qrovbk6f"]
+
+[ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
+[ext_resource type="Script" uid="uid://jg8lakyxbcw3" path="res://entity/player/PlayerController.cs" id="2_cwqeq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -35,3 +38,15 @@ mesh = SubResource("PlaneMesh_170dk")
 
 [node name="Hitbox" type="CollisionShape3D" parent="Ground/StaticBody"]
 shape = SubResource("ConcavePolygonShape3D_cwqeq")
+
+[node name="Player" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98506665, 0)
+_entityController = NodePath("PlayerController")
+
+[node name="PlayerController" type="NavigationAgent3D" parent="Player" node_paths=PackedStringArray("_viewCamera")]
+script = ExtResource("2_cwqeq")
+_viewCamera = NodePath("")
+metadata/_custom_type_script = "uid://jg8lakyxbcw3"
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.7167889, 0.69729024, 0, -0.69729024, 0.7167889, 0, 3.831522, 4.986125)

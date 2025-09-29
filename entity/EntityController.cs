@@ -5,20 +5,45 @@ namespace RougeLiteGame.entity;
 
 public abstract partial class EntityController : NavigationAgent3D
 {
+    protected enum MoveState
+    {
+        Stand,
+        Walk,
+        Sprint,
+        Fall,
+        Sneak
+    }
+
+    #region Attributes
     protected Entity Entity { get; private set; }
-
     protected MoveState MovementState { get; private set; } = MoveState.Stand;
-
-    [ExportGroup("Essential")] 
+    #endregion
+    #region Editor Gravity Settings
+    [ExportGroup("Gravity")] 
     [Export] protected bool EnableGravity { get; set; } = true;
+
     [Export] private float GravityMultiplier { get; set; } = 1.14f;
-    
-    
+    #endregion Gravity
+    #region Editor Movement Settings
     [ExportGroup("Movement")] 
     [Export] protected float BaseSpeed { get; private set; } = 3f;
-    [Export] protected float JumpVelocity { get; private set; } = 4.5f;
-    [Export] protected float SprintAddition { get; private set; } = 2.0f;
 
+    [Export] protected float JumpVelocity { get; private set; } = 4.5f;
+
+    [Export] protected float SprintAddition { get; private set; } = 2.0f;
+    #endregion
+    
+    public override void _Ready()
+    {
+        // idk how godot works, so imma just do that
+        SetPhysicsProcess(IsEntityConnected()); 
+        base._Ready();
+    }
+    
+    /**
+     * This method should only be called by the entity which is set in editor
+     * If called more than once, an exception will be thrown.
+     */
     public void Connect(Entity entity)
     {
         if (IsEntityConnected())
@@ -27,6 +52,7 @@ public abstract partial class EntityController : NavigationAgent3D
         }
         
         Entity = entity;
+        SetPhysicsProcess(true);
     }
 
     private bool IsEntityConnected()
@@ -36,6 +62,12 @@ public abstract partial class EntityController : NavigationAgent3D
 
     public override void _PhysicsProcess(double delta)
     {
+        if (Entity == null)
+        {
+            SetPhysicsProcess(false);
+            return;
+        }
+        
         Vector3 movement = MovementProcess(delta);
 
         if (!Entity.IsOnFloor() && EnableGravity)
@@ -52,13 +84,14 @@ public abstract partial class EntityController : NavigationAgent3D
             MovementState = MoveState.Walk;
         }
 
+        // apply movement to the connected entity
         Entity.Velocity = movement;
         Entity.MoveAndSlide();
         base._PhysicsProcess(delta);
     }
 
     protected abstract Vector3 MovementProcess(double delta);
-    
+
     private Vector3 ComputeGravity(double delta)
     {
         return GravityMultiplier * Entity.GetGravity() * (float)delta;
@@ -66,20 +99,14 @@ public abstract partial class EntityController : NavigationAgent3D
 
     protected virtual float MovementSpeed()
     {
-        return BaseMovementSpeed();
+        if (!IsSprinting()) return BaseSpeed;
+        
+        MovementState = MoveState.Sprint;
+        return BaseSpeed * SprintAddition;
     }
 
-    private float BaseMovementSpeed()
+    protected virtual bool IsSprinting()
     {
-        return 1;
-    }
-
-    protected enum MoveState
-    {
-        Stand,
-        Walk,
-        Sprint,
-        Fall,
-        Sneak
+        return false;
     }
 }

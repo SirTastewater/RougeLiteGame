@@ -2,7 +2,7 @@ using Godot;
 
 namespace RougeLiteGame.entity;
 
-public abstract partial class Entity : CharacterBody3D
+[GlobalClass] public abstract partial class Entity : CharacterBody3D
 {
     [Export] private EntityController _entityController;
 
