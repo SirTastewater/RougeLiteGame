@@ -43,10 +43,9 @@ shape = SubResource("ConcavePolygonShape3D_cwqeq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98506665, 0)
 _entityController = NodePath("PlayerController")
 
-[node name="PlayerController" type="NavigationAgent3D" parent="Player" node_paths=PackedStringArray("_viewCamera")]
+[node name="PlayerController" type="NavigationAgent3D" parent="Player"]
 script = ExtResource("2_cwqeq")
-_viewCamera = NodePath("")
 metadata/_custom_type_script = "uid://jg8lakyxbcw3"
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.7167889, 0.69729024, 0, -0.69729024, 0.7167889, 0, 3.831522, 4.986125)
+[node name="View" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.71066445, 0.70353115, 0, -0.70353115, 0.71066445, 0, 3.7620244, 4.955249)

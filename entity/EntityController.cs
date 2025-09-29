@@ -17,6 +17,7 @@ public abstract partial class EntityController : NavigationAgent3D
     #region Attributes
     protected Entity Entity { get; private set; }
     protected MoveState MovementState { get; private set; } = MoveState.Stand;
+
     #endregion
     #region Editor Gravity Settings
     [ExportGroup("Gravity")] 
@@ -36,7 +37,9 @@ public abstract partial class EntityController : NavigationAgent3D
     public override void _Ready()
     {
         // idk how godot works, so imma just do that
-        SetPhysicsProcess(IsEntityConnected()); 
+        SetPhysicsProcess(IsEntityConnected());
+        SetProcessInput(false);
+        
         base._Ready();
     }
     
@@ -79,7 +82,11 @@ public abstract partial class EntityController : NavigationAgent3D
         {
             MovementState = MoveState.Stand;
         }
-        else
+        else if (IsSprinting())
+        {
+            MovementState = MoveState.Sprint;    
+        }
+        else 
         {
             MovementState = MoveState.Walk;
         }
@@ -97,11 +104,10 @@ public abstract partial class EntityController : NavigationAgent3D
         return GravityMultiplier * Entity.GetGravity() * (float)delta;
     }
 
-    protected virtual float MovementSpeed()
+    protected float MovementSpeed()
     {
         if (!IsSprinting()) return BaseSpeed;
         
-        MovementState = MoveState.Sprint;
         return BaseSpeed * SprintAddition;
     }
 
