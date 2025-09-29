@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=10 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="Script" uid="uid://esn1xwja4tjc" path="res://entity/camera/CameraController.cs" id="3_170dk"]
@@ -23,6 +23,9 @@ size = Vector2(10, 10)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_cwqeq"]
 data = PackedVector3Array(5, 0, 5, -5, 0, 5, 5, 0, -5, -5, 0, 5, -5, 0, -5, 5, 0, -5)
 
+[sub_resource type="Theme" id="Theme_170dk"]
+default_font_size = 37
+
 [node name="root" type="Node3D"]
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
@@ -44,10 +47,21 @@ shape = SubResource("ConcavePolygonShape3D_cwqeq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98506665, 0)
 _entityController = NodePath("PlayerController")
 
-[node name="PlayerController" type="NavigationAgent3D" parent="Player" node_paths=PackedStringArray("CameraController")]
+[node name="PlayerController" type="NavigationAgent3D" parent="Player" node_paths=PackedStringArray("CameraController", "_debugLabel")]
 script = ExtResource("3_cwqeq")
 CameraController = NodePath("../CameraController")
+_debugLabel = NodePath("debug")
 metadata/_custom_type_script = "uid://ct5atprv3rqr8"
+
+[node name="debug" type="Label" parent="Player/PlayerController"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -33.0
+offset_right = 81.0
+grow_vertical = 0
+theme = SubResource("Theme_170dk")
+text = "Test"
 
 [node name="CameraController" type="Node3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.408, 0)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://46wmtnfnlyqu"]
 
-[ext_resource type="Script" uid="uid://muvhw4a63g3c" path="res://entity/player/Player.cs" id="1_sntwv"]
+[ext_resource type="Script" uid="uid://18rirpm55cmp" path="res://entity/player/Player.cs" id="1_sntwv"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sntwv"]
 radius = 0.4
@@ -18,7 +18,6 @@ size = Vector3(0.6, 0.2, 0.2)
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_sntwv")
-metadata/_custom_type_script = "uid://muvhw4a63g3c"
 
 [node name="Body" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_sntwv")
@@ -26,6 +25,6 @@ mesh = SubResource("CapsuleMesh_sntwv")
 [node name="Hitbox" type="CollisionShape3D" parent="."]
 shape = SubResource("ConvexPolygonShape3D_sntwv")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="glasses" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42735392, -0.325386)
 mesh = SubResource("BoxMesh_o3s7f")

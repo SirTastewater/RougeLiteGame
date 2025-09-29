@@ -85,6 +85,11 @@ public partial class PlayerController : EntityController
         return velocity;
     }
 
+    protected override bool IsSneaking()
+    {
+        return Input.IsActionPressed("sneak");
+    }
+
     protected override bool IsSprinting()
     {
         return Input.IsActionPressed("sprint");
