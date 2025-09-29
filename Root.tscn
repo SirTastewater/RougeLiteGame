@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=9 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
-[ext_resource type="Script" uid="uid://jg8lakyxbcw3" path="res://entity/player/PlayerController.cs" id="2_cwqeq"]
+[ext_resource type="Script" uid="uid://cmkenxahiknpt" path="res://entity/player/FirstPersonPlayerController.cs" id="2_170dk"]
+[ext_resource type="Script" uid="uid://kwyjxemcsnmw" path="res://entity/camera/CameraPivot.cs" id="3_170dk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -41,11 +42,19 @@ shape = SubResource("ConcavePolygonShape3D_cwqeq")
 
 [node name="Player" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98506665, 0)
-_entityController = NodePath("PlayerController")
+_entityController = NodePath("FirstPersonPlayerController")
 
-[node name="PlayerController" type="NavigationAgent3D" parent="Player"]
-script = ExtResource("2_cwqeq")
-metadata/_custom_type_script = "uid://jg8lakyxbcw3"
+[node name="FirstPersonPlayerController" type="NavigationAgent3D" parent="Player" node_paths=PackedStringArray("_cameraPivot")]
+script = ExtResource("2_170dk")
+_cameraPivot = NodePath("../CameraPivot")
+metadata/_custom_type_script = "uid://cmkenxahiknpt"
 
-[node name="View" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.71066445, 0.70353115, 0, -0.70353115, 0.71066445, 0, 3.7620244, 4.955249)
+[node name="CameraPivot" type="Node3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4234515, -0.5322041)
+top_level = true
+script = ExtResource("3_170dk")
+_mouseInput = true
+_mouseSensitivity = 0.638
+metadata/_custom_type_script = "uid://kwyjxemcsnmw"
+
+[node name="Camera3D" type="Camera3D" parent="Player/CameraPivot"]

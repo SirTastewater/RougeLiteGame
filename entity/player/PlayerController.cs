@@ -1,10 +1,12 @@
 using Godot;
+using RougeLiteGame.entity.camera;
 
 namespace RougeLiteGame.entity.player;
 
 [GlobalClass]
-public partial class PlayerController : EntityController
+public abstract partial class PlayerController : EntityController
 {
+    
     protected override Vector3 MovementProcess(double delta)
     {
         float speed = MovementSpeed();
