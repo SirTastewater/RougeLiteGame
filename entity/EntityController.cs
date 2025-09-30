@@ -70,6 +70,8 @@ public sealed partial class EntityController : NavigationAgent3D
 
     public override void _Ready()
     {
+        SetPhysicsProcess(IsEntityConnected());
+        
         if(_detectionArea == null) return;
         _detectionArea.BodyEntered += BodyEntered;
 
