@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://46wmtnfnlyqu"]
 
-[ext_resource type="Script" uid="uid://18rirpm55cmp" path="res://entity/player/Player.cs" id="1_sntwv"]
+[ext_resource type="Script" path="res://entity/player/Player.cs" id="1_sntwv"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sntwv"]
 radius = 0.4

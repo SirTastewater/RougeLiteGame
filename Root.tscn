@@ -1,13 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=8 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
 [ext_resource type="Script" uid="uid://onv3e2hhcglw" path="res://entity/camera/CameraController.cs" id="3_170dk"]
-[ext_resource type="Script" uid="uid://ec3ehgnvaxqc" path="res://entity/player/PlayerBehavior.cs" id="4_2qvp8"]
-[ext_resource type="Script" uid="uid://bqgeix1vcei8x" path="res://entity/EntityController.cs" id="4_g0d6c"]
-[ext_resource type="Script" uid="uid://dhg3qhmsoaxxo" path="res://entity/behavior/reaction/ChaseBehaviour.cs" id="7_2qvp8"]
-[ext_resource type="Script" uid="uid://blt0jdlp5sgs8" path="res://entity/behavior/StatueIdleBehavior.cs" id="7_n0g3p"]
-[ext_resource type="Script" uid="uid://5khebm0df7rb" path="res://entity/behavior/reaction/ReactionTarget.cs" id="8_8hd61"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -21,24 +16,6 @@ background_mode = 2
 sky = SubResource("Sky_gxo8o")
 tonemap_mode = 2
 glow_enabled = true
-
-[sub_resource type="Resource" id="Resource_3ipfy"]
-script = ExtResource("4_2qvp8")
-metadata/_custom_type_script = "uid://ec3ehgnvaxqc"
-
-[sub_resource type="Resource" id="Resource_g0d6c"]
-script = ExtResource("7_n0g3p")
-metadata/_custom_type_script = "uid://blt0jdlp5sgs8"
-
-[sub_resource type="Resource" id="Resource_n0g3p"]
-script = ExtResource("7_2qvp8")
-metadata/_custom_type_script = "uid://dhg3qhmsoaxxo"
-
-[sub_resource type="Resource" id="Resource_2qvp8"]
-script = ExtResource("8_8hd61")
-Entity = NodePath("../../Player")
-Behavior = SubResource("Resource_n0g3p")
-metadata/_custom_type_script = "uid://5khebm0df7rb"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g0d6c"]
 size = Vector3(1, 0.49890137, 25.716675)
@@ -59,9 +36,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96214926, 0)
 _entityController = NodePath("PlayerController")
 
 [node name="PlayerController" type="NavigationAgent3D" parent="Player"]
-script = ExtResource("4_g0d6c")
-_idleBehavior = SubResource("Resource_3ipfy")
-metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 
 [node name="FPController" type="Node3D" parent="Player" node_paths=PackedStringArray("_yawPivot", "_pitchPivot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -78,14 +52,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.50898516)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0483932, 1.0693624, 0)
 _entityController = NodePath("EntityController")
 
-[node name="EntityController" type="NavigationAgent3D" parent="Enemy" node_paths=PackedStringArray("_detectionArea")]
+[node name="EntityController" type="NavigationAgent3D" parent="Enemy"]
 target_desired_distance = 3.0
 debug_enabled = true
-script = ExtResource("4_g0d6c")
-_idleBehavior = SubResource("Resource_g0d6c")
-_behaviours = Array[Object]([SubResource("Resource_2qvp8")])
-_detectionArea = NodePath("../ViewArea")
-metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 
 [node name="ViewArea" type="Area3D" parent="Enemy"]
 
