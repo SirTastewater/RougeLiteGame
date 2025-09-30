@@ -4,10 +4,14 @@ namespace RougeLiteGame.entity.behavior.reaction;
 
 [GlobalClass] public partial class ChaseBehaviour : ReactionBehavior
 {
+
     public override Vector3 Process(double delta)
     {
         SetTargetPosition(Target.GlobalPosition);
         Entity.LookAt(Target.GlobalPosition);
+        
+        
+        
         return FollowControllerTarget();
     }
 
@@ -18,6 +22,6 @@ namespace RougeLiteGame.entity.behavior.reaction;
 
     public override bool Release()
     {
-        return GetTargetDistance().Length() > 15.0f;
+        return GetTargetDistance().Length() > 10.0f;
     }
 }

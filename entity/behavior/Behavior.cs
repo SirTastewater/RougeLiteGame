@@ -5,14 +5,13 @@ using Godot;
 
 namespace RougeLiteGame.entity.behavior;
 
-[GlobalClass]
 [SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global")]
-public abstract partial class AiBehavior : Resource
+[GlobalClass] public abstract partial class Behavior : Resource
 {
-    protected AiEntityController Controller { get; private set; }
+    protected EntityController Controller { get; private set; }
     protected Entity Entity { get; private set; }
     
-    public void Initialize(AiEntityController controller, Entity entity)
+    public void Initialize(EntityController controller, Entity entity)
     {
         if (Controller != null || Entity != null)
         {
@@ -21,7 +20,11 @@ public abstract partial class AiBehavior : Resource
         
         Controller = controller;
         Entity = entity;
+        
+        Init();
     }
+    
+    protected virtual void Init() { }
     
     public void Uninitialize()
     {

@@ -17,7 +17,8 @@ public abstract partial class Entity : CharacterBody3D
 {
     [Export] private EntityController _entityController;
 
-    public ReactionTarget ToReactionTarget(ReactionBehavior behavior)
+    // ReSharper disable once MemberCanBePrivate.Global
+    public ReactionTarget ConvertIntoReactionTarget(ReactionBehavior behavior)
     {
         return new ReactionTarget(GetPath(), behavior);
     }

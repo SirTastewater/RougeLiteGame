@@ -1,11 +1,10 @@
-[gd_scene load_steps=23 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=17 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
 [ext_resource type="Script" uid="uid://onv3e2hhcglw" path="res://entity/camera/CameraController.cs" id="3_170dk"]
-[ext_resource type="Script" uid="uid://p5q08xcu2eqe" path="res://entity/player/PlayerController.cs" id="3_cwqeq"]
-[ext_resource type="Script" uid="uid://c621010pj8lg8" path="res://entity/player/Player.cs" id="4_3ipfy"]
-[ext_resource type="Script" uid="uid://dmh3v38vsk0cu" path="res://entity/AiEntityController.cs" id="6_f5i44"]
+[ext_resource type="Script" uid="uid://ec3ehgnvaxqc" path="res://entity/player/PlayerBehavior.cs" id="4_2qvp8"]
+[ext_resource type="Script" uid="uid://bqgeix1vcei8x" path="res://entity/EntityController.cs" id="4_g0d6c"]
 [ext_resource type="Script" uid="uid://dhg3qhmsoaxxo" path="res://entity/behavior/reaction/ChaseBehaviour.cs" id="7_2qvp8"]
 [ext_resource type="Script" uid="uid://blt0jdlp5sgs8" path="res://entity/behavior/StatueIdleBehavior.cs" id="7_n0g3p"]
 [ext_resource type="Script" uid="uid://5khebm0df7rb" path="res://entity/behavior/reaction/ReactionTarget.cs" id="8_8hd61"]
@@ -23,41 +22,26 @@ sky = SubResource("Sky_gxo8o")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="LabelSettings" id="LabelSettings_170dk"]
-font_size = 32
-font_color = Color(0, 0, 0, 1)
+[sub_resource type="Resource" id="Resource_3ipfy"]
+script = ExtResource("4_2qvp8")
+metadata/_custom_type_script = "uid://ec3ehgnvaxqc"
 
-[sub_resource type="LabelSettings" id="LabelSettings_cwqeq"]
-font_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sntwv"]
-albedo_color = Color(0, 0, 0, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_3ipfy"]
-material = SubResource("StandardMaterial3D_sntwv")
-size = Vector3(0.6, 0.2, 0.2)
-
-[sub_resource type="SphereMesh" id="SphereMesh_g0d6c"]
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_3ipfy"]
-points = PackedVector3Array(0.4578707, 0.19807906, 0.01578243, -0.48873997, -0.09168735, -0.04518683, -0.47150937, -0.1370268, -0.090701535, 0.07635914, -0.33327514, 0.36417928, 0.13656896, -0.33242497, -0.3469059, -0.15161654, 0.47198188, -0.060245913, -0.10534735, 0.21193622, 0.43966028, -0.045016855, 0.19809827, -0.4564163, 0.4090765, -0.15116782, 0.2425159, -0.27137637, -0.37776056, 0.18187061, 0.41147974, -0.07598096, -0.27324012, 0.19819722, -0.4561612, -0.04493101, -0.24064063, -0.33167413, -0.2857683, 0.22713655, 0.2567203, 0.36304116, 0.22752243, 0.42360392, -0.13548777, -0.37899047, 0.060702223, 0.31946206, -0.40674683, 0.18104935, -0.22569102, -0.014631338, -0.09176946, 0.49022886, -0.37785473, 0.30279276, 0.121712334, 0.046232317, 0.45601088, 0.19818504, -0.22746402, -0.060786348, -0.44034815, 0.22845526, 0.06072284, -0.43988743, -0.09113759, -0.48924586, -0.045174047, 0.44186506, -0.22821625, -0.044958085, 0.31717873, 0.24121423, -0.30081153, -0.044848714, 0.39473665, -0.30295488, -0.316348, -0.19622163, 0.33255145, 0.19844188, -0.03042933, 0.45723665, 0.061471395, -0.1522456, -0.47130713, 0.36308852, 0.25670764, 0.22707908, 0.15213433, -0.43948856, 0.18237916, -0.21072462, 0.36227608, 0.2722302)
-
-[sub_resource type="Resource" id="Resource_hbe7s"]
-script = ExtResource("7_2qvp8")
-metadata/_custom_type_script = "uid://dhg3qhmsoaxxo"
-
-[sub_resource type="Resource" id="Resource_g1ltr"]
-script = ExtResource("8_8hd61")
-Entity = NodePath("../../Player")
-Behavior = SubResource("Resource_hbe7s")
-metadata/_custom_type_script = "uid://5khebm0df7rb"
-
-[sub_resource type="Resource" id="Resource_2qvp8"]
+[sub_resource type="Resource" id="Resource_g0d6c"]
 script = ExtResource("7_n0g3p")
 metadata/_custom_type_script = "uid://blt0jdlp5sgs8"
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_f5i44"]
-size = Vector3(7, 5, 5)
+[sub_resource type="Resource" id="Resource_n0g3p"]
+script = ExtResource("7_2qvp8")
+metadata/_custom_type_script = "uid://dhg3qhmsoaxxo"
+
+[sub_resource type="Resource" id="Resource_2qvp8"]
+script = ExtResource("8_8hd61")
+Entity = NodePath("../../Player")
+Behavior = SubResource("Resource_n0g3p")
+metadata/_custom_type_script = "uid://5khebm0df7rb"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g0d6c"]
+size = Vector3(1, 0.49890137, 25.716675)
 
 [node name="root" type="Node3D"]
 
@@ -71,91 +55,40 @@ environment = SubResource("Environment_24d08")
 [node name="Level" parent="." instance=ExtResource("1_f5i44")]
 
 [node name="Player" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98506665, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96214926, 0)
 _entityController = NodePath("PlayerController")
 
-[node name="PlayerController" type="NavigationAgent3D" parent="Player" node_paths=PackedStringArray("CameraController", "_debugLabel")]
-script = ExtResource("3_cwqeq")
-CameraController = NodePath("../FirstPersonController")
-_debugLabel = NodePath("debug")
+[node name="PlayerController" type="NavigationAgent3D" parent="Player"]
+script = ExtResource("4_g0d6c")
+_idleBehavior = SubResource("Resource_3ipfy")
+metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 
-[node name="debug" type="Label" parent="Player/PlayerController"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -45.0
-offset_right = 70.0
-grow_vertical = 0
-size_flags_horizontal = 4
-text = "Test"
-label_settings = SubResource("LabelSettings_170dk")
-metadata/_edit_use_anchors_ = true
-
-[node name="Message" type="Label" parent="Player/PlayerController"]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -432.0
-offset_top = -25.0
-grow_horizontal = 0
-grow_vertical = 0
-size_flags_horizontal = 4
-text = "Press left mouse button to relase or capture the mouse"
-label_settings = SubResource("LabelSettings_cwqeq")
-
-[node name="FirstPersonController" type="Node3D" parent="Player" node_paths=PackedStringArray("_yawPivot", "_pitchPivot")]
-transform = Transform3D(1, 0, 0, 0, 0.99898404, 0.04506658, 0, -0.04506658, 0.99898404, 0, 0.48, 0)
+[node name="FPController" type="Node3D" parent="Player" node_paths=PackedStringArray("_yawPivot", "_pitchPivot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("3_170dk")
+EnableMouseInput = true
 _yawPivot = NodePath("..")
-_pitchPivot = NodePath("FirstPersonView")
+_pitchPivot = NodePath("View")
+metadata/_custom_type_script = "uid://onv3e2hhcglw"
 
-[node name="FirstPersonView" type="Camera3D" parent="Player/FirstPersonController"]
-transform = Transform3D(1, 0, 0, 0, 0.9918433, 0.12746277, 0, -0.12746277, 0.9918433, 0, 0.02624631, -0.58179736)
-cull_mask = 1048063
-current = true
+[node name="View" type="Camera3D" parent="Player/FPController"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.50898516)
 
-[node name="ThirdPersonController" type="Node3D" parent="Player" node_paths=PackedStringArray("_yawPivot")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
-visible = false
-script = ExtResource("3_170dk")
-_yawPivot = NodePath("..")
+[node name="Enemy" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0483932, 1.0693624, 0)
+_entityController = NodePath("EntityController")
 
-[node name="ThirdPersonView" type="Camera3D" parent="Player/ThirdPersonController"]
-transform = Transform3D(0.99896264, -0.02057148, 0.040625896, 0, 0.89214474, 0.4517497, -0.045537338, -0.45128107, 0.89121926, 0.5842447, 0.8063383, 1.3540978)
-
-[node name="Enemy" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_entityController")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, -5)
-script = ExtResource("4_3ipfy")
-_entityController = NodePath("AiEntityController")
-metadata/_custom_type_script = "uid://c621010pj8lg8"
-
-[node name="glasses" type="MeshInstance3D" parent="Enemy"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4273548, -0.467947)
-mesh = SubResource("BoxMesh_3ipfy")
-
-[node name="Enemy" type="MeshInstance3D" parent="Enemy"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3495531, 0)
-mesh = SubResource("SphereMesh_g0d6c")
-
-[node name="hitbox" type="CollisionShape3D" parent="Enemy"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3495531, 0)
-shape = SubResource("ConvexPolygonShape3D_3ipfy")
-
-[node name="AiEntityController" type="NavigationAgent3D" parent="Enemy" node_paths=PackedStringArray("_detectionArea")]
-path_desired_distance = 3.0
-target_desired_distance = 2.0
+[node name="EntityController" type="NavigationAgent3D" parent="Enemy" node_paths=PackedStringArray("_detectionArea")]
+target_desired_distance = 3.0
 debug_enabled = true
-script = ExtResource("6_f5i44")
-_detectionArea = NodePath("../Area3D")
-_behaviours = Array[Object]([SubResource("Resource_g1ltr")])
-_idleBehavior = SubResource("Resource_2qvp8")
-metadata/_custom_type_script = "uid://dmh3v38vsk0cu"
+script = ExtResource("4_g0d6c")
+_idleBehavior = SubResource("Resource_g0d6c")
+_behaviours = Array[Object]([SubResource("Resource_2qvp8")])
+_detectionArea = NodePath("../ViewArea")
+metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 
-[node name="Area3D" type="Area3D" parent="Enemy"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38075817, 0)
+[node name="ViewArea" type="Area3D" parent="Enemy"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy/Area3D"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.028564453, 0.41735852, -3.1721087)
-shape = SubResource("BoxShape3D_f5i44")
+[node name="ViewBox" type="CollisionShape3D" parent="Enemy/ViewArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4980402, -13.1812)
+shape = SubResource("BoxShape3D_g0d6c")

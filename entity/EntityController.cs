@@ -1,64 +1,99 @@
 using System;
 using Godot;
-using RougeLiteGame.entity.camera;
+using Godot.Collections;
+using RougeLiteGame.entity.behavior;
+using RougeLiteGame.entity.behavior.reaction;
 
 namespace RougeLiteGame.entity;
 
 /// <summary>
 /// Represents the base class for controlling entities in the game.
 /// </summary>
-public abstract partial class EntityController : NavigationAgent3D
+[GlobalClass]
+public sealed partial class EntityController : NavigationAgent3D
 {
     
     #region Attributes
+    private Entity _entity;
 
-    protected Entity Entity { get; private set; }
-    protected MoveState MovementState { get; private set; } = MoveState.Stand;
+    private Entity Entity
+    {
+        get => _entity;
+        set
+        {
+            _entity = value;
+            SetPhysicsProcess(value != null);
+        }
+    }
 
+    private MoveState MovementState { get; set; } = MoveState.Stand;
+    private Behavior _currentBehaviour;
+    
+    private Behavior CurrentBehaviour
+    {
+        get => _currentBehaviour;
+        set // Moved to setter because it's the fcking 5'th time I forgot to free the behavior before
+        {
+            _currentBehaviour?.Uninitialize();
+            _currentBehaviour = value;
+            value.Initialize(this, Entity);
+            SetProcessInput(value is IInputAcceptor);
+        }
+    }
     #endregion
+    
+    [ExportGroup("Behavior")]
+    [Export] private IdleBehavior _idleBehavior;
+    [ExportSubgroup("Reaction")]
+    [Export] private Array<ReactionTarget> _behaviours;
+    [Export] private Area3D _detectionArea;
 
     #region Editor Gravity Settings
 
-    [ExportGroup("Gravity")] [Export] protected bool EnableGravity { get; set; } = true;
-
+    [ExportGroup("Gravity")] 
+    [Export] private bool EnableGravity { get; set; } = true;
     [Export] private float GravityMultiplier { get; set; } = 1.14f;
-
     #endregion Gravity
 
     #region Editor Movement Settings
-
-    [ExportGroup("Movement")] [Export] protected float BaseSpeed { get; private set; } = 3f;
-
-    [Export] protected float JumpVelocity { get; private set; } = 4.5f;
-
-    [Export] protected float SprintAddition { get; private set; } = 2.0f;
-    [Export] protected float SneakPenalty { get; private set; } = 2.0f;
-
+    [ExportGroup("Movement")] 
+    [Export] private float BaseSpeed { get; set; } = 3f;
+    [Export] public float JumpVelocity { get; private set; } = 4.5f;
+    [Export] private float SprintAddition { get; set; } = 2.0f;
+    [Export] private float SneakPenalty { get; set; } = 2.0f;
     #endregion
     
     #region Debug
-
-    [ExportGroup("Debug")] [Export] private Label _debugLabel;
-
+    [ExportGroup("Debug")] 
+    [Export] private Label _debugLabel;
     #endregion
 
     public override void _Ready()
     {
-        // idk how godot works, so imma just do that
-        SetPhysicsProcess(IsEntityConnected());
-        SetProcessInput(false);
+        if(_detectionArea == null) return;
+        _detectionArea.BodyEntered += BodyEntered;
 
         base._Ready();
+    }
+    
+    private void BodyEntered(Node3D body)
+    {
+        if (body is not Entity target)
+        {
+            return;
+        }
+
+        foreach (ReactionTarget behaviour in _behaviours)
+        {
+            if (GetNode<Entity>(behaviour.Entity) != target) continue;
+            
+            CurrentBehaviour = behaviour.Behavior;
+            behaviour.Behavior.React(target, _idleBehavior);
+        }
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if (Entity == null)
-        {
-            SetPhysicsProcess(false);
-            return;
-        }
-
         Vector3 movement = MovementProcess(delta);
         MovementState = ComputeMovementState(movement);
 
@@ -70,6 +105,14 @@ public abstract partial class EntityController : NavigationAgent3D
         Entity.Velocity = movement;
         Entity.MoveAndSlide();
         base._PhysicsProcess(delta);
+    }
+    
+    public override void _Input(InputEvent @event)
+    {
+        if (CurrentBehaviour is not IInputAcceptor acceptor) return;
+        
+        acceptor.Input(@event);
+        base._Input(@event);
     }
 
     /// <summary>
@@ -93,18 +136,16 @@ public abstract partial class EntityController : NavigationAgent3D
         Entity = entity;
         SetPhysicsProcess(true);
         
-        EntityReady();
+        CurrentBehaviour = _idleBehavior;
     }
-
-    protected virtual void EntityReady() {}
     
     /// <summary>
     /// Returns whether an entity is connected to this instance.
     /// </summary>
     /// <returns>
-    /// <c>true</c> if a entity has been connected to this instance; otherwise, <c>false</c>.
+    /// <c>true</c> if an entity has been connected to this instance; otherwise, <c>false</c>.
     /// </returns>
-    protected bool IsEntityConnected()
+    private bool IsEntityConnected()
     {
         return Entity != null;
     }
@@ -131,14 +172,13 @@ public abstract partial class EntityController : NavigationAgent3D
     /// It is important to note that a falling entity is not able to also sneak, sprint or walk.
     ///
     /// </remarks>
-    /// TODO: Discuss the above order with the whole team!!! (Jan and me)
     private MoveState ComputeMovementState(Vector3 movement)
     {
         if (!Entity.IsOnFloor() && EnableGravity) return MoveState.Fall;
         if (movement == Vector3.Zero) return MoveState.Stand;
-        if (IsSneaking()) return MoveState.Sneak;
+        if (CurrentBehaviour.IsSneaking()) return MoveState.Sneak;
 
-        return IsSprinting() ? MoveState.Sprint : MoveState.Walk;
+        return CurrentBehaviour.IsSprinting() ? MoveState.Sprint : MoveState.Walk;
     }
 
     /// <summary>
@@ -153,7 +193,21 @@ public abstract partial class EntityController : NavigationAgent3D
     /// <remarks>
     /// This method is intended to be implemented by derived classes to define custom movement behavior.
     /// </remarks>
-    protected abstract Vector3 MovementProcess(double delta);
+    private Vector3 MovementProcess(double delta)
+    {
+        if(CurrentBehaviour == null) return Vector3.Zero;
+        
+        // Do not query when the map has never synchronized and is empty.
+        // Our Entity will just freeze when no navigation mesh is existent.
+        if (NavigationServer3D.MapGetIterationId(GetNavigationMap()) == 0) return Vector3.Zero;
+        
+        if (CurrentBehaviour is not ReactionBehavior reactBehavior || !reactBehavior.Release())
+            return CurrentBehaviour.Process(delta);
+
+        CurrentBehaviour = _idleBehavior;
+
+        return CurrentBehaviour.Process(delta);
+    }
 
     /// <summary>
     /// Computes the gravitational force to be applied to the entity over the specified time delta.
@@ -169,7 +223,6 @@ public abstract partial class EntityController : NavigationAgent3D
         return GravityMultiplier * Entity.GetGravity() * (float) delta;
     }
 
-
     /// <summary>
     /// Calculates and returns the current movement speed of the entity.
     /// </summary>
@@ -183,45 +236,12 @@ public abstract partial class EntityController : NavigationAgent3D
     /// </remarks>
     public float MovementSpeed()
     {
-        if (IsSneaking()) return BaseSpeed / SneakPenalty;
-
-        if (!IsSprinting()) return BaseSpeed;
-
+        if (CurrentBehaviour.IsSneaking()) return BaseSpeed / SneakPenalty;
+        if (!CurrentBehaviour.IsSprinting()) return BaseSpeed;
 
         return BaseSpeed * SprintAddition;
     }
-
-    /// <summary>
-    /// Determines whether the entity is currently in a sprinting state.
-    /// </summary>
-    /// <returns>
-    /// True if the entity is sprinting; otherwise, false.
-    /// </returns>
-    /// <remarks>
-    /// This method can be overridden in derived classes to implement specific logic
-    /// for determining the sprinting state.
-    /// </remarks>
-    protected virtual bool IsSprinting()
-    {
-        return false;
-    }
-
-    /// <summary>
-    /// Checks if the entity is in a sneaking state based on specific input or conditions.
-    /// </summary>
-    /// <returns>
-    /// True if the entity is sneaking, otherwise false. Sneaking generally applies movement penalties
-    /// or reduced visibility impact, depending on game logic.
-    /// </returns>
-    /// <remarks>
-    /// The sneaking state may affect movement speed or other gameplay mechanics. Override this method
-    /// in derived classes to implement specific sneaking behavior.
-    /// </remarks>
-    protected virtual bool IsSneaking()
-    {
-        return false;
-    }
-
+    
     /// <summary>
     /// Represents the different movement states that an entity can have within the game.
     /// </summary>
@@ -229,7 +249,7 @@ public abstract partial class EntityController : NavigationAgent3D
     /// The movement state determines how an entity's motion and behavior are processed.
     /// It includes states for stationary, basic walking, sprinting, sneaking, and falling.
     /// </remarks>
-    protected enum MoveState
+    private enum MoveState
     {
         Stand,
         Walk,
@@ -237,5 +257,4 @@ public abstract partial class EntityController : NavigationAgent3D
         Fall,
         Sneak
     }
-
 }
