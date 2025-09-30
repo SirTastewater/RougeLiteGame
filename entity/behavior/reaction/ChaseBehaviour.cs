@@ -22,6 +22,6 @@ namespace RougeLiteGame.entity.behavior.reaction;
 
     public override bool Release()
     {
-        return GetTargetDistance().Length() > 10.0f;
+        return Controller.IsNavigationFinished();
     }
 }

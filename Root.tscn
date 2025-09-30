@@ -79,6 +79,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0483932, 1.0693624, 0)
 _entityController = NodePath("EnemyController1")
 
 [node name="EnemyController1" type="NavigationAgent3D" parent="Enemy" node_paths=PackedStringArray("_detectionArea")]
+target_desired_distance = 2.0
 debug_enabled = true
 script = ExtResource("3_n0g3p")
 _idleBehavior = SubResource("Resource_n0g3p")
