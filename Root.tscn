@@ -53,7 +53,7 @@ _entityController = NodePath("PlayerController")
 
 [node name="PlayerController" type="NavigationAgent3D" parent="Player" node_paths=PackedStringArray("CameraController", "_debugLabel")]
 script = ExtResource("3_cwqeq")
-CameraController = NodePath("../CameraController")
+CameraController = NodePath("../FirstPersonController")
 _debugLabel = NodePath("debug")
 metadata/_custom_type_script = "uid://ct5atprv3rqr8"
 
@@ -83,11 +83,24 @@ size_flags_horizontal = 4
 text = "Press left mouse button to relase or capture the mouse"
 label_settings = SubResource("LabelSettings_cwqeq")
 
-[node name="CameraController" type="Node3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 0.99898404, 0.04506658, 0, -0.04506658, 0.99898404, 0, 0.48, 0.09)
+[node name="FirstPersonController" type="Node3D" parent="Player" node_paths=PackedStringArray("_yawPivot", "_pitchPivot")]
+transform = Transform3D(1, 0, 0, 0, 0.99898404, 0.04506658, 0, -0.04506658, 0.99898404, 0, 0.48, 0)
 script = ExtResource("3_170dk")
 MouseInput = true
+_yawPivot = NodePath("..")
+_pitchPivot = NodePath("FirstPersonView")
 
-[node name="View" type="Camera3D" parent="Player/CameraController"]
-transform = Transform3D(1, 0, 0, 0, 0.99999994, 3.7252903e-09, 0, 0, 0.99999994, 0, -0.062897325, -0.49360865)
+[node name="FirstPersonView" type="Camera3D" parent="Player/FirstPersonController"]
+transform = Transform3D(1, 0, 0, 0, 0.9918433, 0.12746277, 0, -0.12746277, 0.9918433, 0, 0.02624631, -0.58179736)
 cull_mask = 1048063
+current = true
+
+[node name="ThirdPersonController" type="Node3D" parent="Player" node_paths=PackedStringArray("_yawPivot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
+visible = false
+script = ExtResource("3_170dk")
+_yawPivot = NodePath("..")
+metadata/_custom_type_script = "uid://esn1xwja4tjc"
+
+[node name="ThirdPersonView" type="Camera3D" parent="Player/ThirdPersonController"]
+transform = Transform3D(0.99896264, -0.02057148, 0.040625896, 0, 0.89214474, 0.4517497, -0.045537338, -0.45128107, 0.89121926, 0.5842447, 0.8063383, 1.3540978)
