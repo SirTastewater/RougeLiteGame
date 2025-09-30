@@ -1,5 +1,7 @@
 using Godot;
+using RougeLiteGame.entity.behavior;
 using RougeLiteGame.entity.camera;
+using ReactionTarget = RougeLiteGame.entity.behavior.reaction.ReactionTarget;
 
 namespace RougeLiteGame.entity;
 
@@ -14,7 +16,12 @@ namespace RougeLiteGame.entity;
 public abstract partial class Entity : CharacterBody3D
 {
     [Export] private EntityController _entityController;
-    
+
+    public ReactionTarget ToReactionTarget(ReactionBehavior behavior)
+    {
+        return new ReactionTarget(GetPath(), behavior);
+    }
+
     public override void _Ready()
     {
         base._Ready();

@@ -1,12 +1,14 @@
-[gd_scene load_steps=25 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=23 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
-[ext_resource type="PackedScene" uid="uid://b5lsmomafcocw" path="res://rock/rock.blend" id="1_g0d6c"]
+[ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
 [ext_resource type="Script" uid="uid://onv3e2hhcglw" path="res://entity/camera/CameraController.cs" id="3_170dk"]
 [ext_resource type="Script" uid="uid://p5q08xcu2eqe" path="res://entity/player/PlayerController.cs" id="3_cwqeq"]
 [ext_resource type="Script" uid="uid://c621010pj8lg8" path="res://entity/player/Player.cs" id="4_3ipfy"]
-[ext_resource type="Script" uid="uid://bpsrxbshpp12y" path="res://entity/hostile/HostileEntityController.cs" id="4_cwqeq"]
-[ext_resource type="Texture2D" uid="uid://b4koj8rtmjedy" path="res://scary.jpg" id="7_f5i44"]
+[ext_resource type="Script" uid="uid://dmh3v38vsk0cu" path="res://entity/AiEntityController.cs" id="6_f5i44"]
+[ext_resource type="Script" uid="uid://dhg3qhmsoaxxo" path="res://entity/behavior/reaction/ChaseBehaviour.cs" id="7_2qvp8"]
+[ext_resource type="Script" uid="uid://blt0jdlp5sgs8" path="res://entity/behavior/StatueIdleBehavior.cs" id="7_n0g3p"]
+[ext_resource type="Script" uid="uid://5khebm0df7rb" path="res://entity/behavior/reaction/ReactionTarget.cs" id="8_8hd61"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -20,43 +22,6 @@ background_mode = 2
 sky = SubResource("Sky_gxo8o")
 tonemap_mode = 2
 glow_enabled = true
-
-[sub_resource type="NavigationMesh" id="NavigationMesh_3ipfy"]
-vertices = PackedVector3Array(-3.5, 0.40860176, 0.75, -3.25, 0.40860176, 1.25, -2.5, 0.40860176, 1, 0.75, 0.40860176, -16.75, 0.75, 0.40860176, -17.25, 2.25, 0.40860176, -18.25, 2.25, 0.40860176, -24, -24, 0.40860176, 2, -5, 0.40860176, 2, -4.25, 0.40860176, 0.75, -24, 0.40860176, -24, 3.25, 0.40860176, -17.75, 13.5, 0.40860176, 1.75, 13.75, 0.40860176, 3, 24, 0.40860176, 3, 12.75, 0.40860176, 1, 24, 0.40860176, -24, 3.25, 0.65860176, -17, 11.5, 0.40860176, 1, -1.5, 0.40860176, 2, -1.5, 0.40860176, 2.25, 10.75, 0.40860176, 2, 1.75, 0.65860176, -15.75, 2.5, 0.90860176, -16.375, -9, 0.40860176, 14.5, -7.5, 0.40860176, 14.75, -5, 0.40860176, 2.25, -24, 0.40860176, 16, -10, 0.40860176, 16, 7.5, 0.40860176, 11.75, 8.25, 0.40860176, 11.75, 12, 0.40860176, 4.25, -1.5, 0.40860176, 2.5, -6.5, 0.40860176, 15.75, -5, 0.40860176, 12.75, -4, 0.65860176, 3.25, -2, 0.40860176, 3.25, 6.5, 0.40860176, 12.75, 22.25, 0.40860176, 10.75, 23.25, 0.40860176, 13, 24, 0.40860176, 12.75, 13.75, 0.40860176, 3.75, 12.75, 0.40860176, 4.5, 20.75, 0.40860176, 11, 9.25, 0.40860176, 12.75, 20, 0.40860176, 12.5, 20, 0.40860176, 11.5, 22.5, 0.40860176, 14.25, 24, 0.40860176, 24, 21.75, 0.40860176, 14.25, 21.25, 0.90860176, 13, 9.5, 0.40860176, 14.25, 8.5, 0.40860176, 14.75, 8.5, 0.40860176, 24, -7, 0.40860176, 16.75, -8.75, 0.65860176, 17, -8.75, 0.40860176, 24, 6.5, 0.40860176, 13.25, -9.5, 0.40860176, 17, -24, 0.40860176, 24)
-polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Array(6, 5, 4), PackedInt32Array(9, 8, 4), PackedInt32Array(4, 8, 6), PackedInt32Array(6, 8, 7), PackedInt32Array(6, 7, 10), PackedInt32Array(0, 9, 3), PackedInt32Array(3, 9, 4), PackedInt32Array(11, 5, 6), PackedInt32Array(14, 13, 12), PackedInt32Array(12, 15, 14), PackedInt32Array(14, 15, 11), PackedInt32Array(14, 11, 6), PackedInt32Array(14, 6, 16), PackedInt32Array(17, 11, 18), PackedInt32Array(18, 11, 15), PackedInt32Array(20, 19, 21), PackedInt32Array(21, 19, 18), PackedInt32Array(18, 19, 22), PackedInt32Array(18, 22, 23), PackedInt32Array(18, 23, 17), PackedInt32Array(3, 22, 2), PackedInt32Array(2, 22, 19), PackedInt32Array(26, 25, 24), PackedInt32Array(26, 24, 8), PackedInt32Array(8, 24, 28), PackedInt32Array(8, 28, 27), PackedInt32Array(8, 27, 7), PackedInt32Array(30, 29, 31), PackedInt32Array(31, 29, 21), PackedInt32Array(21, 29, 32), PackedInt32Array(21, 32, 20), PackedInt32Array(33, 25, 34), PackedInt32Array(34, 25, 35), PackedInt32Array(35, 25, 26), PackedInt32Array(34, 35, 36), PackedInt32Array(36, 32, 34), PackedInt32Array(34, 32, 37), PackedInt32Array(37, 32, 29), PackedInt32Array(39, 38, 40), PackedInt32Array(40, 38, 14), PackedInt32Array(43, 42, 41), PackedInt32Array(38, 43, 14), PackedInt32Array(14, 43, 41), PackedInt32Array(14, 41, 13), PackedInt32Array(31, 42, 30), PackedInt32Array(30, 42, 44), PackedInt32Array(44, 42, 46), PackedInt32Array(44, 46, 45), PackedInt32Array(42, 43, 46), PackedInt32Array(39, 40, 47), PackedInt32Array(47, 40, 48), PackedInt32Array(45, 50, 49), PackedInt32Array(52, 51, 53), PackedInt32Array(53, 51, 45), PackedInt32Array(53, 45, 49), PackedInt32Array(53, 49, 48), PackedInt32Array(51, 44, 45), PackedInt32Array(49, 47, 48), PackedInt32Array(56, 55, 54), PackedInt32Array(56, 54, 33), PackedInt32Array(52, 53, 57), PackedInt32Array(57, 53, 34), PackedInt32Array(34, 53, 33), PackedInt32Array(33, 53, 56), PackedInt32Array(34, 37, 57), PackedInt32Array(58, 55, 56), PackedInt32Array(58, 56, 28), PackedInt32Array(28, 56, 27), PackedInt32Array(27, 56, 59)]
-geometry_parsed_geometry_type = 0
-agent_radius = 1.0
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_3ipfy"]
-noise_type = 2
-frequency = 0.1365
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g0d6c"]
-noise = SubResource("FastNoiseLite_3ipfy")
-seamless = true
-as_normal_map = true
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_f5i44"]
-frequency = 0.0128
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_n0g3p"]
-noise = SubResource("FastNoiseLite_f5i44")
-seamless = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5i44"]
-albedo_color = Color(0.114708595, 0.105603494, 0.012852703, 1)
-roughness_texture = SubResource("NoiseTexture2D_n0g3p")
-normal_enabled = true
-normal_scale = 0.3
-normal_texture = SubResource("NoiseTexture2D_g0d6c")
-uv1_scale = Vector3(12.043, 12.043, 12.043)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_170dk"]
-material = SubResource("StandardMaterial3D_f5i44")
-size = Vector2(50, 50)
-
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_g0d6c"]
-data = PackedVector3Array(25, 0, 25, -25, 0, 25, 25, 0, -25, -25, 0, 25, -25, 0, -25, 25, 0, -25)
 
 [sub_resource type="LabelSettings" id="LabelSettings_170dk"]
 font_size = 32
@@ -77,6 +42,23 @@ size = Vector3(0.6, 0.2, 0.2)
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_3ipfy"]
 points = PackedVector3Array(0.4578707, 0.19807906, 0.01578243, -0.48873997, -0.09168735, -0.04518683, -0.47150937, -0.1370268, -0.090701535, 0.07635914, -0.33327514, 0.36417928, 0.13656896, -0.33242497, -0.3469059, -0.15161654, 0.47198188, -0.060245913, -0.10534735, 0.21193622, 0.43966028, -0.045016855, 0.19809827, -0.4564163, 0.4090765, -0.15116782, 0.2425159, -0.27137637, -0.37776056, 0.18187061, 0.41147974, -0.07598096, -0.27324012, 0.19819722, -0.4561612, -0.04493101, -0.24064063, -0.33167413, -0.2857683, 0.22713655, 0.2567203, 0.36304116, 0.22752243, 0.42360392, -0.13548777, -0.37899047, 0.060702223, 0.31946206, -0.40674683, 0.18104935, -0.22569102, -0.014631338, -0.09176946, 0.49022886, -0.37785473, 0.30279276, 0.121712334, 0.046232317, 0.45601088, 0.19818504, -0.22746402, -0.060786348, -0.44034815, 0.22845526, 0.06072284, -0.43988743, -0.09113759, -0.48924586, -0.045174047, 0.44186506, -0.22821625, -0.044958085, 0.31717873, 0.24121423, -0.30081153, -0.044848714, 0.39473665, -0.30295488, -0.316348, -0.19622163, 0.33255145, 0.19844188, -0.03042933, 0.45723665, 0.061471395, -0.1522456, -0.47130713, 0.36308852, 0.25670764, 0.22707908, 0.15213433, -0.43948856, 0.18237916, -0.21072462, 0.36227608, 0.2722302)
 
+[sub_resource type="Resource" id="Resource_hbe7s"]
+script = ExtResource("7_2qvp8")
+metadata/_custom_type_script = "uid://dhg3qhmsoaxxo"
+
+[sub_resource type="Resource" id="Resource_g1ltr"]
+script = ExtResource("8_8hd61")
+Entity = NodePath("../../Player")
+Behavior = SubResource("Resource_hbe7s")
+metadata/_custom_type_script = "uid://5khebm0df7rb"
+
+[sub_resource type="Resource" id="Resource_2qvp8"]
+script = ExtResource("7_n0g3p")
+metadata/_custom_type_script = "uid://blt0jdlp5sgs8"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f5i44"]
+size = Vector3(7, 5, 5)
+
 [node name="root" type="Node3D"]
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
@@ -86,38 +68,7 @@ shadow_enabled = true
 [node name="Environment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_24d08")
 
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
-navigation_mesh = SubResource("NavigationMesh_3ipfy")
-
-[node name="Ground" type="MeshInstance3D" parent="NavigationRegion3D"]
-mesh = SubResource("PlaneMesh_170dk")
-skeleton = NodePath("../..")
-
-[node name="StaticBody" type="StaticBody3D" parent="NavigationRegion3D/Ground"]
-
-[node name="Hitbox" type="CollisionShape3D" parent="NavigationRegion3D/Ground/StaticBody"]
-shape = SubResource("ConcavePolygonShape3D_g0d6c")
-
-[node name="Obstacles" type="Node3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0913963, 0)
-
-[node name="rock" parent="NavigationRegion3D/Obstacles" instance=ExtResource("1_g0d6c")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5768757, 0.31505835, 13.349791)
-
-[node name="rock2" parent="NavigationRegion3D/Obstacles" instance=ExtResource("1_g0d6c")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.131155, 0.31505454, 12.467875)
-
-[node name="rock3" parent="NavigationRegion3D/Obstacles" instance=ExtResource("1_g0d6c")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.680719, 0.31505644, 2.6855803)
-
-[node name="rock4" parent="NavigationRegion3D/Obstacles" instance=ExtResource("1_g0d6c")]
-transform = Transform3D(0.4943667, 0, 0.86925346, 0, 1, 0, -0.86925346, 0, 0.4943667, -3.6144466, 0.31505644, 2.6855803)
-
-[node name="rock5" parent="NavigationRegion3D/Obstacles" instance=ExtResource("1_g0d6c")]
-transform = Transform3D(0.7106056, 0.032274347, 0.70284986, -0.01657191, 0.9994379, -0.029138675, -0.7033953, 0.00905854, 0.7107411, 2.1331425, 0.31505644, -16.430729)
-
-[node name="rock6" parent="NavigationRegion3D/Obstacles" instance=ExtResource("1_g0d6c")]
-transform = Transform3D(0.7106056, 0.032274347, 0.70284986, -0.01657191, 0.9994379, -0.029138675, -0.7033953, 0.00905854, 0.7107411, -8.550962, 0.31505644, 16.36436)
+[node name="Level" parent="." instance=ExtResource("1_f5i44")]
 
 [node name="Player" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98506665, 0)
@@ -177,7 +128,7 @@ transform = Transform3D(0.99896264, -0.02057148, 0.040625896, 0, 0.89214474, 0.4
 [node name="Enemy" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_entityController")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, -5)
 script = ExtResource("4_3ipfy")
-_entityController = NodePath("HostileEntityController")
+_entityController = NodePath("AiEntityController")
 metadata/_custom_type_script = "uid://c621010pj8lg8"
 
 [node name="glasses" type="MeshInstance3D" parent="Enemy"]
@@ -192,18 +143,19 @@ mesh = SubResource("SphereMesh_g0d6c")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3495531, 0)
 shape = SubResource("ConvexPolygonShape3D_3ipfy")
 
-[node name="HostileEntityController" type="NavigationAgent3D" parent="Enemy" node_paths=PackedStringArray("_hostileTowards")]
-avoidance_enabled = true
-use_3d_avoidance = true
+[node name="AiEntityController" type="NavigationAgent3D" parent="Enemy" node_paths=PackedStringArray("_detectionArea")]
+path_desired_distance = 3.0
+target_desired_distance = 2.0
 debug_enabled = true
-debug_path_custom_color = Color(0.5905845, 0.30233824, 0.25428212, 1)
-script = ExtResource("4_cwqeq")
-_hostileTowards = [NodePath("../../Player")]
-_desiredDistance = 4.0
-metadata/_custom_type_script = "uid://bpsrxbshpp12y"
+script = ExtResource("6_f5i44")
+_detectionArea = NodePath("../Area3D")
+_behaviours = Array[Object]([SubResource("Resource_g1ltr")])
+_idleBehavior = SubResource("Resource_2qvp8")
+metadata/_custom_type_script = "uid://dmh3v38vsk0cu"
 
-[node name="Sprite3D" type="Sprite3D" parent="Enemy"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.934692, 0, 0.45801306, -0.61773396)
-flip_h = true
-pixel_size = 0.001
-texture = ExtResource("7_f5i44")
+[node name="Area3D" type="Area3D" parent="Enemy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38075817, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy/Area3D"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.028564453, 0.41735852, -3.1721087)
+shape = SubResource("BoxShape3D_f5i44")

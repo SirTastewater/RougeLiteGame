@@ -181,7 +181,7 @@ public abstract partial class EntityController : NavigationAgent3D
     /// is sneaking, sprinting, or in a normal state. Sneaking reduces the speed relative to the
     /// base speed by the sneaking penalty factor, while sprinting increases it by the sprint addition factor.
     /// </remarks>
-    protected float MovementSpeed()
+    public float MovementSpeed()
     {
         if (IsSneaking()) return BaseSpeed / SneakPenalty;
 
