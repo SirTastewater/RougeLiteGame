@@ -4,10 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
 [ext_resource type="Script" uid="uid://onv3e2hhcglw" path="res://entity/camera/CameraController.cs" id="3_170dk"]
 [ext_resource type="Script" uid="uid://bqgeix1vcei8x" path="res://entity/EntityController.cs" id="3_n0g3p"]
-[ext_resource type="Script" uid="uid://ckvpqa4tvq04p" path="res://entity/player/PlayerBehavior.cs" id="4_2qvp8"]
-[ext_resource type="Script" uid="uid://bscc1j3n0n7do" path="res://entity/behavior/reaction/ChaseBehaviour.cs" id="7_n0g3p"]
+[ext_resource type="Script" uid="uid://diracah62385j" path="res://entity/player/PlayerBehavior.cs" id="4_2qvp8"]
+[ext_resource type="Script" uid="uid://lijvuyy5sqnh" path="res://entity/behavior/reaction/ChaseBehaviour.cs" id="7_n0g3p"]
 [ext_resource type="Script" uid="uid://effrjad0b1wr" path="res://entity/behavior/reaction/ReactionTarget.cs" id="8_2qvp8"]
-[ext_resource type="Script" uid="uid://dvjkqtlpch12a" path="res://entity/behavior/FollowPath.cs" id="9_2qvp8"]
+[ext_resource type="Script" uid="uid://sh6qy5qm61re" path="res://entity/behavior/FollowPath.cs" id="9_2qvp8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -22,27 +22,27 @@ sky = SubResource("Sky_gxo8o")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="Resource" id="Resource_ebfx1"]
+[sub_resource type="Resource" id="Resource_g0d6c"]
 script = ExtResource("4_2qvp8")
-metadata/_custom_type_script = "uid://ckvpqa4tvq04p"
+metadata/_custom_type_script = "uid://diracah62385j"
 
-[sub_resource type="Resource" id="Resource_8hd61"]
+[sub_resource type="Resource" id="Resource_f5i44"]
 script = ExtResource("9_2qvp8")
 _path = NodePath("../../Path3D/PathFollow3D")
-metadata/_custom_type_script = "uid://dvjkqtlpch12a"
+metadata/_custom_type_script = "uid://sh6qy5qm61re"
 
-[sub_resource type="Resource" id="Resource_hbe7s"]
+[sub_resource type="Resource" id="Resource_n0g3p"]
 script = ExtResource("7_n0g3p")
-metadata/_custom_type_script = "uid://bscc1j3n0n7do"
+metadata/_custom_type_script = "uid://lijvuyy5sqnh"
 
-[sub_resource type="Resource" id="Resource_g1ltr"]
+[sub_resource type="Resource" id="Resource_2qvp8"]
 script = ExtResource("8_2qvp8")
 Entity = NodePath("../../Player")
-Behavior = SubResource("Resource_hbe7s")
+Behavior = SubResource("Resource_n0g3p")
 metadata/_custom_type_script = "uid://effrjad0b1wr"
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_g0d6c"]
-size = Vector3(1, 0.49890137, 25.716675)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_n0g3p"]
+points = PackedVector3Array(0, 0, 0, 6, 0, 0, 3, 0, 5, 0, 1, 0, 3, 1, 5, 6, 1, 0)
 
 [sub_resource type="Curve3D" id="Curve3D_hbe7s"]
 closed = true
@@ -70,7 +70,7 @@ _entityController = NodePath("PlayerController")
 
 [node name="PlayerController" type="NavigationAgent3D" parent="Player"]
 script = ExtResource("3_n0g3p")
-_idleBehavior = SubResource("Resource_ebfx1")
+_idleBehavior = SubResource("Resource_g0d6c")
 metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 
 [node name="FPController" type="Node3D" parent="Player" node_paths=PackedStringArray("_yawPivot", "_pitchPivot")]
@@ -93,17 +93,18 @@ target_desired_distance = 2.0
 avoidance_enabled = true
 height = 10.0
 radius = 4.0
+debug_enabled = true
 script = ExtResource("3_n0g3p")
-_idleBehavior = SubResource("Resource_8hd61")
-_behaviours = Array[Object]([SubResource("Resource_g1ltr")])
+_idleBehavior = SubResource("Resource_f5i44")
+_behaviours = Array[Object]([SubResource("Resource_2qvp8")])
 _detectionArea = NodePath("../ViewArea")
 metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 
 [node name="ViewArea" type="Area3D" parent="Enemy"]
 
 [node name="ViewBox" type="CollisionShape3D" parent="Enemy/ViewArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4980402, -13.1812)
-shape = SubResource("BoxShape3D_g0d6c")
+transform = Transform3D(-0.4985809, -0.016889151, 0.8666787, 0.0024853323, 0.9997782, 0.020912666, -0.86683977, 0.012580658, -0.49842834, 0.0021343231, -0.2032001, -0.23161173)
+shape = SubResource("ConvexPolygonShape3D_n0g3p")
 
 [node name="Path3D" type="Path3D" parent="."]
 curve = SubResource("Curve3D_hbe7s")
