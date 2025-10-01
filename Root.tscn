@@ -1,13 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=14 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
 [ext_resource type="Script" uid="uid://onv3e2hhcglw" path="res://entity/camera/CameraController.cs" id="3_170dk"]
 [ext_resource type="Script" uid="uid://bqgeix1vcei8x" path="res://entity/EntityController.cs" id="3_n0g3p"]
 [ext_resource type="Script" uid="uid://ckvpqa4tvq04p" path="res://entity/player/PlayerBehavior.cs" id="4_2qvp8"]
-[ext_resource type="Script" uid="uid://cbhm47p56yj57" path="res://entity/behavior/StatueIdleBehavior.cs" id="6_8hd61"]
-[ext_resource type="Script" uid="uid://bscc1j3n0n7do" path="res://entity/behavior/reaction/ChaseBehaviour.cs" id="7_hbe7s"]
-[ext_resource type="Script" uid="uid://effrjad0b1wr" path="res://entity/behavior/reaction/ReactionTarget.cs" id="8_g1ltr"]
+[ext_resource type="Script" uid="uid://dvjkqtlpch12a" path="res://entity/behavior/FollowPath.cs" id="9_2qvp8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -26,22 +24,21 @@ glow_enabled = true
 script = ExtResource("4_2qvp8")
 metadata/_custom_type_script = "uid://ckvpqa4tvq04p"
 
-[sub_resource type="Resource" id="Resource_n0g3p"]
-script = ExtResource("6_8hd61")
-metadata/_custom_type_script = "uid://cbhm47p56yj57"
-
-[sub_resource type="Resource" id="Resource_cxe32"]
-script = ExtResource("7_hbe7s")
-metadata/_custom_type_script = "uid://bscc1j3n0n7do"
-
-[sub_resource type="Resource" id="Resource_vf7dw"]
-script = ExtResource("8_g1ltr")
-Entity = NodePath("../../Player")
-Behavior = SubResource("Resource_cxe32")
-metadata/_custom_type_script = "uid://effrjad0b1wr"
+[sub_resource type="Resource" id="Resource_8hd61"]
+script = ExtResource("9_2qvp8")
+_path = NodePath("../../Path3D/PathFollow3D")
+metadata/_custom_type_script = "uid://dvjkqtlpch12a"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g0d6c"]
 size = Vector3(1, 0.49890137, 25.716675)
+
+[sub_resource type="Curve3D" id="Curve3D_hbe7s"]
+closed = true
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -11.234897, 0.12003702, -3.6322975, 0, 0, 0, 0, 0, 0, 15.881326, 0.03942409, -2.9900742, 0, 0, 0, 0, 0, 0, 21.065392, 0.10956603, 15.791966),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
 
 [node name="root" type="Node3D"]
 
@@ -53,6 +50,7 @@ shadow_enabled = true
 environment = SubResource("Environment_24d08")
 
 [node name="Level" parent="." instance=ExtResource("1_f5i44")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011890411, 0.044784546, -0.00630188)
 
 [node name="Player" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96214926, 0)
@@ -75,15 +73,15 @@ metadata/_custom_type_script = "uid://onv3e2hhcglw"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.50898516)
 
 [node name="Enemy" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0483932, 1.0693624, 0)
-_entityController = NodePath("EnemyController1")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.946992, 1.0693624, 0)
+_entityController = NodePath("EnemyController")
 
-[node name="EnemyController1" type="NavigationAgent3D" parent="Enemy" node_paths=PackedStringArray("_detectionArea")]
+[node name="EnemyController" type="NavigationAgent3D" parent="Enemy" node_paths=PackedStringArray("_detectionArea")]
 target_desired_distance = 2.0
 debug_enabled = true
 script = ExtResource("3_n0g3p")
-_idleBehavior = SubResource("Resource_n0g3p")
-_behaviours = Array[Object]([SubResource("Resource_vf7dw")])
+_idleBehavior = SubResource("Resource_8hd61")
+_behaviours = Array[Object]([])
 _detectionArea = NodePath("../ViewArea")
 metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 
@@ -93,21 +91,8 @@ metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4980402, -13.1812)
 shape = SubResource("BoxShape3D_g0d6c")
 
-[node name="Enemy2" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.946992, 1.0693624, 0)
-_entityController = NodePath("EnemyController1")
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_hbe7s")
 
-[node name="EnemyController1" type="NavigationAgent3D" parent="Enemy2" node_paths=PackedStringArray("_detectionArea")]
-target_desired_distance = 2.0
-debug_enabled = true
-script = ExtResource("3_n0g3p")
-_idleBehavior = SubResource("Resource_n0g3p")
-_behaviours = Array[Object]([SubResource("Resource_vf7dw")])
-_detectionArea = NodePath("../ViewArea")
-metadata/_custom_type_script = "uid://bqgeix1vcei8x"
-
-[node name="ViewArea" type="Area3D" parent="Enemy2"]
-
-[node name="ViewBox" type="CollisionShape3D" parent="Enemy2/ViewArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4980402, -13.1812)
-shape = SubResource("BoxShape3D_g0d6c")
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(-0.023677444, 0.002971187, -0.99971527, 0, 0.9999956, 0.00297202, 0.9997197, 7.036984e-05, -0.02367734, -11.234897, 0.12003702, -3.6322975)
