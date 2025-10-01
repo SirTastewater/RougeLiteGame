@@ -22,4 +22,10 @@ namespace RougeLiteGame.entity.behavior.reaction;
     {
         return Controller.IsNavigationFinished();
     }
+
+    public override void OutOfVision()
+    {
+        base.OutOfVision();
+        SetTargetPosition(Entity.GlobalPosition);
+    }
 }

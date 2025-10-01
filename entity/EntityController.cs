@@ -104,6 +104,7 @@ public sealed partial class EntityController : NavigationAgent3D
         
         if(_detectionArea == null) return;
         _detectionArea.BodyEntered += BodyEntered;
+        _detectionArea.BodyExited += BodyExited;
 
         base._Ready();
     }
@@ -123,6 +124,19 @@ public sealed partial class EntityController : NavigationAgent3D
             
             // we cannot use behavior.Behavior, because we duplicated it inside the setter.
             ((ReactionBehavior) CurrentBehaviour).React(target, _idleBehavior);
+        }
+    }
+
+    private void BodyExited(Node3D body)
+    {
+        if (body is not Entity target)
+        {
+            return;
+        }
+
+        if (_currentBehaviour is ReactionBehavior reactionBehavior && reactionBehavior.Target == target)
+        {
+            reactionBehavior.OutOfVision();
         }
     }
 
