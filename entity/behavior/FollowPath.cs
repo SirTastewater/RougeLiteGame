@@ -22,7 +22,6 @@ namespace RougeLiteGame.entity.behavior;
         if (!IsFacingTarget())
         {
             RotateTowards(delta);
-            return Vector3.Zero;
         }
         
         if (!Controller.IsNavigationFinished()) return FollowControllerTarget();
@@ -32,5 +31,10 @@ namespace RougeLiteGame.entity.behavior;
         SetTargetPosition(targetPosition);
 
         return FollowControllerTarget();
+    }
+
+    public override bool IsSneaking()
+    {
+        return !IsFacingTarget();
     }
 }

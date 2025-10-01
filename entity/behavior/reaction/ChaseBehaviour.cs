@@ -10,8 +10,6 @@ namespace RougeLiteGame.entity.behavior.reaction;
         SetTargetPosition(Target.GlobalPosition);
         Entity.LookAt(Target.GlobalPosition);
         
-        
-        
         return FollowControllerTarget();
     }
 

@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://b5lsmomafcocw" path="res://rock/rock.blend" id="1_xnnxx"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_xnnxx"]
-vertices = PackedVector3Array(-3, 0.25884545, -5.75, 0, 0.25884545, -6.5, 0, 0.25884545, -23, -3.75, 0.25884545, -3.5, -23, 0.25884545, -23, -23, 0.25884545, -3.5, 2.25, 0.25884545, -5.75, 2.75, 0.25884545, -3.5, 23, 0.25884545, -3.5, 23, 0.25884545, -23, -3.75, 0.25884545, -2.75, -2.5, 0.25884545, -1, 0, 0.25884545, 0, -23, 0.25884545, 23, 0, 0.25884545, 23, 2, 0.25884545, -0.75, 23, 0.25884545, 23)
-polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(0, 3, 2), PackedInt32Array(2, 3, 5), PackedInt32Array(2, 5, 4), PackedInt32Array(2, 6, 1), PackedInt32Array(6, 2, 7), PackedInt32Array(7, 2, 8), PackedInt32Array(8, 2, 9), PackedInt32Array(5, 3, 10), PackedInt32Array(5, 10, 11), PackedInt32Array(11, 12, 5), PackedInt32Array(5, 12, 14), PackedInt32Array(5, 14, 13), PackedInt32Array(15, 7, 8), PackedInt32Array(15, 8, 12), PackedInt32Array(12, 8, 14), PackedInt32Array(14, 8, 16)]
+vertices = PackedVector3Array(-23, 0.25884545, -3.75, -13.25, 0.25884545, -3.75, -12.5, 0.25884545, -5.75, -9.25, 0.25884545, -6.5, -9.5, 0.25884545, -23, -23, 0.25884545, -23, -7.25, 0.25884545, -5.75, -6.75, 0.25884545, -3.5, -3.75, 0.25884545, -3.5, -3, 0.25884545, -5.75, 0, 0.25884545, -6.5, 0, 0.25884545, -23, 2.25, 0.25884545, -5.75, 2.75, 0.25884545, -3.5, 23, 0.25884545, -3.5, 23, 0.25884545, -23, -12, 0.25884545, -1, -9.25, 0.25884545, 0, -23, 0.25884545, 23, -9.25, 0.25884545, 23, -3.75, 0.25884545, -2.75, -7.5, 0.25884545, -0.75, -2.5, 0.25884545, -1, 0, 0.25884545, 23, 0, 0.25884545, 0, 2, 0.25884545, -0.75, 23, 0.25884545, 23)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(2, 0, 3), PackedInt32Array(3, 0, 4), PackedInt32Array(4, 0, 5), PackedInt32Array(7, 6, 8), PackedInt32Array(8, 6, 9), PackedInt32Array(6, 3, 9), PackedInt32Array(9, 3, 10), PackedInt32Array(10, 3, 11), PackedInt32Array(11, 3, 4), PackedInt32Array(11, 12, 10), PackedInt32Array(12, 11, 13), PackedInt32Array(13, 11, 14), PackedInt32Array(14, 11, 15), PackedInt32Array(0, 1, 16), PackedInt32Array(16, 17, 0), PackedInt32Array(0, 17, 19), PackedInt32Array(0, 19, 18), PackedInt32Array(7, 8, 20), PackedInt32Array(20, 22, 7), PackedInt32Array(7, 22, 21), PackedInt32Array(21, 22, 17), PackedInt32Array(17, 22, 24), PackedInt32Array(17, 24, 23), PackedInt32Array(17, 23, 19), PackedInt32Array(25, 13, 14), PackedInt32Array(25, 14, 24), PackedInt32Array(24, 14, 23), PackedInt32Array(23, 14, 26)]
 agent_radius = 2.0
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_gaj2k"]
@@ -50,3 +50,6 @@ shape = SubResource("ConcavePolygonShape3D_7qcyj")
 
 [node name="rock" parent="." instance=ExtResource("1_xnnxx")]
 transform = Transform3D(1, 0, 0, 0, 0.7147901, -0.69933903, 0, 0.69933903, 0.7147901, -0.4989624, 0.09453452, -3.531129)
+
+[node name="rock2" parent="." instance=ExtResource("1_xnnxx")]
+transform = Transform3D(1, 0, 0, 0, 0.7147901, -0.69933903, 0, 0.69933903, 0.7147901, -9.965897, 0.09453452, -3.531129)

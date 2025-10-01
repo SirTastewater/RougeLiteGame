@@ -1,13 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://46wmtnfnlyqu"]
 
-[ext_resource type="Script" path="res://entity/player/Player.cs" id="1_sntwv"]
+[ext_resource type="Script" uid="uid://c621010pj8lg8" path="res://entity/player/Player.cs" id="1_sntwv"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sntwv"]
 radius = 0.4
 height = 1.8
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_sntwv"]
-points = PackedVector3Array(0.38808236, 0.5888041, 0.013298327, -0.388082, -0.58880365, -0.013374248, -0.38808233, -0.5888042, 0.013298329, -0.33784845, 0.7027541, 0.067446955, -0.013374248, 0.58880365, -0.388082, 0.2820629, -0.6987575, 0.20149529, 0.17285605, -0.6385711, -0.33264202, -0.09256211, 0.5557874, 0.38369715, -0.22240482, -0.54951364, 0.32707036, -0.22240633, -0.54951733, -0.32707247, -0.12361767, -0.8791931, -0.013726605, -0.32707247, 0.54951733, -0.22240633, 0.09618819, 0.88083875, -0.06876161, 0.17120443, 0.5535348, 0.3558029, 0.013298327, -0.5888041, 0.38808236, 0.3557666, -0.55347836, -0.17126173, 0.27658004, 0.5796744, -0.27657998, -0.32710296, 0.5495686, 0.22235282, 0.327103, -0.54956853, 0.22235279, 0.067995764, 0.81738925, 0.2315259, 0.123147644, -0.84895074, -0.15059146, -0.150588, 0.84893125, -0.123222485, -0.06807214, -0.8173782, 0.23152275, -0.013374168, -0.58880013, -0.38807967, 0.3271051, 0.54957205, 0.22235423, 0.38808465, -0.58880764, 0.013298407, -0.38807967, 0.58880013, -0.013374168, -0.1746835, -0.75265944, -0.25534776, -0.17126693, 0.5534951, -0.35577732, -0.35579216, -0.5535182, 0.17119929, -0.35577732, -0.5534951, -0.17126693, -0.17594947, 0.8122288, 0.17587267)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sntwv"]
 albedo_color = Color(0, 0, 0, 1)
@@ -16,16 +13,21 @@ albedo_color = Color(0, 0, 0, 1)
 material = SubResource("StandardMaterial3D_sntwv")
 size = Vector3(0.6, 0.2, 0.2)
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sntwv"]
+radius = 0.57177734
+height = 1.8359375
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_sntwv")
 
 [node name="Body" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_sntwv")
 
-[node name="Hitbox" type="CollisionShape3D" parent="."]
-shape = SubResource("ConvexPolygonShape3D_sntwv")
-
 [node name="glasses" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42735392, -0.325386)
 layers = 512
 mesh = SubResource("BoxMesh_o3s7f")
+
+[node name="Hitbox" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.021104634, 0)
+shape = SubResource("CapsuleShape3D_sntwv")

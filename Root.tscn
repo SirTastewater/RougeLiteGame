@@ -35,7 +35,7 @@ size = Vector3(1, 0.49890137, 25.716675)
 [sub_resource type="Curve3D" id="Curve3D_hbe7s"]
 closed = true
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -11.234897, 0.12003702, -3.6322975, 0, 0, 0, 0, 0, 0, 15.881326, 0.03942409, -2.9900742, 0, 0, 0, 0, 0, 0, 21.065392, 0.10956603, 15.791966),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -11.235, 6, -3.632, 0, 0, 0, 0, 0, 0, 15.881, 6, -2.99, 0, 0, 0, 0, 0, 0, 21.065, 6, 15.792),
 "tilts": PackedFloat32Array(0, 0, 0)
 }
 point_count = 3
@@ -78,6 +78,10 @@ _entityController = NodePath("EnemyController")
 
 [node name="EnemyController" type="NavigationAgent3D" parent="Enemy" node_paths=PackedStringArray("_detectionArea")]
 target_desired_distance = 2.0
+avoidance_enabled = true
+height = 10.0
+radius = 4.0
+use_3d_avoidance = true
 debug_enabled = true
 script = ExtResource("3_n0g3p")
 _idleBehavior = SubResource("Resource_8hd61")
@@ -95,4 +99,4 @@ shape = SubResource("BoxShape3D_g0d6c")
 curve = SubResource("Curve3D_hbe7s")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
-transform = Transform3D(-0.023677444, 0.002971187, -0.99971527, 0, 0.9999956, 0.00297202, 0.9997197, 7.036984e-05, -0.02367734, -11.234897, 0.12003702, -3.6322975)
+transform = Transform3D(-0.023669422, 0, -0.99971855, 0, 0.9999985, 0, 0.9997182, 0, -0.02366943, -11.235, 6, -3.632)
