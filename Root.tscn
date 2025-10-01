@@ -1,10 +1,12 @@
-[gd_scene load_steps=14 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=18 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
 [ext_resource type="Script" uid="uid://onv3e2hhcglw" path="res://entity/camera/CameraController.cs" id="3_170dk"]
 [ext_resource type="Script" uid="uid://bqgeix1vcei8x" path="res://entity/EntityController.cs" id="3_n0g3p"]
 [ext_resource type="Script" uid="uid://ckvpqa4tvq04p" path="res://entity/player/PlayerBehavior.cs" id="4_2qvp8"]
+[ext_resource type="Script" uid="uid://bscc1j3n0n7do" path="res://entity/behavior/reaction/ChaseBehaviour.cs" id="7_n0g3p"]
+[ext_resource type="Script" uid="uid://effrjad0b1wr" path="res://entity/behavior/reaction/ReactionTarget.cs" id="8_2qvp8"]
 [ext_resource type="Script" uid="uid://dvjkqtlpch12a" path="res://entity/behavior/FollowPath.cs" id="9_2qvp8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
@@ -29,16 +31,26 @@ script = ExtResource("9_2qvp8")
 _path = NodePath("../../Path3D/PathFollow3D")
 metadata/_custom_type_script = "uid://dvjkqtlpch12a"
 
+[sub_resource type="Resource" id="Resource_hbe7s"]
+script = ExtResource("7_n0g3p")
+metadata/_custom_type_script = "uid://bscc1j3n0n7do"
+
+[sub_resource type="Resource" id="Resource_g1ltr"]
+script = ExtResource("8_2qvp8")
+Entity = NodePath("../../Player")
+Behavior = SubResource("Resource_hbe7s")
+metadata/_custom_type_script = "uid://effrjad0b1wr"
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_g0d6c"]
 size = Vector3(1, 0.49890137, 25.716675)
 
 [sub_resource type="Curve3D" id="Curve3D_hbe7s"]
 closed = true
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -11.235, 6, -3.632, 0, 0, 0, 0, 0, 0, 15.881, 6, -2.99, 0, 0, 0, 0, 0, 0, 21.065, 6, 15.792),
-"tilts": PackedFloat32Array(0, 0, 0)
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -11.235, 6, -3.632, 0, 0, 0, 0, 0, 0, 4.7138605, 6, -11.979759, 0, 0, 0, 0, 0, 0, 15.881, 6, -2.99, 0, 0, 0, 0, 0, 0, 21.065, 6, 15.792, 0, 0, 0, 0, 0, 0, 1.953, 6, 15.015148),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
 }
-point_count = 3
+point_count = 5
 
 [node name="root" type="Node3D"]
 
@@ -81,11 +93,9 @@ target_desired_distance = 2.0
 avoidance_enabled = true
 height = 10.0
 radius = 4.0
-use_3d_avoidance = true
-debug_enabled = true
 script = ExtResource("3_n0g3p")
 _idleBehavior = SubResource("Resource_8hd61")
-_behaviours = Array[Object]([])
+_behaviours = Array[Object]([SubResource("Resource_g1ltr")])
 _detectionArea = NodePath("../ViewArea")
 metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 
@@ -99,4 +109,4 @@ shape = SubResource("BoxShape3D_g0d6c")
 curve = SubResource("Curve3D_hbe7s")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
-transform = Transform3D(-0.023669422, 0, -0.99971855, 0, 0.9999985, 0, 0.9997182, 0, -0.02366943, -11.235, 6, -3.632)
+transform = Transform3D(0.463726, 0, -0.8859744, 0, 0.9999986, 0, 0.8859744, 0, 0.463726, -11.235, 6, -3.632)

@@ -81,53 +81,6 @@ namespace RougeLiteGame.entity.behavior;
         Controller.SetTargetPosition(position);
     }
 
-    protected bool IsFacingTarget(float tolerance = 0.01f)
-    {
-        return IsFacing(GetTargetPosition(), tolerance);
-    }
-    
-    protected bool IsFacing(Vector3 location, float tolerance = 0.01f)
-    {
-        return AngleTo(location) < tolerance;
-    }
-
-    protected float AngleTo(Vector3 location)
-    {
-        Vector3 target = location - Entity.GlobalPosition;
-        target.Y = 0;
-        target.Normalized();
-                
-        Vector3 facing = -Entity.GlobalTransform.Basis.Z;
-        facing.Y = 0;
-        facing = facing.Normalized();
-
-        return facing.AngleTo(target);
-    }
-
-    protected float RotateTowards(double delta, float rotationStep = 2.0f)
-    {
-        return RotateTowards(GetTargetPosition(), delta, rotationStep);
-    }
-    
-    protected float RotateTowards(Vector3 location, double delta, float rotationStep = 2.0f)
-    {
-        Vector3 target = GetTargetPosition() - Entity.GlobalPosition;
-        target.Y = 0;
-        target.Normalized();
-                
-        Vector3 facing = -Entity.GlobalTransform.Basis.Z;
-        facing.Y = 0;
-        facing = facing.Normalized();
-
-        float angle = facing.AngleTo(target);
-        float cross = facing.Cross(target).Y;
-        float turnDirection = float.Sign(cross);
-        float rotationAmount = Mathf.Min(angle, rotationStep * (float) delta);
-            
-        Entity.Rotation = new Vector3(Entity.Rotation.X, Entity.Rotation.Y + turnDirection * rotationAmount, Entity.Rotation.Z);
-        return angle;
-    }
-
     public virtual bool IsSprinting()
     {
         return false;

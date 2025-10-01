@@ -9,9 +9,13 @@ agent_radius = 2.0
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_gaj2k"]
 noise_type = 3
+frequency = 0.0034
+fractal_type = 2
+fractal_gain = 0.762
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xnnxx"]
 noise = SubResource("FastNoiseLite_gaj2k")
+seamless = true
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_3ipfy"]
 noise_type = 2

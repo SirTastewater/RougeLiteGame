@@ -26,9 +26,12 @@ public sealed partial class EntityController : NavigationAgent3D
         }
     }
 
+    private Array<Behavior> _duplicated = [];
+
     private MoveState MovementState { get; set; } = MoveState.Stand;
+
     private Behavior _currentBehaviour;
-    
+
     private Behavior CurrentBehaviour
     {
         get => _currentBehaviour;
@@ -37,13 +40,36 @@ public sealed partial class EntityController : NavigationAgent3D
             _currentBehaviour?.Uninitialize();
             
             // duplicate behavior per instance to prevent shared routes among copied enemies.
-            Behavior newBehavior = (Behavior) value.Duplicate();
+            Behavior newBehavior = CloneBehavior(value);
             _currentBehaviour = newBehavior;
             
             newBehavior.Initialize(this, Entity);
             SetProcessInput(newBehavior is IInputAcceptor);
         }
     }
+
+    /// <summary>
+    /// Creates a duplicate of the specified <see cref="Behavior"/> instance to make sure
+    /// behavior instances are not shared among copied entities.
+    /// </summary>
+    /// <param name="behavior">
+    /// The <see cref="Behavior"/> to be duplicated. This should be an instance of a behavior
+    /// attached to an entity.
+    /// </param>
+    /// <returns>
+    /// A new instance of the provided <see cref="Behavior"/> if it has not been duplicated before,
+    /// or the already duplicated <see cref="Behavior"/> instance from the internal cache.
+    /// </returns>
+    private Behavior CloneBehavior(Behavior behavior)
+    {
+        if (_duplicated.Contains(behavior)) { return behavior; }
+
+        //GD.Print("Duplicate not yet duplicated behavior");
+        Behavior duplicated = (Behavior)behavior.Duplicate();
+        _duplicated.Add(duplicated);
+        return duplicated;
+    }
+
     #endregion
     
     [ExportGroup("Behavior")]

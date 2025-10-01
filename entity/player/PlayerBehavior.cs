@@ -4,16 +4,16 @@ using RougeLiteGame.entity.behavior;
 namespace RougeLiteGame.entity.player;
 
 [GlobalClass]
-public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
+public partial class PlayerBehavior : IdleBehavior
 {
     public override Vector3 Process(double delta)
     {
         float speed = MovementSpeed();
         Vector3 velocity = Entity.Velocity;
 
-        if (Godot.Input.IsActionJustPressed("jump") && Entity.IsOnFloor()) velocity.Y += Controller.JumpVelocity;
+        if (Input.IsActionJustPressed("jump") && Entity.IsOnFloor()) velocity.Y += Controller.JumpVelocity;
         
-        Vector2 inputDir = Godot.Input.GetVector("left", "right", "forward", "backward");
+        Vector2 inputDir = Input.GetVector("left", "right", "forward", "backward");
         
         Vector3 direction = (Entity.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 
@@ -33,16 +33,11 @@ public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
 
     public override bool IsSneaking()
     {
-        return Godot.Input.IsActionPressed("sneak");
+        return Input.IsActionPressed("sneak");
     }
 
     public  override bool IsSprinting()
     {
-        return Godot.Input.IsActionPressed("sprint");
-    }
-
-    public void Input(InputEvent @event)
-    {
-        //throw new System.NotImplementedException();
+        return Input.IsActionPressed("sprint");
     }
 }
