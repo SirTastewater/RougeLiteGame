@@ -1,5 +1,9 @@
 # Godot 4+ specific ignores
 .godot/
+
+# Do not ignore the uid_cache
+!.godot/uid_cache.bin
+
 .nomedia
 
 # Godot-specific ignores
