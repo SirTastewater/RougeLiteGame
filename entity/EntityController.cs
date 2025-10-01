@@ -35,9 +35,13 @@ public sealed partial class EntityController : NavigationAgent3D
         set // Moved to setter because it's the fcking 5'th time I forgot to free the behavior before
         {
             _currentBehaviour?.Uninitialize();
-            _currentBehaviour = value;
-            value.Initialize(this, Entity);
-            SetProcessInput(value is IInputAcceptor);
+            
+            // duplicate behavior per instance to prevent shared routes among copied enemies.
+            Behavior newBehavior = (Behavior) value.Duplicate();
+            _currentBehaviour = newBehavior;
+            
+            newBehavior.Initialize(this, Entity);
+            SetProcessInput(newBehavior is IInputAcceptor);
         }
     }
     #endregion
@@ -90,7 +94,9 @@ public sealed partial class EntityController : NavigationAgent3D
             if (GetNode<Entity>(behaviour.Entity) != target) continue;
             
             CurrentBehaviour = behaviour.Behavior;
-            behaviour.Behavior.React(target, _idleBehavior);
+            
+            // we cannot use behavior.Behavior, because we duplicated it inside the setter.
+            ((ReactionBehavior) CurrentBehaviour).React(target, _idleBehavior);
         }
     }
 
@@ -128,7 +134,7 @@ public sealed partial class EntityController : NavigationAgent3D
     /// </exception>
     /// <remarks>
     /// This method should only be called once during the lifecycle of the object
-    /// and only by the entity specified in the editor. Subsequent calls will throw an exception.
+    /// and only by the entity specified in the editor. Later calls will throw an exception.
     /// Enables physics processing after connection.
     /// </remarks>
     public void Connect(Entity entity)

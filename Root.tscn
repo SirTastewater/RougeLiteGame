@@ -92,3 +92,22 @@ metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 [node name="ViewBox" type="CollisionShape3D" parent="Enemy/ViewArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4980402, -13.1812)
 shape = SubResource("BoxShape3D_g0d6c")
+
+[node name="Enemy2" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.946992, 1.0693624, 0)
+_entityController = NodePath("EnemyController1")
+
+[node name="EnemyController1" type="NavigationAgent3D" parent="Enemy2" node_paths=PackedStringArray("_detectionArea")]
+target_desired_distance = 2.0
+debug_enabled = true
+script = ExtResource("3_n0g3p")
+_idleBehavior = SubResource("Resource_n0g3p")
+_behaviours = Array[Object]([SubResource("Resource_vf7dw")])
+_detectionArea = NodePath("../ViewArea")
+metadata/_custom_type_script = "uid://bqgeix1vcei8x"
+
+[node name="ViewArea" type="Area3D" parent="Enemy2"]
+
+[node name="ViewBox" type="CollisionShape3D" parent="Enemy2/ViewArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4980402, -13.1812)
+shape = SubResource("BoxShape3D_g0d6c")
