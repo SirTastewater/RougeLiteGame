@@ -25,7 +25,7 @@ public class LoggerFactory
     /// </returns>
     public static ILogger GetLogger(Type type)
     {
-        Logger.Log("Getting logger for type {0}.", type);
+        Logger.Log("Getting logger for type {}.", type);
         if (Loggers.TryGetValue(type, out ILogger value)) return value;
         
         value = new ConsoleLogger(type);
