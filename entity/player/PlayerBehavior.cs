@@ -4,7 +4,7 @@ using RougeLiteGame.entity.behavior;
 namespace RougeLiteGame.entity.player;
 
 [GlobalClass]
-public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
+public partial class PlayerBehavior : behavior.idle.IdleBehavior, IInputAcceptor
 {
     public override Vector3 Process(double delta)
     {

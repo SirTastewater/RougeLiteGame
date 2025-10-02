@@ -1,8 +1,7 @@
-using System;
 using Godot;
 using RougeLiteGame.logger;
 
-namespace RougeLiteGame.entity.behavior;
+namespace RougeLiteGame.entity.behavior.idle;
 
 [GlobalClass] public partial class NavigationIdleBehavior : IdleBehavior
 {

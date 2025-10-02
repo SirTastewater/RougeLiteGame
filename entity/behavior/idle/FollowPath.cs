@@ -1,10 +1,9 @@
 using Godot;
 
-namespace RougeLiteGame.entity.behavior;
+namespace RougeLiteGame.entity.behavior.idle;
 
 [GlobalClass] public partial class FollowPath : NavigationIdleBehavior
 {
-    
     [Export(PropertyHint.NodePathValidTypes, "PathFollow3D")] private NodePath _path;
     private PathFollow3D _path3D;
     

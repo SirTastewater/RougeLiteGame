@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Godot;
 using Godot.Collections;
 using RougeLiteGame.entity.behavior;
+using RougeLiteGame.entity.behavior.idle;
 using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity;
@@ -79,7 +80,7 @@ public sealed partial class EntityController : NavigationAgent3D
     #endregion
     
     [ExportGroup("Behavior")]
-    [Export] private IdleBehavior _idleBehavior;
+    [Export] private behavior.idle.IdleBehavior _idleBehavior;
     [ExportSubgroup("Reaction")]
 
     #region Editor Gravity Settings
@@ -160,13 +161,13 @@ public sealed partial class EntityController : NavigationAgent3D
     /// Sets the idle behavior for this entity controller, optionally overriding the current behavior.
     /// </summary>
     /// <param name="idleBehavior">
-    /// The <see cref="IdleBehavior"/> to set as the idle behavior for the entity.
+    /// The <see cref="behavior.idle.IdleBehavior"/> to set as the idle behavior for the entity.
     /// </param>
     /// <param name="switchBehavior">
     /// A boolean value indicating whether the current behavior should be overridden with the provided idle behavior.
     /// If set to true, the current behavior will be replaced.
     /// </param>
-    public void SetIdleBehavior(IdleBehavior idleBehavior, bool switchBehavior = true)
+    public void SetIdleBehavior(behavior.idle.IdleBehavior idleBehavior, bool switchBehavior = true)
     {
         _idleBehavior = idleBehavior;
         if (CurrentBehaviour is ReactionBehavior reactionBehavior)
