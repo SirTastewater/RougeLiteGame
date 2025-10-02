@@ -12,12 +12,11 @@ namespace RougeLiteGame.entity.behavior;
     {
         DefaultBehavior = defaultBehavior;
         Target = target;
+        
+        React();
     }
+    
+    protected virtual void React() { }
 
-    public virtual void OutOfVision()
-    {
-        
-        
-    }
-    public abstract bool Release();
+    public abstract bool ReactionDone();
 }

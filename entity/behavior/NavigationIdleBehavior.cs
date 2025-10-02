@@ -137,7 +137,7 @@ namespace RougeLiteGame.entity.behavior;
     /// </remarks>
     protected virtual Vector3 GetNextPosition()
     {
-        Logger.Log(LogLevel.Debug, "Generating new random position for basic navigation.");
+        Logger.Trace("Generating new random position for basic navigation.");
         
         Vector3 randomPosition;
         do

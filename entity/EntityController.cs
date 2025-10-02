@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using Godot;
 using Godot.Collections;
 using RougeLiteGame.entity.behavior;
-using RougeLiteGame.entity.behavior.reaction;
 using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity;
@@ -66,11 +65,11 @@ public sealed partial class EntityController : NavigationAgent3D
     {
         if (_duplicated.Contains(behavior.ResourcePath))
         {
-            Logger.Trace("Behavior already duplicated: [Type: {}, ResourcePath: {}]. Reusing existing instance for entity {}.", behavior.GetType().Name, behavior.ResourcePath, Entity.Name);
+            Logger.Trace("Behavior already duplicated: [Type: {}, ResourcePath: {}]. Reusing existing instance for {}.", behavior.GetType().Name, behavior.ResourcePath, Entity.Name);
             return behavior;
         }
         
-        Logger.Debug("Duplicating behavior: [Resource: {}, Path: {}] for entity {}.", behavior.GetType().Name, behavior.ResourcePath, Entity.Name);
+        Logger.Debug("Duplicating behavior: [Resource: {}, Path: {}] for {}.", behavior.GetType().Name, behavior.ResourcePath, Entity.Name);
         Behavior duplicated = (Behavior)behavior.Duplicate();
         _duplicated.Add(behavior.ResourcePath);
         
@@ -82,8 +81,6 @@ public sealed partial class EntityController : NavigationAgent3D
     [ExportGroup("Behavior")]
     [Export] private IdleBehavior _idleBehavior;
     [ExportSubgroup("Reaction")]
-    [Export] private Array<ReactionTarget> _behaviours;
-    [Export] private Area3D _detectionArea;
 
     #region Editor Gravity Settings
 
@@ -108,43 +105,8 @@ public sealed partial class EntityController : NavigationAgent3D
     public override void _Ready()
     {
         SetPhysicsProcess(IsEntityConnected());
-        
-        if(_detectionArea == null) return;
-        _detectionArea.BodyEntered += BodyEntered;
-        _detectionArea.BodyExited += BodyExited;
 
         base._Ready();
-    }
-    
-    private void BodyEntered(Node3D body)
-    {
-        if (body is not Entity target)
-        {
-            return;
-        }
-
-        foreach (ReactionTarget behaviour in _behaviours)
-        {
-            if (GetNode<Entity>(behaviour.Entity) != target) continue;
-            
-            CurrentBehaviour = behaviour.Behavior;
-            
-            // we cannot use behavior.Behavior, because we duplicated it inside the setter.
-            ((ReactionBehavior) CurrentBehaviour).React(target, _idleBehavior);
-        }
-    }
-
-    private void BodyExited(Node3D body)
-    {
-        if (body is not Entity target)
-        {
-            return;
-        }
-
-        if (_currentBehaviour is ReactionBehavior reactionBehavior && reactionBehavior.Target == target)
-        {
-            reactionBehavior.OutOfVision();
-        }
     }
 
     public override void _PhysicsProcess(double delta)
@@ -256,7 +218,7 @@ public sealed partial class EntityController : NavigationAgent3D
         // Our Entity will just freeze when no navigation mesh is existent.
         if (NavigationServer3D.MapGetIterationId(GetNavigationMap()) == 0) return Vector3.Zero;
         
-        if (CurrentBehaviour is not ReactionBehavior reactBehavior || !reactBehavior.Release())
+        if (CurrentBehaviour is not ReactionBehavior reactionBehavior || !reactionBehavior.ReactionDone())
             return CurrentBehaviour.Process(delta);
 
         CurrentBehaviour = _idleBehavior;
