@@ -155,6 +155,45 @@ public sealed partial class EntityController : NavigationAgent3D
         
         CurrentBehaviour = _idleBehavior;
     }
+
+    /// <summary>
+    /// Sets the idle behavior for this entity controller, optionally overriding the current behavior.
+    /// </summary>
+    /// <param name="idleBehavior">
+    /// The <see cref="IdleBehavior"/> to set as the idle behavior for the entity.
+    /// </param>
+    /// <param name="switchBehavior">
+    /// A boolean value indicating whether the current behavior should be overridden with the provided idle behavior.
+    /// If set to true, the current behavior will be replaced.
+    /// </param>
+    public void SetIdleBehavior(IdleBehavior idleBehavior, bool switchBehavior = true)
+    {
+        _idleBehavior = idleBehavior;
+        if (CurrentBehaviour is ReactionBehavior reactionBehavior)
+        {
+            reactionBehavior.DefaultBehaviorOverride(idleBehavior);
+        }
+        
+        if (!switchBehavior) return;
+        
+        CurrentBehaviour = idleBehavior;
+    }
+
+    /// <summary>
+    /// Sets the reaction behavior for the entity and triggers the corresponding reaction process.
+    /// </summary>
+    /// <param name="behavior">
+    /// The <see cref="ReactionBehavior"/> to be set as the current behavior for the entity.
+    /// </param>
+    /// <param name="target">
+    /// The target <see cref="Entity"/> that the reaction behavior will respond to.
+    /// </param>
+    public void SetReactionBehavior(ReactionBehavior behavior, Entity target)
+    {
+        ReactionBehavior reactionBehavior = (ReactionBehavior)CloneBehavior(behavior);
+        reactionBehavior.React(target, _idleBehavior);
+        CurrentBehaviour = behavior;
+    }
     
     /// <summary>
     /// Returns whether an entity is connected to this instance.

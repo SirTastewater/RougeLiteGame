@@ -6,15 +6,16 @@ namespace RougeLiteGame.entity.behavior;
 {
     protected IdleBehavior DefaultBehavior { get; private set; }
 
-    public Entity Target { get; private set; }
+    protected Entity Target { get; private set; }
+    
+    public void DefaultBehaviorOverride(IdleBehavior defaultBehavior)
+    {
+        DefaultBehavior = defaultBehavior;
+    }
     
     public void React(Entity target, IdleBehavior defaultBehavior)
     {
         DefaultBehavior = defaultBehavior;
         Target = target;
-        
-        React();
     }
-    
-    protected virtual void React() { }
 }
