@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using RougeLiteGame.entity.behavior;
 using RougeLiteGame.entity.behavior.idle;
@@ -31,7 +32,19 @@ public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
         float speed = MovementSpeed();
         Vector3 velocity = Entity.Velocity;
 
-        if (Input.IsActionJustPressed("jump") && Entity.IsOnFloor()) velocity.Y += Controller.JumpVelocity;
+        if (Input.IsActionJustPressed("jump") && Entity.IsOnFloor())
+        {
+            // v² = u² + 2as
+            // v = 0 (final velocity) 
+            // u = ? (initial velocity)
+            // a = -Entities Gravity (acceleration)
+            // s = JumpHeight (Distance)
+
+            Vector3 gravity = Entity.GetGravity();
+            float jumpVelocity = (float) Math.Sqrt(-2.0f * gravity.Y * Controller.JumpHeight);
+            
+            velocity.Y += jumpVelocity;
+        }
         
         Vector2 inputDir = Input.GetVector("left", "right", "forward", "backward");
         

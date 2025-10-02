@@ -100,7 +100,7 @@ public sealed partial class EntityController : NavigationAgent3D
     #region Editor Movement Settings
     [ExportGroup("Movement")] 
     [Export] private float BaseSpeed { get; set; } = 3f;
-    [Export] public float JumpVelocity { get; private set; } = 4.5f;
+    [Export] public float JumpHeight { get; private set; } = 4.5f;
     [Export] private float SprintAddition { get; set; } = 2.0f;
     [Export] private float SneakPenalty { get; set; } = 2.0f;
     #endregion
@@ -291,6 +291,11 @@ public sealed partial class EntityController : NavigationAgent3D
     private Vector3 ComputeGravity(double delta)
     {
         return GravityMultiplier * Entity.GetGravity() * (float) delta;
+    }
+
+    public Vector3 Gravity()
+    {
+        return GravityMultiplier * Entity.GetGravity();
     }
 
     /// <summary>
