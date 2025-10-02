@@ -13,7 +13,7 @@ public abstract partial class BasicLogger(Type type) : ILogger
     /// </summary>
     /// <param name="message">The message template that may include placeholders for parameter values.</param>
     /// <param name="parameters">An array of parameters to replace placeholders in the message template.</param>
-    public void Log(string message, params object[] parameters)
+    public void Log(object message, params object[] parameters)
     {
         Log(LogLevel.Info, message, parameters);
     }
@@ -25,27 +25,30 @@ public abstract partial class BasicLogger(Type type) : ILogger
     /// <param name="level">The severity level of the log message <see cref="LogLevel"/>.</param>
     /// <param name="message">The message template containing placeholders to be replaced with parameter values.</param>
     /// <param name="parameters">An array of parameters to replace placeholders in the message template. Optionally includes an exception as the last parameter.</param>
-    public void Log(LogLevel level, string message, params object[] parameters)
+    public void Log(LogLevel level, object message, params object[] parameters)
     {
         /*if (!EngineDebugger.IsActive())
         { // TODO find better solution to not exclude rider runs
             return; // disable in production as logging is hilariously slow
         }*/
         
+        string logMessage = message?.ToString();
+        if(logMessage == null) return;
+        
         if (parameters == null || parameters.Length == 0)
         {
-            Out(level, message);
+            Out(level, logMessage);
             return;
         }
 
         if (parameters[^1] is Exception exception)
         {
-            LogException(level, message, parameters, exception);
+            LogException(level, logMessage, parameters, exception);
             return;
         }
 
         int i = 0;
-        Out(level, Attribute().Replace(message, match =>
+        Out(level, Attribute().Replace(logMessage, match =>
         {
             if (i < parameters.Length)
                 return parameters[i++]?.ToString() ?? "null";
@@ -53,47 +56,47 @@ public abstract partial class BasicLogger(Type type) : ILogger
         }));
     }
 
-    public void Trace(string message, params object[] parameters)
+    public void Trace(object message, params object[] parameters)
     {
         Log(LogLevel.Trace, message, parameters);
     }
 
-    public void Fine(string message, params object[] parameters)
+    public void Fine(object message, params object[] parameters)
     {
         Log(LogLevel.Fine, message, parameters);
     }
 
-    public void Debug(string message, params object[] parameters)
+    public void Debug(object message, params object[] parameters)
     {
         Log(LogLevel.Debug, message, parameters);
     }
 
-    public void Info(string message, params object[] parameters)
+    public void Info(object message, params object[] parameters)
     {
         Log(LogLevel.Info, message, parameters);
     }
 
-    public void Success(string message, params object[] parameters)
+    public void Success(object message, params object[] parameters)
     {
         Log(LogLevel.Success, message, parameters);
     }
 
-    public void Error(string message, params object[] parameters)
+    public void Error(object message, params object[] parameters)
     {
         Log(LogLevel.Error, message, parameters);
     }
 
-    public void Warn(string message, params object[] parameters)
+    public void Warn(object message, params object[] parameters)
     {
         Log(LogLevel.Warn, message, parameters);
     }
 
-    public void Critical(string message, params object[] parameters)
+    public void Critical(object message, params object[] parameters)
     {
         Log(LogLevel.Critical, message, parameters);
     }
 
-    public void Fatal(string message, params object[] parameters)
+    public void Fatal(object message, params object[] parameters)
     {
         Log(LogLevel.Fatal, message, parameters);
     }
