@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://46wmtnfnlyqu"]
+[gd_scene load_steps=12 format=3 uid="uid://46wmtnfnlyqu"]
 
 [ext_resource type="Script" uid="uid://c621010pj8lg8" path="res://entity/player/Player.cs" id="1_sntwv"]
 [ext_resource type="Texture2D" uid="uid://b4koj8rtmjedy" path="res://scary.jpg" id="2_o3s7f"]
@@ -7,10 +7,13 @@
 
 [sub_resource type="Resource" id="Resource_etv1g"]
 script = ExtResource("3_rykwh")
-_enableInput = true
 _yawPivot = NodePath("..")
 _pitchPivot = NodePath("../View")
 metadata/_custom_type_script = "uid://diracah62385j"
+
+[sub_resource type="Curve" id="Curve_u8k42"]
+_data = [Vector2(0.08321593, 0.15395296), 0.0, 0.0, 0, 0, Vector2(0.2985186, 0.8973536), 0.0, 0.0, 0, 0, Vector2(0.9394424, 0.09723735), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5o33p"]
 albedo_texture = ExtResource("2_o3s7f")
@@ -38,6 +41,7 @@ _entityController = NodePath("PlayerController")
 use_3d_avoidance = true
 script = ExtResource("2_u8k42")
 _idleBehavior = SubResource("Resource_etv1g")
+SprintCurve = SubResource("Curve_u8k42")
 metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 
 [node name="Body" type="MeshInstance3D" parent="."]

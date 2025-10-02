@@ -6,7 +6,6 @@ using RougeLiteGame.entity.behavior;
 using RougeLiteGame.entity.behavior.idle;
 using RougeLiteGame.entity.behavior.reaction;
 using RougeLiteGame.logger;
-using Array = Godot.Collections.Array;
 
 namespace RougeLiteGame.entity;
 
@@ -20,21 +19,11 @@ public sealed partial class EntityController : NavigationAgent3D
     
     #region Attributes
     private Entity _entity;
-
-    private Entity Entity
-    {
-        get => _entity;
-        set
-        {
-            _entity = value;
-            SetPhysicsProcess(value != null);
-        }
-    }
-
     private MoveState MovementState { get; set; } = MoveState.Stand;
     private Behavior _currentBehaviour;
     private Array<string> _duplicated = [];
 
+    private Entity Entity { get => _entity; set { _entity = value; SetPhysicsProcess(value != null); } }
     private Behavior CurrentBehaviour
     {
         get => _currentBehaviour;
@@ -52,38 +41,7 @@ public sealed partial class EntityController : NavigationAgent3D
         }
     }
 
-    /// <summary>
-    /// Creates a duplicate of the specified <see cref="Behavior"/> instance to make sure
-    /// behavior instances are not shared among copied entities.
-    /// </summary>
-    /// <param name="behavior">
-    /// The <see cref="Behavior"/> to be duplicated. This should be an instance of a behavior
-    /// attached to an entity.
-    /// </param>
-    /// <returns>
-    /// A new instance of the provided <see cref="Behavior"/> if it has not been duplicated before,
-    /// or the already duplicated <see cref="Behavior"/> instance from the internal cache.
-    /// </returns>
-    private Behavior CloneBehavior(Behavior behavior)
-    {
-        // reaction behaviors can only be added with code. 
-        // therefore, it cannot happen to accidentally use the same instance
-        // TODO: Check if the resource has got a path. If not we can probably also skip the isolating
-        if(behavior is ReactionBehavior) return behavior;
-        
-        if (_duplicated.Contains(behavior.ResourcePath))
-        {
-            Logger.Trace("{}: Behavior already isolated: [Type: {}]. Reusing existing instance.", Entity.Name, behavior.GetType().Name, behavior.ResourcePath);
-            return behavior;
-        }
-        
-        // I know, I know. Isolating sounds harsh. But they just WANT to be alone.
-        Logger.Debug("{}: Isolate behavior: [Resource: {}].", Entity.Name, behavior.GetType().Name, behavior.ResourcePath);
-        Behavior duplicated = (Behavior)behavior.Duplicate();
-        _duplicated.Add(behavior.ResourcePath);
-        
-        return duplicated;
-    }
+    private float _currentStamina;
     #endregion
     
     [ExportGroup("Behavior")]
@@ -100,9 +58,13 @@ public sealed partial class EntityController : NavigationAgent3D
     #region Editor Movement Settings
     [ExportGroup("Movement")] 
     [Export] private float BaseSpeed { get; set; } = 3f;
-    [Export] public float JumpHeight { get; private set; } = 4.5f;
-    [Export] private float SprintAddition { get; set; } = 2.0f;
+    [Export] public float JumpHeight { get; private set; } = 1f;
     [Export] private float SneakPenalty { get; set; } = 2.0f;
+    [ExportSubgroup("Sprint")]
+    // I am preparing something big
+    [Export] private float MaximumSpeedAddition { get; set; } = 2.0f;
+    [Export] private float Stamina { get; set; } = 2.0f;
+    [Export] private Curve SprintCurve { get; set; }
     #endregion
     
     public override void _Ready()
@@ -134,6 +96,7 @@ public sealed partial class EntityController : NavigationAgent3D
         
         CurrentBehaviour = _idleBehavior;
         VelocityComputed += ApplyMovement;
+        _currentStamina = Stamina;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -156,7 +119,6 @@ public sealed partial class EntityController : NavigationAgent3D
             return;
         }
         
-        // apply movement to the connected entity
         Entity.Velocity = movement;
         ApplyMovement(movement);
     }
@@ -313,8 +275,41 @@ public sealed partial class EntityController : NavigationAgent3D
     {
         if (CurrentBehaviour.IsSneaking()) return BaseSpeed / SneakPenalty;
         if (!CurrentBehaviour.IsSprinting()) return BaseSpeed;
-
-        return BaseSpeed * SprintAddition;
+        
+        return BaseSpeed ;
+    }
+    
+    /// <summary>
+    /// Creates a duplicate of the specified <see cref="Behavior"/> instance to make sure
+    /// behavior instances are not shared among copied entities.
+    /// </summary>
+    /// <param name="behavior">
+    /// The <see cref="Behavior"/> to be duplicated. This should be an instance of a behavior
+    /// attached to an entity.
+    /// </param>
+    /// <returns>
+    /// A new instance of the provided <see cref="Behavior"/> if it has not been duplicated before,
+    /// or the already duplicated <see cref="Behavior"/> instance from the internal cache.
+    /// </returns>
+    private Behavior CloneBehavior(Behavior behavior)
+    {
+        // reaction behaviors can only be added with code. 
+        // therefore, it cannot happen to accidentally use the same instance
+        // TODO: Check if the resource has got a path. If not we can probably also skip the isolating
+        if(behavior is ReactionBehavior) return behavior;
+        
+        if (_duplicated.Contains(behavior.ResourcePath))
+        {
+            Logger.Trace("{}: Behavior already isolated: [Type: {}]. Reusing existing instance.", Entity.Name, behavior.GetType().Name, behavior.ResourcePath);
+            return behavior;
+        }
+        
+        // I know, I know. Isolating sounds harsh. But they just WANT to be alone.
+        Logger.Debug("{}: Isolate behavior: [Resource: {}].", Entity.Name, behavior.GetType().Name, behavior.ResourcePath);
+        Behavior duplicated = (Behavior)behavior.Duplicate();
+        _duplicated.Add(behavior.ResourcePath);
+        
+        return duplicated;
     }
     
     /// <summary>
