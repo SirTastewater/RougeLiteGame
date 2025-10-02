@@ -20,18 +20,19 @@ public class ConsoleLogger(Type type) : BasicLogger(type)
 
     private static string LogLevelToColor(LogLevel level)
     {
-        // used LTRO-1 Palette
+        // inspired by LTRO-1 Palette
         // https://lospec.com/palette-list/ltro-1
+        // slightly modified
         
         return level switch
         {
-            LogLevel.Trace    => "#37313b", // dark-grey 
+            LogLevel.Trace    => "#7d7781", // dark-grey 
             LogLevel.Debug    => "#4159cb", // blue
             LogLevel.Fine     => "#59a7af", // cyan
-            LogLevel.Info     => "#eae1f0", // light gray
+            LogLevel.Info     => "#b8afbe", // light gray
             LogLevel.Success  => "#8d902e", // green
             LogLevel.Warn     => "#fdbb27", // yellow
-            LogLevel.Error    => "#7e7185", // lighter gray
+            LogLevel.Error    => "#997171", // lighter gray-redish
             LogLevel.Critical => "#89423f", // matt red
             LogLevel.Fatal    => "#f63f4c", // burning eyes red
             _ => "#FFFFFF"
