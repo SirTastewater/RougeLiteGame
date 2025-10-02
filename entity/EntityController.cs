@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using RougeLiteGame.entity.camera;
+using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity;
 
@@ -9,8 +10,9 @@ namespace RougeLiteGame.entity;
 /// </summary>
 public abstract partial class EntityController : NavigationAgent3D
 {
-    
     #region Attributes
+
+    private static readonly ILogger Logger = LoggerFactory.GetLogger(typeof(EntityController));
 
     protected Entity Entity { get; private set; }
     protected MoveState MovementState { get; private set; } = MoveState.Stand;
@@ -47,6 +49,7 @@ public abstract partial class EntityController : NavigationAgent3D
         // idk how godot works, so imma just do that
         SetPhysicsProcess(IsEntityConnected());
         SetProcessInput(false);
+        Logger.Log("EntityController ready.");
 
         base._Ready();
     }
@@ -92,6 +95,7 @@ public abstract partial class EntityController : NavigationAgent3D
 
         Entity = entity;
         SetPhysicsProcess(true);
+        Logger.Log("Entity {} has been connected.", Entity.Name);
         
         EntityReady();
     }

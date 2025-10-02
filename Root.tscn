@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
-[ext_resource type="Script" uid="uid://esn1xwja4tjc" path="res://entity/camera/CameraController.cs" id="3_170dk"]
-[ext_resource type="Script" uid="uid://ct5atprv3rqr8" path="res://entity/player/PlayerController.cs" id="3_cwqeq"]
+[ext_resource type="Script" uid="uid://onv3e2hhcglw" path="res://entity/camera/CameraController.cs" id="3_170dk"]
+[ext_resource type="Script" uid="uid://p5q08xcu2eqe" path="res://entity/player/PlayerController.cs" id="3_cwqeq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -55,7 +55,6 @@ _entityController = NodePath("PlayerController")
 script = ExtResource("3_cwqeq")
 CameraController = NodePath("../FirstPersonController")
 _debugLabel = NodePath("debug")
-metadata/_custom_type_script = "uid://ct5atprv3rqr8"
 
 [node name="debug" type="Label" parent="Player/PlayerController"]
 anchors_preset = 2
@@ -86,7 +85,6 @@ label_settings = SubResource("LabelSettings_cwqeq")
 [node name="FirstPersonController" type="Node3D" parent="Player" node_paths=PackedStringArray("_yawPivot", "_pitchPivot")]
 transform = Transform3D(1, 0, 0, 0, 0.99898404, 0.04506658, 0, -0.04506658, 0.99898404, 0, 0.48, 0)
 script = ExtResource("3_170dk")
-MouseInput = true
 _yawPivot = NodePath("..")
 _pitchPivot = NodePath("FirstPersonView")
 
@@ -100,7 +98,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
 visible = false
 script = ExtResource("3_170dk")
 _yawPivot = NodePath("..")
-metadata/_custom_type_script = "uid://esn1xwja4tjc"
 
 [node name="ThirdPersonView" type="Camera3D" parent="Player/ThirdPersonController"]
 transform = Transform3D(0.99896264, -0.02057148, 0.040625896, 0, 0.89214474, 0.4517497, -0.045537338, -0.45128107, 0.89121926, 0.5842447, 0.8063383, 1.3540978)
