@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using RougeLiteGame.entity.camera;
+using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity;
 
@@ -9,7 +10,6 @@ namespace RougeLiteGame.entity;
 /// </summary>
 public abstract partial class EntityController : NavigationAgent3D
 {
-    
     #region Attributes
 
     protected Entity Entity { get; private set; }
