@@ -10,7 +10,6 @@ namespace RougeLiteGame.entity.behavior.idle;
     private static readonly ILogger Logger = LoggerFactory.GetLogger<FollowPath>();
     
     [Export(PropertyHint.NodePathValidTypes, "PathFollow3D")] private NodePath _path;
-    [Export(PropertyHint.NodePathValidTypes, "Player")] private NodePath player;
     private PathFollow3D _path3D;
     
     [Export(PropertyHint.Range, "0.1,30")]
@@ -28,12 +27,6 @@ namespace RougeLiteGame.entity.behavior.idle;
         // "afaik it is threaded, so it should be pretty cheap." - nancok
         
         _path3D.Progress += _samplePathPointDistance;
-        Logger.Info("Progress: {} ", _path3D.Progress);
-        if (_path3D.Progress > 20)
-        {
-            Controller.SetBehavior(new ChaseBehaviour(GetNode<Player>(player)));
-            return Vector3.Zero;
-        }
         return _path3D.GlobalPosition;
     }
 
