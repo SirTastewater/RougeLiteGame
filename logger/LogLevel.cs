@@ -1,5 +1,8 @@
 namespace RougeLiteGame.logger;
 
+/// <summary>
+/// Specifies the severity level of a log message.
+/// </summary>
 public enum LogLevel
 {
     Trace,      // Most detailed

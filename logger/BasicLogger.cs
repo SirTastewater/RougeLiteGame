@@ -4,6 +4,10 @@ using Godot;
 
 namespace RougeLiteGame.logger;
 
+/// <summary>
+/// An abstract base class that provides logging functionality with support for message templates,
+/// various logging levels, and optional parameter substitution in messages.
+/// </summary>
 public abstract partial class BasicLogger(Type type) : ILogger
 {
     [GeneratedRegex(@"\{\}")] private static partial Regex Attribute();
