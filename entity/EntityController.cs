@@ -41,7 +41,6 @@ public sealed partial class EntityController : NavigationAgent3D
         [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         set // Moved to setter because it's the fcking 5'th time I forgot to free the behavior before
         {
-            SetPhysicsProcess(false);
             _currentBehaviour?.Uninitialize();
 
             // duplicate behavior per instance to prevent shared routes among copied enemies.
@@ -50,7 +49,6 @@ public sealed partial class EntityController : NavigationAgent3D
 
             newBehavior.Initialize(this, Entity);
             SetProcessInput(newBehavior is IInputAcceptor);
-            SetPhysicsProcess(true);
         }
     }
 
@@ -107,49 +105,10 @@ public sealed partial class EntityController : NavigationAgent3D
     [Export] private float SneakPenalty { get; set; } = 2.0f;
     #endregion
     
-    #region Debug
-    [ExportGroup("Debug")] 
-    [Export] private Label _debugLabel;
-    #endregion
-
     public override void _Ready()
     {
         SetPhysicsProcess(IsEntityConnected());
-        VelocityComputed += ApplyMovement;
         base._Ready();
-    }
-
-    public override void _PhysicsProcess(double delta)
-    {
-        Vector3 movement = MovementProcess(delta);
-        MovementState = ComputeMovementState(movement);
-        if (MovementState == MoveState.Fall) movement += ComputeGravity(delta);
-        if (_debugLabel != null) _debugLabel.Text = MovementState.ToString();
-
-        // apply movement to the connected entity
-        Entity.Velocity = movement;
-
-        if (AvoidanceEnabled)
-        {
-            Velocity = movement;
-            return;
-        }
-        
-        ApplyMovement(movement);
-    }
-
-    private void ApplyMovement(Vector3 movement)
-    {
-        Entity.Velocity = movement;
-        Entity.MoveAndSlide();
-    }
-    
-    public override void _Input(InputEvent @event)
-    {
-        if (CurrentBehaviour is not IInputAcceptor acceptor) return;
-        
-        acceptor.AcceptInput(@event);
-        base._Input(@event);
     }
 
     /// <summary>
@@ -174,6 +133,54 @@ public sealed partial class EntityController : NavigationAgent3D
         SetPhysicsProcess(true);
         
         CurrentBehaviour = _idleBehavior;
+        VelocityComputed += ApplyMovement;
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        // Do not query when the map has never synchronized and is empty.
+        // Our Entity will just freeze when no navigation mesh is existent.
+        bool navigationMeshExists = NavigationServer3D.MapGetIterationId(GetNavigationMap()) != 0;
+        Vector3 movement = !navigationMeshExists ? Vector3.Zero : CurrentBehaviour.Process(delta);
+        MovementState = ComputeMovementState(movement);
+        
+        if (MovementState == MoveState.Fall && EnableGravity) movement += ComputeGravity(delta);
+        if (AvoidanceEnabled)
+        {
+            // Godot uses black magic to compute a vector spacing out agents.
+            // When calling the setter of the NavigationsAgent velocity, it will calculate a new velocity spacing out from other
+            // agents and send the result via the VelocityComputed signal.
+            // more information can be found here:
+            // https://docs.godotengine.org/en/4.0/tutorials/navigation/navigation_using_agent_avoidance.html
+            Velocity = movement;
+            return;
+        }
+        
+        // apply movement to the connected entity
+        Entity.Velocity = movement;
+        ApplyMovement(movement);
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        if (CurrentBehaviour is not IInputAcceptor acceptor) return;
+        
+        acceptor.AcceptInput(@event);
+        base._Input(@event);
+    }
+
+    /// <summary>
+    /// Applies the specified movement vector to the connected entity and triggers movement calculations.
+    /// Adjusts the entity's velocity and calls its movement logic.
+    /// </summary>
+    /// <param name="movement">
+    /// A <see cref="Vector3"/> representing the movement vector to apply to the entity.
+    /// This vector typically considers navigation, user input, and environmental factors such as gravity.
+    /// </param>
+    private void ApplyMovement(Vector3 movement)
+    {
+        Entity.Velocity = movement;
+        Entity.MoveAndSlide();
     }
 
     /// <summary>
@@ -198,6 +205,16 @@ public sealed partial class EntityController : NavigationAgent3D
         SetBehavior(idleBehavior);
     }
 
+    /// <summary>
+    /// Switches the current behavior of the entity to the specified <see cref="Behavior"/>.
+    /// </summary>
+    /// <param name="behavior">
+    /// The <see cref="Behavior"/> to switch to. This should inherit from the <see cref="Behavior"/>
+    /// class and be properly initialized with the associated <see cref="EntityController"/> and <see cref="Entity"/>.
+    /// </param>
+    /// <remarks>
+    /// Note that the actual switch is delayed until the next tick to prevent an uninitialized behavior to be used.
+    /// </remarks>
     public void SetBehavior(Behavior behavior)
     {
         CallDeferred("QueueBehaviorSwitch", behavior);
@@ -205,11 +222,11 @@ public sealed partial class EntityController : NavigationAgent3D
 
     /// <summary>
     /// This method exists solely for use with Godot's <c>CallDeferred(string, Variant[])</c>,
-    /// which only supports calling methods by name at runtime.
+    /// which only supports calling methods by name at runtime. (Why not use inline Actions?)
     /// 
     /// The behavior must be switched before the next physics frame. If not, the entity
     /// may operate with an uninitialized behavior, which causes runtime errors (non-fatal,
-    /// but I just don't like errors lol).
+    /// but I just don't like errors duh).
     /// </summary>
     /// <param name="behavior">
     /// The new <see cref="Behavior"/> instance to apply. This becomes the entity's active behavior
@@ -219,7 +236,7 @@ public sealed partial class EntityController : NavigationAgent3D
     {
         CurrentBehaviour = behavior;
     }
-    
+
     /// <summary>
     /// Returns whether an entity is connected to this instance.
     /// </summary>
@@ -260,27 +277,6 @@ public sealed partial class EntityController : NavigationAgent3D
         if (CurrentBehaviour.IsSneaking()) return MoveState.Sneak;
 
         return CurrentBehaviour.IsSprinting() ? MoveState.Sprint : MoveState.Walk;
-    }
-
-    /// <summary>
-    /// Processes input and other movement-related factors to compute and return the resulting velocity vector.
-    /// </summary>
-    /// <param name="delta">
-    /// The frame delta time, typically used to scale movement by time to ensure consistent behavior across frame rates.
-    /// </param>
-    /// <returns>
-    /// A <see cref="Vector3"/> representing the movement or velocity vector computed for this frame.
-    /// </returns>
-    /// <remarks>
-    /// This method is intended to be implemented by derived classes to define custom movement behavior.
-    /// </remarks>
-    private Vector3 MovementProcess(double delta)
-    {   
-        // Do not query when the map has never synchronized and is empty.
-        // Our Entity will just freeze when no navigation mesh is existent.
-        
-        bool navigationMeshExists = NavigationServer3D.MapGetIterationId(GetNavigationMap()) != 0;
-        return !navigationMeshExists ? Vector3.Zero : CurrentBehaviour.Process(delta);
     }
 
     /// <summary>
