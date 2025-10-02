@@ -34,11 +34,6 @@ public partial class CameraController : Node3D
 
     public override void _Input(InputEvent @event)
     {
-        if(Input.IsActionPressed("switch_input"))
-        {
-            EnableMouseInput = !EnableMouseInput;
-        }
-        
         if (Input.MouseMode != Input.MouseModeEnum.Captured) return;
         if (@event is not InputEventMouseMotion motionEvent) return;
         
@@ -68,9 +63,9 @@ public partial class CameraController : Node3D
     /// <item><description><see cref="Input.MouseModeEnum.Visible"/> shows and frees the cursor.</description></item>
     /// </list>
     /// </remarks>
-    private static /* unstatic later */ void ConfigureMouseCapture(bool value)
+    private void ConfigureMouseCapture(bool value)
     {
-        // SetProcessInput(value); // TODO: Disabled for debugging purposes
+        SetProcessInput(value);
         if (value)
         {
             Input.SetMouseMode(Input.MouseModeEnum.Captured);

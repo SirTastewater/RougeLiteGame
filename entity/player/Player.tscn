@@ -1,6 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://46wmtnfnlyqu"]
+[gd_scene load_steps=8 format=3 uid="uid://46wmtnfnlyqu"]
 
 [ext_resource type="Script" uid="uid://c621010pj8lg8" path="res://entity/player/Player.cs" id="1_sntwv"]
+[ext_resource type="Texture2D" uid="uid://b4koj8rtmjedy" path="res://scary.jpg" id="2_o3s7f"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5o33p"]
+albedo_texture = ExtResource("2_o3s7f")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sntwv"]
 radius = 0.4
@@ -21,6 +25,7 @@ height = 1.8359375
 script = ExtResource("1_sntwv")
 
 [node name="Body" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_5o33p")
 mesh = SubResource("CapsuleMesh_sntwv")
 
 [node name="glasses" type="MeshInstance3D" parent="."]

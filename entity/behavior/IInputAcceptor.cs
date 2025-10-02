@@ -4,5 +4,5 @@ namespace RougeLiteGame.entity.behavior;
 
 public interface IInputAcceptor
 {
-    void Input(InputEvent @event);
+    void AcceptInput(InputEvent @event);
 }

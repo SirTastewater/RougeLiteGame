@@ -166,7 +166,7 @@ public sealed partial class EntityController : NavigationAgent3D
     {
         if (CurrentBehaviour is not IInputAcceptor acceptor) return;
         
-        acceptor.Input(@event);
+        acceptor.AcceptInput(@event);
         base._Input(@event);
     }
 

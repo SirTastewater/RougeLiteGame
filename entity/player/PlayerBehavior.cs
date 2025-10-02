@@ -4,7 +4,7 @@ using RougeLiteGame.entity.behavior;
 namespace RougeLiteGame.entity.player;
 
 [GlobalClass]
-public partial class PlayerBehavior : IdleBehavior
+public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
 {
     public override Vector3 Process(double delta)
     {
@@ -39,5 +39,15 @@ public partial class PlayerBehavior : IdleBehavior
     public  override bool IsSprinting()
     {
         return Input.IsActionPressed("sprint");
+    }
+
+    public void AcceptInput(InputEvent @event)
+    {
+        if(Input.IsActionJustPressed("switch_input"))
+        {
+            Input.SetMouseMode(Input.GetMouseMode() == Input.MouseModeEnum.Captured
+                ? Input.MouseModeEnum.Visible
+                : Input.MouseModeEnum.Captured);
+        }
     }
 }
