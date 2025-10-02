@@ -1,11 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=10 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
-[ext_resource type="Script" uid="uid://onv3e2hhcglw" path="res://entity/camera/CameraController.cs" id="3_170dk"]
 [ext_resource type="Script" uid="uid://bqgeix1vcei8x" path="res://entity/EntityController.cs" id="3_n0g3p"]
-[ext_resource type="Script" uid="uid://diracah62385j" path="res://entity/player/PlayerBehavior.cs" id="4_2qvp8"]
-[ext_resource type="Script" uid="uid://sh6qy5qm61re" path="res://entity/behavior/FollowPath.cs" id="6_g0d6c"]
+[ext_resource type="Script" uid="uid://sh6qy5qm61re" path="res://entity/behavior/idle/FollowPath.cs" id="6_g0d6c"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -19,10 +17,6 @@ background_mode = 2
 sky = SubResource("Sky_gxo8o")
 tonemap_mode = 2
 glow_enabled = true
-
-[sub_resource type="Resource" id="Resource_g0d6c"]
-script = ExtResource("4_2qvp8")
-metadata/_custom_type_script = "uid://diracah62385j"
 
 [sub_resource type="Resource" id="Resource_f5i44"]
 script = ExtResource("6_g0d6c")
@@ -49,25 +43,8 @@ environment = SubResource("Environment_24d08")
 [node name="Level" parent="." instance=ExtResource("1_f5i44")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011890411, 0.044784546, -0.00630188)
 
-[node name="Player" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
+[node name="Player" parent="." instance=ExtResource("1_170dk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96214926, 0)
-_entityController = NodePath("PlayerController")
-
-[node name="PlayerController" type="NavigationAgent3D" parent="Player"]
-script = ExtResource("3_n0g3p")
-_idleBehavior = SubResource("Resource_g0d6c")
-metadata/_custom_type_script = "uid://bqgeix1vcei8x"
-
-[node name="FPController" type="Node3D" parent="Player" node_paths=PackedStringArray("_yawPivot", "_pitchPivot")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-script = ExtResource("3_170dk")
-EnableMouseInput = true
-_yawPivot = NodePath("..")
-_pitchPivot = NodePath("View")
-metadata/_custom_type_script = "uid://onv3e2hhcglw"
-
-[node name="View" type="Camera3D" parent="Player/FPController"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.50898516)
 
 [node name="Enemy" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.946992, 1.0693624, 0)

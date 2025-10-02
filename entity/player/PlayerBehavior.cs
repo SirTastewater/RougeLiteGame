@@ -10,6 +10,21 @@ public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
 {
     private static readonly ILogger Logger = LoggerFactory.GetLogger<PlayerBehavior>();
     
+    [ExportGroup("Camera")]
+    [Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath _yawPivot;
+    [Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath _pitchPivot;
+    
+    [Export(PropertyHint.Range, "0,10")] private float _mouseSensitivity = 5f;
+    
+    private float _yaw, _pitch;
+    private Node3D _yawPivotNode, _pitchPivotNode;
+    
+    protected override void Init()
+    {
+        _yawPivotNode = GetNode<Node3D>(_yawPivot);
+        _pitchPivotNode = GetNode<Node3D>(_pitchPivot);
+    }
+
     public override Vector3 Process(double delta)
     {
         float speed = MovementSpeed();
@@ -60,5 +75,17 @@ public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
             Logger.Debug("Capturing mouse.");
             Input.SetMouseMode(Input.MouseModeEnum.Captured);
         }
+        
+        if (Input.MouseMode != Input.MouseModeEnum.Captured) return;
+        if (@event is not InputEventMouseMotion motionEvent) return;
+        
+        float actualSensitivity = _mouseSensitivity / 1000;
+
+        _yaw -= motionEvent.Relative.X * actualSensitivity;
+        _pitch -= motionEvent.Relative.Y * actualSensitivity;
+        _pitch = Mathf.Clamp(_pitch, -1.4f, 1.4f);
+        
+        _yawPivotNode.Rotation = new Vector3(_yawPivotNode.Rotation.X, _yaw, _yawPivotNode.Rotation.Z);
+        _pitchPivotNode.Rotation = new Vector3(_pitch, _pitchPivotNode.Rotation.Y, _pitchPivotNode.Rotation.Z);
     }
 }
