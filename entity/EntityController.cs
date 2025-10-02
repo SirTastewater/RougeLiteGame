@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Godot;
 using Godot.Collections;
 using RougeLiteGame.entity.behavior;
@@ -28,13 +29,14 @@ public sealed partial class EntityController : NavigationAgent3D
         }
     }
 
-    private Array<Behavior> _duplicated = [];
     private MoveState MovementState { get; set; } = MoveState.Stand;
     private Behavior _currentBehaviour;
+    private Array<string> _duplicated = [];
 
     private Behavior CurrentBehaviour
     {
         get => _currentBehaviour;
+        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         set // Moved to setter because it's the fcking 5'th time I forgot to free the behavior before
         {
             _currentBehaviour?.Uninitialize();
@@ -62,11 +64,16 @@ public sealed partial class EntityController : NavigationAgent3D
     /// </returns>
     private Behavior CloneBehavior(Behavior behavior)
     {
-        if (_duplicated.Contains(behavior)) { return behavior; }
-
-        Logger.Log(LogLevel.Debug, "Duplicating behavior {} for entity {}.", behavior, Entity.Name);
+        if (_duplicated.Contains(behavior.ResourcePath))
+        {
+            Logger.Trace("Behavior already duplicated: [Type: {}, ResourcePath: {}]. Reusing existing instance for entity {}.", behavior.GetType().Name, behavior.ResourcePath, Entity.Name);
+            return behavior;
+        }
+        
+        Logger.Debug("Duplicating behavior: [Resource: {}, Path: {}] for entity {}.", behavior.GetType().Name, behavior.ResourcePath, Entity.Name);
         Behavior duplicated = (Behavior)behavior.Duplicate();
-        _duplicated.Add(duplicated);
+        _duplicated.Add(behavior.ResourcePath);
+        
         return duplicated;
     }
 
