@@ -10,7 +10,7 @@ public class ConsoleLogger(Type type) : BasicLogger(type)
 
     protected override void Out(LogLevel level, string message, Exception throwable = null)
     {
-        string outMessage = $"${DateTime.Now} ${level.ToString().ToUpper()} [${_type}] {message})";
+        string outMessage = $"{DateTime.Now} {level.ToString().ToUpper()} [{_type}] {message}";
         GD.PrintRich(outMessage);
         
         if(throwable != null) Debug.Print(throwable.StackTrace);
