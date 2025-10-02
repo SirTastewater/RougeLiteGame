@@ -4,6 +4,7 @@ using Godot;
 using Godot.Collections;
 using RougeLiteGame.entity.behavior;
 using RougeLiteGame.entity.behavior.idle;
+using RougeLiteGame.entity.behavior.reaction;
 using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity;
