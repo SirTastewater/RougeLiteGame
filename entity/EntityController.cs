@@ -169,7 +169,7 @@ public sealed partial class EntityController : NavigationAgent3D
     /// A boolean value indicating whether the current behavior should be overridden with the provided idle behavior.
     /// If set to true, the current behavior will be replaced.
     /// </param>
-    public void SetIdleBehavior(behavior.idle.IdleBehavior idleBehavior, bool switchBehavior = true)
+    public void SetIdleBehavior(IdleBehavior idleBehavior, bool switchBehavior = true)
     {
         _idleBehavior = idleBehavior;
         if (CurrentBehaviour is ReactionBehavior reactionBehavior)
