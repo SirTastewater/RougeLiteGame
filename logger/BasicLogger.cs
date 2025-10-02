@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using Godot;
 
 namespace RougeLiteGame.logger;
 
@@ -26,6 +27,11 @@ public abstract partial class BasicLogger(Type type) : ILogger
     /// <param name="parameters">An array of parameters to replace placeholders in the message template. Optionally includes an exception as the last parameter.</param>
     public void Log(LogLevel level, string message, params object[] parameters)
     {
+        if (!EngineDebugger.IsActive())
+        {
+            return; // disable in production as logging is hilariously slow
+        }
+        
         if (parameters == null || parameters.Length == 0)
         {
             Out(level, message);
