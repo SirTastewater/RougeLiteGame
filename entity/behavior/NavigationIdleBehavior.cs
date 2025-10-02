@@ -1,10 +1,13 @@
 using System;
 using Godot;
+using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity.behavior;
 
 [GlobalClass] public partial class NavigationIdleBehavior : IdleBehavior
 {
+    private static readonly ILogger Logger = LoggerFactory.GetLogger(typeof(NavigationIdleBehavior));
+    
     private Vector3 _targetPosition;
 
     protected override void Init()
@@ -134,6 +137,8 @@ namespace RougeLiteGame.entity.behavior;
     /// </remarks>
     protected virtual Vector3 GetNextPosition()
     {
+        Logger.Log(LogLevel.Debug, "Generating new random position for basic navigation.");
+        
         Vector3 randomPosition;
         do
         {

@@ -3,6 +3,7 @@ using Godot;
 using Godot.Collections;
 using RougeLiteGame.entity.behavior;
 using RougeLiteGame.entity.behavior.reaction;
+using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity;
 
@@ -12,6 +13,7 @@ namespace RougeLiteGame.entity;
 [GlobalClass]
 public sealed partial class EntityController : NavigationAgent3D
 {
+    private static readonly ILogger Logger = LoggerFactory.GetLogger(typeof(NavigationIdleBehavior));
     
     #region Attributes
     private Entity _entity;
@@ -27,9 +29,7 @@ public sealed partial class EntityController : NavigationAgent3D
     }
 
     private Array<Behavior> _duplicated = [];
-
     private MoveState MovementState { get; set; } = MoveState.Stand;
-
     private Behavior _currentBehaviour;
 
     private Behavior CurrentBehaviour
@@ -64,7 +64,7 @@ public sealed partial class EntityController : NavigationAgent3D
     {
         if (_duplicated.Contains(behavior)) { return behavior; }
 
-        //GD.Print("Duplicate not yet duplicated behavior");
+        Logger.Log(LogLevel.Debug, "Duplicating behavior {} for entity {}.", behavior, Entity.Name);
         Behavior duplicated = (Behavior)behavior.Duplicate();
         _duplicated.Add(duplicated);
         return duplicated;
