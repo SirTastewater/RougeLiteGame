@@ -1,6 +1,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Godot;
+using RougeLiteGame.entity.behavior.idle;
+using RougeLiteGame.entity.behavior.reaction;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace RougeLiteGame.entity.behavior;
@@ -10,7 +13,7 @@ namespace RougeLiteGame.entity.behavior;
 {
     protected EntityController Controller { get; private set; }
     protected Entity Entity { get; private set; }
-    
+
     public void Initialize(EntityController controller, Entity entity)
     {
         if (Controller != null || Entity != null)
@@ -51,14 +54,7 @@ namespace RougeLiteGame.entity.behavior;
 
     protected Vector3 FollowControllerTarget()
     {
-        Vector3 nextPathPosition = Controller.GetNextPathPosition();
-        Vector3 desiredMovement = Entity.GlobalPosition.DirectionTo(nextPathPosition) * Controller.MovementSpeed();
-
-        if (!Controller.AvoidanceEnabled) return desiredMovement;
-        
-        // Godot's setter uses black magic (or smt) to space out enemies following the same position
-        Controller.Velocity = desiredMovement;
-        return desiredMovement;
+        return Entity.GlobalPosition.DirectionTo(Controller.GetNextPathPosition()) * Controller.MovementSpeed();
     }
 
     protected float MovementSpeed()

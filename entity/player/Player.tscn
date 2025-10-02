@@ -7,6 +7,7 @@
 
 [sub_resource type="Resource" id="Resource_etv1g"]
 script = ExtResource("3_rykwh")
+_enableInput = true
 _yawPivot = NodePath("..")
 _pitchPivot = NodePath("../View")
 metadata/_custom_type_script = "uid://diracah62385j"
@@ -34,6 +35,7 @@ script = ExtResource("1_sntwv")
 _entityController = NodePath("PlayerController")
 
 [node name="PlayerController" type="NavigationAgent3D" parent="."]
+use_3d_avoidance = true
 script = ExtResource("2_u8k42")
 _idleBehavior = SubResource("Resource_etv1g")
 metadata/_custom_type_script = "uid://bqgeix1vcei8x"

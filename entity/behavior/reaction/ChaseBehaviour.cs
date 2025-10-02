@@ -2,13 +2,12 @@ using Godot;
 
 namespace RougeLiteGame.entity.behavior.reaction;
 
-[GlobalClass] public partial class ChaseBehaviour : ReactionBehavior
+[GlobalClass] public partial class ChaseBehaviour(Entity target) : ReactionBehavior
 {
     public override Vector3 Process(double delta)
     {
-        SetTargetPosition(Target.GlobalPosition);
-        Entity.LookAt(Target.GlobalPosition);
-        
+        SetTargetPosition(target.GlobalPosition);
+        Entity.LookAt(target.GlobalPosition);
         return FollowControllerTarget();
     }
 }

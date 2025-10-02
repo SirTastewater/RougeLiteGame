@@ -9,12 +9,12 @@ namespace RougeLiteGame.entity.player;
 public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
 {
     private static readonly ILogger Logger = LoggerFactory.GetLogger<PlayerBehavior>();
-    
+    [Export] private bool _enableInput = true;
     [ExportGroup("Camera")]
     [Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath _yawPivot;
     [Export(PropertyHint.NodePathValidTypes, "Node3D")] private NodePath _pitchPivot;
-    
     [Export(PropertyHint.Range, "0,10")] private float _mouseSensitivity = 5f;
+    
     
     private float _yaw, _pitch;
     private Node3D _yawPivotNode, _pitchPivotNode;
@@ -27,6 +27,7 @@ public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
 
     public override Vector3 Process(double delta)
     {
+        if(!_enableInput) return Vector3.Zero;
         float speed = MovementSpeed();
         Vector3 velocity = Entity.Velocity;
 
@@ -62,6 +63,8 @@ public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
 
     public void AcceptInput(InputEvent @event)
     {
+        if(!_enableInput) return;
+        
         if(Input.IsActionJustPressed("switch_input"))
         {
             bool isMouseCaptured = Input.GetMouseMode() == Input.MouseModeEnum.Captured;

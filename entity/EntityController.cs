@@ -6,6 +6,7 @@ using RougeLiteGame.entity.behavior;
 using RougeLiteGame.entity.behavior.idle;
 using RougeLiteGame.entity.behavior.reaction;
 using RougeLiteGame.logger;
+using Array = Godot.Collections.Array;
 
 namespace RougeLiteGame.entity;
 
@@ -40,14 +41,16 @@ public sealed partial class EntityController : NavigationAgent3D
         [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         set // Moved to setter because it's the fcking 5'th time I forgot to free the behavior before
         {
+            SetPhysicsProcess(false);
             _currentBehaviour?.Uninitialize();
-            
+
             // duplicate behavior per instance to prevent shared routes among copied enemies.
             Behavior newBehavior = CloneBehavior(value);
             _currentBehaviour = newBehavior;
-            
+
             newBehavior.Initialize(this, Entity);
             SetProcessInput(newBehavior is IInputAcceptor);
+            SetPhysicsProcess(true);
         }
     }
 
@@ -65,6 +68,11 @@ public sealed partial class EntityController : NavigationAgent3D
     /// </returns>
     private Behavior CloneBehavior(Behavior behavior)
     {
+        // reaction behaviors can only be added with code. 
+        // therefore, it cannot happen to accidentally use the same instance
+        // TODO: Check if the resource has got a path. If not we can probably also skip the isolating
+        if(behavior is ReactionBehavior) return behavior;
+        
         if (_duplicated.Contains(behavior.ResourcePath))
         {
             Logger.Trace("{}: Behavior already isolated: [Type: {}]. Reusing existing instance.", Entity.Name, behavior.GetType().Name, behavior.ResourcePath);
@@ -72,13 +80,12 @@ public sealed partial class EntityController : NavigationAgent3D
         }
         
         // I know, I know. Isolating sounds harsh. But they just WANT to be alone.
-        Logger.Debug("{}: Isolate behavior for this instance: [Resource: {}].", Entity.Name, behavior.GetType().Name, behavior.ResourcePath);
+        Logger.Debug("{}: Isolate behavior: [Resource: {}].", Entity.Name, behavior.GetType().Name, behavior.ResourcePath);
         Behavior duplicated = (Behavior)behavior.Duplicate();
         _duplicated.Add(behavior.ResourcePath);
         
         return duplicated;
     }
-
     #endregion
     
     [ExportGroup("Behavior")]
@@ -108,7 +115,7 @@ public sealed partial class EntityController : NavigationAgent3D
     public override void _Ready()
     {
         SetPhysicsProcess(IsEntityConnected());
-
+        VelocityComputed += ApplyMovement;
         base._Ready();
     }
 
@@ -116,15 +123,25 @@ public sealed partial class EntityController : NavigationAgent3D
     {
         Vector3 movement = MovementProcess(delta);
         MovementState = ComputeMovementState(movement);
-
         if (MovementState == MoveState.Fall) movement += ComputeGravity(delta);
-
         if (_debugLabel != null) _debugLabel.Text = MovementState.ToString();
 
         // apply movement to the connected entity
         Entity.Velocity = movement;
+
+        if (AvoidanceEnabled)
+        {
+            Velocity = movement;
+            return;
+        }
+        
+        ApplyMovement(movement);
+    }
+
+    private void ApplyMovement(Vector3 movement)
+    {
+        Entity.Velocity = movement;
         Entity.MoveAndSlide();
-        base._PhysicsProcess(delta);
     }
     
     public override void _Input(InputEvent @event)
@@ -174,27 +191,32 @@ public sealed partial class EntityController : NavigationAgent3D
         _idleBehavior = idleBehavior;
         if (CurrentBehaviour is ReactionBehavior reactionBehavior)
         {
-            reactionBehavior.DefaultBehaviorOverride(idleBehavior);
+            reactionBehavior.SetDefaultBehavior(idleBehavior);
         }
         
         if (!switchBehavior) return;
-        
-        CurrentBehaviour = idleBehavior;
+        SetBehavior(idleBehavior);
+    }
+
+    public void SetBehavior(Behavior behavior)
+    {
+        CallDeferred("QueueBehaviorSwitch", behavior);
     }
 
     /// <summary>
-    /// Sets the reaction behavior for the entity and triggers the corresponding reaction process.
+    /// This method exists solely for use with Godot's <c>CallDeferred(string, Variant[])</c>,
+    /// which only supports calling methods by name at runtime.
+    /// 
+    /// The behavior must be switched before the next physics frame. If not, the entity
+    /// may operate with an uninitialized behavior, which causes runtime errors (non-fatal,
+    /// but I just don't like errors lol).
     /// </summary>
     /// <param name="behavior">
-    /// The <see cref="ReactionBehavior"/> to be set as the current behavior for the entity.
+    /// The new <see cref="Behavior"/> instance to apply. This becomes the entity's active behavior
+    /// once the switch is performed.
     /// </param>
-    /// <param name="target">
-    /// The target <see cref="Entity"/> that the reaction behavior will respond to.
-    /// </param>
-    public void SetReactionBehavior(ReactionBehavior behavior, Entity target)
+    private void QueueBehaviorSwitch(Behavior behavior)
     {
-        ReactionBehavior reactionBehavior = (ReactionBehavior)CloneBehavior(behavior);
-        reactionBehavior.React(target, _idleBehavior);
         CurrentBehaviour = behavior;
     }
     
