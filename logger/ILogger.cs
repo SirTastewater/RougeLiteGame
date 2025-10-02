@@ -43,4 +43,22 @@ public interface ILogger
     /// <param name="message">The message template containing placeholders to be replaced with parameter values.</param>
     /// <param name="parameters">An array of parameters to replace placeholders in the message template. Optionally includes an exception as the last parameter.</param>
     void Log(LogLevel level, string message, params object[] parameters);
+    
+    void Trace(string message, params object[] parameters);
+    
+    void Fine(string message, params object[] parameters);
+    
+    void Debug(string message, params object[] parameters);
+    
+    void Info(string message, params object[] parameters);
+    
+    void Success(string message, params object[] parameters);
+
+    void Error(string message, params object[] parameters);
+
+    void Warn(string message, params object[] parameters);
+
+    void Critical(string message, params object[] parameters);
+    
+    void Fatal(string message, params object[] parameters);
 }

@@ -53,6 +53,51 @@ public abstract partial class BasicLogger(Type type) : ILogger
         }));
     }
 
+    public void Trace(string message, params object[] parameters)
+    {
+        Log(LogLevel.Trace, message, parameters);
+    }
+
+    public void Fine(string message, params object[] parameters)
+    {
+        Log(LogLevel.Fine, message, parameters);
+    }
+
+    public void Debug(string message, params object[] parameters)
+    {
+        Log(LogLevel.Debug, message, parameters);
+    }
+
+    public void Info(string message, params object[] parameters)
+    {
+        Log(LogLevel.Info, message, parameters);
+    }
+
+    public void Success(string message, params object[] parameters)
+    {
+        Log(LogLevel.Success, message, parameters);
+    }
+
+    public void Error(string message, params object[] parameters)
+    {
+        Log(LogLevel.Error, message, parameters);
+    }
+
+    public void Warn(string message, params object[] parameters)
+    {
+        Log(LogLevel.Warn, message, parameters);
+    }
+
+    public void Critical(string message, params object[] parameters)
+    {
+        Log(LogLevel.Critical, message, parameters);
+    }
+
+    public void Fatal(string message, params object[] parameters)
+    {
+        Log(LogLevel.Fatal, message, parameters);
+    }
+
     /// <summary>
     /// Logs a message along with a specified log level, including exception details.
     /// Formats the message using provided parameters or replaces placeholders appropriately.
