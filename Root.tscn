@@ -1,11 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=13 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
 [ext_resource type="Script" uid="uid://onv3e2hhcglw" path="res://entity/camera/CameraController.cs" id="3_170dk"]
 [ext_resource type="Script" uid="uid://bqgeix1vcei8x" path="res://entity/EntityController.cs" id="3_n0g3p"]
 [ext_resource type="Script" uid="uid://diracah62385j" path="res://entity/player/PlayerBehavior.cs" id="4_2qvp8"]
-[ext_resource type="Script" uid="uid://bbfvei77cj5lj" path="res://entity/behavior/NavigationIdleBehavior.cs" id="6_g0d6c"]
+[ext_resource type="Script" uid="uid://sh6qy5qm61re" path="res://entity/behavior/FollowPath.cs" id="6_g0d6c"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -26,7 +26,16 @@ metadata/_custom_type_script = "uid://diracah62385j"
 
 [sub_resource type="Resource" id="Resource_f5i44"]
 script = ExtResource("6_g0d6c")
-metadata/_custom_type_script = "uid://bbfvei77cj5lj"
+_path = NodePath("../../Path3D/PathFollow3D")
+metadata/_custom_type_script = "uid://sh6qy5qm61re"
+
+[sub_resource type="Curve3D" id="Curve3D_n0g3p"]
+closed = true
+_data = {
+"points": PackedVector3Array(0, 0, -9.453, 0, 0, 0, -2.2752275, 6, 0, 0, 0, 6.255, 0, 0, 24.5, -2.401966, 6, 13, 0, 0, 0, 0, 0, 0, 12, 6, 0),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
 
 [node name="root" type="Node3D"]
 
@@ -73,3 +82,10 @@ debug_enabled = true
 script = ExtResource("3_n0g3p")
 _idleBehavior = SubResource("Resource_f5i44")
 metadata/_custom_type_script = "uid://bqgeix1vcei8x"
+
+[node name="Path3D" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.020498, 0, -4.046441)
+curve = SubResource("Curve3D_n0g3p")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(-0.99997103, 0, 0.0065818396, 0, 0.99999917, 0, -0.0065818382, 0, -0.9999712, -2.2752275, 6, 0)

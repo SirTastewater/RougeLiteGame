@@ -21,10 +21,9 @@ namespace RougeLiteGame.entity.behavior;
 
         if (GetTargetPosition() != Vector3.Zero && !Controller.IsNavigationFinished())
         {
-            if (IsFacingTarget()) return FollowControllerTarget();
-            
-            RotateTowards(delta);
-            return Vector3.Zero;
+            if (!IsFacingTarget()) RotateTowards(delta);
+
+            return FollowControllerTarget();
         }
         
         SetTargetPosition(GetNextPosition());

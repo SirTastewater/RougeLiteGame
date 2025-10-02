@@ -211,19 +211,12 @@ public sealed partial class EntityController : NavigationAgent3D
     /// This method is intended to be implemented by derived classes to define custom movement behavior.
     /// </remarks>
     private Vector3 MovementProcess(double delta)
-    {
-        if(CurrentBehaviour == null) return Vector3.Zero;
-        
+    {   
         // Do not query when the map has never synchronized and is empty.
         // Our Entity will just freeze when no navigation mesh is existent.
-        if (NavigationServer3D.MapGetIterationId(GetNavigationMap()) == 0) return Vector3.Zero;
         
-        if (CurrentBehaviour is not ReactionBehavior reactionBehavior || !reactionBehavior.ReactionDone())
-            return CurrentBehaviour.Process(delta);
-
-        CurrentBehaviour = _idleBehavior;
-
-        return CurrentBehaviour.Process(delta);
+        bool navigationMeshExists = NavigationServer3D.MapGetIterationId(GetNavigationMap()) != 0;
+        return !navigationMeshExists ? Vector3.Zero : CurrentBehaviour.Process(delta);
     }
 
     /// <summary>

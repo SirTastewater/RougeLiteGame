@@ -11,9 +11,4 @@ namespace RougeLiteGame.entity.behavior.reaction;
         
         return FollowControllerTarget();
     }
-
-    public override bool ReactionDone()
-    {
-        return Controller.IsNavigationFinished();
-    }
 }

@@ -24,12 +24,12 @@ namespace RougeLiteGame.entity.behavior;
         Init();
     }
     
-    public Node GetNode(NodePath path)
+    protected Node GetNode(NodePath path)
     {
         return Controller.GetNode<Node>(path);
     }
-    
-    public T GetNode<T>(NodePath path) where T: Node
+
+    protected T GetNode<T>(NodePath path) where T: Node
     {
         return Controller.GetNode<T>(path);
     }

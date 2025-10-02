@@ -17,6 +17,4 @@ namespace RougeLiteGame.entity.behavior;
     }
     
     protected virtual void React() { }
-
-    public abstract bool ReactionDone();
 }
