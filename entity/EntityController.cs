@@ -95,7 +95,16 @@ public abstract partial class EntityController : NavigationAgent3D
 
         Entity = entity;
         SetPhysicsProcess(true);
-        Logger.Log("Entity {} has been connected.", Entity.Name);
+        
+        Logger.Log(LogLevel.Trace, "Test");
+        Logger.Log(LogLevel.Debug, "Test");
+        Logger.Log(LogLevel.Fine, "Test");
+        Logger.Log(LogLevel.Info, "Test");
+        Logger.Log(LogLevel.Success, "Test");
+        Logger.Log(LogLevel.Warn, "Test");
+        Logger.Log(LogLevel.Error, "Test");
+        Logger.Log(LogLevel.Critical, "Test");
+        Logger.Log(LogLevel.Fatal, "Test");
         
         EntityReady();
     }

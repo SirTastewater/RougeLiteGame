@@ -15,7 +15,7 @@ public abstract partial class BasicLogger(Type type) : ILogger
     /// <param name="parameters">An array of parameters to replace placeholders in the message template.</param>
     public void Log(string message, params object[] parameters)
     {
-        Log(LogLevel.INFO, message, parameters);
+        Log(LogLevel.Info, message, parameters);
     }
 
     /// <summary>
