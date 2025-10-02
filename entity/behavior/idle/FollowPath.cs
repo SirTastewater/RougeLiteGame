@@ -24,7 +24,7 @@ namespace RougeLiteGame.entity.behavior.idle;
 
     protected override Vector3 GetNextPosition()
     {
-        // turns out, calculating a new target position is computaional not expensive
+        // turns out, calculating a new target position is not computaional expensive
         // "afaik it is threaded, so it should be pretty cheap." - nancok
         
         _path3D.Progress += _samplePathPointDistance;
