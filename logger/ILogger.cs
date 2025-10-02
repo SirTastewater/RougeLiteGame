@@ -33,7 +33,7 @@ public interface ILogger
     /// </para>
     /// </remarks>
     // This was written by AI, but it was too good to not be used
-    void Log(string message, params object[] parameters);
+    void Log(object message, params object[] parameters);
 
     /// <summary>
     /// Logs a message with a specified severity level.
@@ -42,23 +42,23 @@ public interface ILogger
     /// <param name="level">The severity level of the log message.</param>
     /// <param name="message">The message template containing placeholders to be replaced with parameter values.</param>
     /// <param name="parameters">An array of parameters to replace placeholders in the message template. Optionally includes an exception as the last parameter.</param>
-    void Log(LogLevel level, string message, params object[] parameters);
+    void Log(LogLevel level, object message, params object[] parameters);
     
-    void Trace(string message, params object[] parameters);
+    void Trace(object message, params object[] parameters);
     
-    void Fine(string message, params object[] parameters);
+    void Fine(object message, params object[] parameters);
     
-    void Debug(string message, params object[] parameters);
+    void Debug(object message, params object[] parameters);
     
-    void Info(string message, params object[] parameters);
+    void Info(object message, params object[] parameters);
     
-    void Success(string message, params object[] parameters);
+    void Success(object message, params object[] parameters);
 
-    void Error(string message, params object[] parameters);
+    void Error(object message, params object[] parameters);
 
-    void Warn(string message, params object[] parameters);
+    void Warn(object message, params object[] parameters);
 
-    void Critical(string message, params object[] parameters);
+    void Critical(object message, params object[] parameters);
     
-    void Fatal(string message, params object[] parameters);
+    void Fatal(object message, params object[] parameters);
 }
