@@ -7,11 +7,23 @@ public abstract partial class BasicLogger(Type type) : ILogger
 {
     [GeneratedRegex(@"\{\}")] private static partial Regex Attribute();
 
+    /// <summary>
+    /// Logs a message with placeholders that are optionally replaced by provided parameter values.
+    /// </summary>
+    /// <param name="message">The message template that may include placeholders for parameter values.</param>
+    /// <param name="parameters">An array of parameters to replace placeholders in the message template.</param>
     public void Log(string message, params object[] parameters)
     {
         Log(LogLevel.INFO, message, parameters);
     }
 
+    /// <summary>
+    /// Logs a message with a specified severity level.
+    /// The message may include placeholders that are replaced with provided parameter values.
+    /// </summary>
+    /// <param name="level">The severity level of the log message <see cref="LogLevel"/>.</param>
+    /// <param name="message">The message template containing placeholders to be replaced with parameter values.</param>
+    /// <param name="parameters">An array of parameters to replace placeholders in the message template. Optionally includes an exception as the last parameter.</param>
     public void Log(LogLevel level, string message, params object[] parameters)
     {
         if (parameters == null || parameters.Length == 0)
@@ -35,6 +47,14 @@ public abstract partial class BasicLogger(Type type) : ILogger
         }));
     }
 
+    /// <summary>
+    /// Logs a message along with a specified log level, including exception details.
+    /// Formats the message using provided parameters or replaces placeholders appropriately.
+    /// </summary>
+    /// <param name="level">The severity level of the log message <see cref="LogLevel"/>.</param>
+    /// <param name="message">The message template containing placeholders to be replaced with parameter values.</param>
+    /// <param name="parameters">An array of parameters to replace placeholders in the message template. The last parameter may optionally be an exception.</param>
+    /// <param name="throwable">An exception containing error details to include in the log output.</param>
     private void LogException(LogLevel level, string message, object[] parameters, Exception throwable)
     {
         int placeholderCount = Attribute().Matches(message).Count;
@@ -60,5 +80,12 @@ public abstract partial class BasicLogger(Type type) : ILogger
         
     }
 
+    /// <summary>
+    /// Outputs a log message to the desired destination (e.g., console, file, etc.)
+    /// along with a specified log level. Optionally includes exception information.
+    /// </summary>
+    /// <param name="level">The severity level of the log message <see cref="LogLevel"/>.</param>
+    /// <param name="message">The message to be logged.</param>
+    /// <param name="throwable">Optional. An exception object containing error details, if applicable.</param>
     protected abstract void Out(LogLevel level, string message, Exception throwable = null);
 }
