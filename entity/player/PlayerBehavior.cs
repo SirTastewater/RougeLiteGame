@@ -1,11 +1,15 @@
 using Godot;
 using RougeLiteGame.entity.behavior;
+using RougeLiteGame.entity.behavior.idle;
+using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity.player;
 
 [GlobalClass]
-public partial class PlayerBehavior : behavior.idle.IdleBehavior, IInputAcceptor
+public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
 {
+    private static readonly ILogger Logger = LoggerFactory.GetLogger<PlayerBehavior>();
+    
     public override Vector3 Process(double delta)
     {
         float speed = MovementSpeed();
@@ -45,9 +49,16 @@ public partial class PlayerBehavior : behavior.idle.IdleBehavior, IInputAcceptor
     {
         if(Input.IsActionJustPressed("switch_input"))
         {
-            Input.SetMouseMode(Input.GetMouseMode() == Input.MouseModeEnum.Captured
-                ? Input.MouseModeEnum.Visible
-                : Input.MouseModeEnum.Captured);
+            bool isMouseCaptured = Input.GetMouseMode() == Input.MouseModeEnum.Captured;
+            if (isMouseCaptured)
+            {
+                Logger.Debug("Releasing mouse capture.");
+                Input.SetMouseMode(Input.MouseModeEnum.Visible);
+                return;
+            }
+            
+            Logger.Debug("Capturing mouse.");
+            Input.SetMouseMode(Input.MouseModeEnum.Captured);
         }
     }
 }

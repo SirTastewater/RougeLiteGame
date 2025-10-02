@@ -15,7 +15,7 @@ namespace RougeLiteGame.entity;
 [GlobalClass]
 public sealed partial class EntityController : NavigationAgent3D
 {
-    private static readonly ILogger Logger = LoggerFactory.GetLogger(typeof(NavigationIdleBehavior));
+    private static readonly ILogger Logger = LoggerFactory.GetLogger(typeof(EntityController));
     
     #region Attributes
     private Entity _entity;
@@ -67,11 +67,12 @@ public sealed partial class EntityController : NavigationAgent3D
     {
         if (_duplicated.Contains(behavior.ResourcePath))
         {
-            Logger.Trace("Behavior already duplicated: [Type: {}, ResourcePath: {}]. Reusing existing instance for {}.", behavior.GetType().Name, behavior.ResourcePath, Entity.Name);
+            Logger.Trace("{}: Behavior already isolated: [Type: {}]. Reusing existing instance.", Entity.Name, behavior.GetType().Name, behavior.ResourcePath);
             return behavior;
         }
         
-        Logger.Debug("Duplicating behavior: [Resource: {}, Path: {}] for {}.", behavior.GetType().Name, behavior.ResourcePath, Entity.Name);
+        // I know, I know. Isolating sounds harsh. But they just WANT to be alone.
+        Logger.Debug("{}: Isolate behavior for this instance: [Resource: {}].", Entity.Name, behavior.GetType().Name, behavior.ResourcePath);
         Behavior duplicated = (Behavior)behavior.Duplicate();
         _duplicated.Add(behavior.ResourcePath);
         
