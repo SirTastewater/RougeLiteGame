@@ -12,8 +12,6 @@ public abstract partial class EntityController : NavigationAgent3D
 {
     #region Attributes
 
-    private static readonly ILogger Logger = LoggerFactory.GetLogger(typeof(EntityController));
-
     protected Entity Entity { get; private set; }
     protected MoveState MovementState { get; private set; } = MoveState.Stand;
 
@@ -49,7 +47,6 @@ public abstract partial class EntityController : NavigationAgent3D
         // idk how godot works, so imma just do that
         SetPhysicsProcess(IsEntityConnected());
         SetProcessInput(false);
-        Logger.Log("EntityController ready.");
 
         base._Ready();
     }
@@ -95,16 +92,6 @@ public abstract partial class EntityController : NavigationAgent3D
 
         Entity = entity;
         SetPhysicsProcess(true);
-        
-        Logger.Log(LogLevel.Trace, "Test");
-        Logger.Log(LogLevel.Debug, "Test");
-        Logger.Log(LogLevel.Fine, "Test");
-        Logger.Log(LogLevel.Info, "Test");
-        Logger.Log(LogLevel.Success, "Test");
-        Logger.Log(LogLevel.Warn, "Test");
-        Logger.Log(LogLevel.Error, "Test");
-        Logger.Log(LogLevel.Critical, "Test");
-        Logger.Log(LogLevel.Fatal, "Test");
         
         EntityReady();
     }
