@@ -82,7 +82,7 @@ public sealed partial class EntityController : NavigationAgent3D
     #endregion
     
     [ExportGroup("Behavior")]
-    [Export] private behavior.idle.IdleBehavior _idleBehavior;
+    [Export] private IdleBehavior _idleBehavior;
     [ExportSubgroup("Reaction")]
 
     #region Editor Gravity Settings
