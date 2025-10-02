@@ -5,8 +5,8 @@ namespace RougeLiteGame.entity.behavior;
 [GlobalClass] public abstract partial class ReactionBehavior : Behavior
 {
     protected IdleBehavior DefaultBehavior { get; private set; }
-    
-    protected Entity Target { get; private set; }
+
+    public Entity Target { get; private set; }
     
     public void React(Entity target, IdleBehavior defaultBehavior)
     {
@@ -14,5 +14,10 @@ namespace RougeLiteGame.entity.behavior;
         Target = target;
     }
 
+    public virtual void OutOfVision()
+    {
+        
+        
+    }
     public abstract bool Release();
 }
