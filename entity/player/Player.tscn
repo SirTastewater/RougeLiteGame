@@ -12,8 +12,10 @@ _pitchPivot = NodePath("../View")
 metadata/_custom_type_script = "uid://diracah62385j"
 
 [sub_resource type="Curve" id="Curve_u8k42"]
-_data = [Vector2(0.08321593, 0.15395296), 0.0, 0.0, 0, 0, Vector2(0.2985186, 0.8973536), 0.0, 0.0, 0, 0, Vector2(0.9394424, 0.09723735), 0.0, 0.0, 0, 0]
-point_count = 3
+_limits = [0.0, 4.5, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.133, 4.5), 0.0, 0.0, 0, 0, Vector2(0.53, 4.5), 0.0, 0.0, 0, 0, Vector2(0.73, 4.2), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+metadata/_snap_count = 46
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5o33p"]
 albedo_texture = ExtResource("2_o3s7f")
@@ -41,6 +43,8 @@ _entityController = NodePath("PlayerController")
 use_3d_avoidance = true
 script = ExtResource("2_u8k42")
 _idleBehavior = SubResource("Resource_etv1g")
+BaseSpeed = 1.5
+Stamina = 15
 SprintCurve = SubResource("Curve_u8k42")
 metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 

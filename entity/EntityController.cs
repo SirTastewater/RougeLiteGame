@@ -15,6 +15,7 @@ namespace RougeLiteGame.entity;
 [GlobalClass]
 public sealed partial class EntityController : NavigationAgent3D
 {
+    private static int TicksPerSecond => Engine.GetPhysicsTicksPerSecond();
     private static readonly ILogger Logger = LoggerFactory.GetLogger(typeof(EntityController));
     
     #region Attributes
@@ -41,7 +42,7 @@ public sealed partial class EntityController : NavigationAgent3D
         }
     }
 
-    private float _currentStamina;
+    private int _currentStamina;
     #endregion
     
     [ExportGroup("Behavior")]
@@ -62,8 +63,7 @@ public sealed partial class EntityController : NavigationAgent3D
     [Export] private float SneakPenalty { get; set; } = 2.0f;
     [ExportSubgroup("Sprint")]
     // I am preparing something big
-    [Export] private float MaximumSpeedAddition { get; set; } = 2.0f;
-    [Export] private float Stamina { get; set; } = 2.0f;
+    [Export] private int Stamina { get; set; } = 2;
     [Export] private Curve SprintCurve { get; set; }
     #endregion
     
@@ -99,6 +99,9 @@ public sealed partial class EntityController : NavigationAgent3D
         _currentStamina = Stamina;
     }
 
+    private int _currentTimer;
+    private float _sprintCurveTimer;
+    private bool exausted;
     public override void _PhysicsProcess(double delta)
     {
         // Do not query when the map has never synchronized and is empty.
@@ -108,6 +111,31 @@ public sealed partial class EntityController : NavigationAgent3D
         MovementState = ComputeMovementState(movement);
         
         if (MovementState == MoveState.Fall && EnableGravity) movement += ComputeGravity(delta);
+        
+        _currentTimer++;
+        // we will have a problem if the physic tick rate is lower than 1 tick per second, which is not possible. I think
+        if (_currentTimer % TicksPerSecond == 0)
+        {
+            _currentTimer = 0;
+            if (MovementState == MoveState.Sprint && _currentStamina-- == 0)
+            {
+                Logger.Info("{}: Sprint finished.", Entity.Name);
+            }
+            SecondsHook();
+        }
+
+        if (!MovementState.Equals(MoveState.Sprint))
+        {
+            // I am a monster. I know
+            exausted = (_currentStamina = Math.Min(++_currentStamina, Stamina)) != Stamina;
+            _sprintCurveTimer = 0;
+        }
+        else
+        {
+            float sprintCurveStep = 1f / (_currentStamina * TicksPerSecond);
+            _sprintCurveTimer = Math.Min(1f, _sprintCurveTimer + sprintCurveStep);
+        }
+        
         if (AvoidanceEnabled)
         {
             // Godot uses black magic to compute a vector spacing out agents.
@@ -121,6 +149,15 @@ public sealed partial class EntityController : NavigationAgent3D
         
         Entity.Velocity = movement;
         ApplyMovement(movement);
+    }
+
+    
+    private void SecondsHook()
+    {
+        if (MovementState == MoveState.Sprint && (--_currentStamina) == 0)
+        {
+            
+        }
     }
 
     public override void _Input(InputEvent @event)
@@ -238,7 +275,7 @@ public sealed partial class EntityController : NavigationAgent3D
         if (movement == Vector3.Zero) return MoveState.Stand;
         if (CurrentBehaviour.IsSneaking()) return MoveState.Sneak;
 
-        return CurrentBehaviour.IsSprinting() ? MoveState.Sprint : MoveState.Walk;
+        return CurrentBehaviour.IsSprinting() && !exausted ? MoveState.Sprint : MoveState.Walk;
     }
 
     /// <summary>
@@ -274,9 +311,9 @@ public sealed partial class EntityController : NavigationAgent3D
     public float MovementSpeed()
     {
         if (CurrentBehaviour.IsSneaking()) return BaseSpeed / SneakPenalty;
-        if (!CurrentBehaviour.IsSprinting()) return BaseSpeed;
+        if (!CurrentBehaviour.IsSprinting() || _currentStamina == 0) return BaseSpeed;
         
-        return BaseSpeed ;
+        return BaseSpeed + SprintCurve.Sample(_sprintCurveTimer);
     }
     
     /// <summary>

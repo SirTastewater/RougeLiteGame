@@ -21,7 +21,6 @@ glow_enabled = true
 [sub_resource type="Resource" id="Resource_f5i44"]
 script = ExtResource("6_g0d6c")
 _path = NodePath("../../Path3D/PathFollow3D")
-player = NodePath("../../Player")
 metadata/_custom_type_script = "uid://sh6qy5qm61re"
 
 [sub_resource type="Curve3D" id="Curve3D_n0g3p"]
