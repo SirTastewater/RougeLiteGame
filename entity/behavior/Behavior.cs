@@ -11,6 +11,8 @@ namespace RougeLiteGame.entity.behavior;
 [SuppressMessage("ReSharper", "VirtualMemberNeverOverridden.Global")]
 [GlobalClass] public abstract partial class Behavior : Resource
 {
+    // I am not going to write documentation just yet. Because I have enough!
+    
     protected EntityController Controller { get; private set; }
     protected Entity Entity { get; private set; }
 

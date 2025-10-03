@@ -61,6 +61,12 @@ public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
         return Input.IsActionPressed("sprint");
     }
 
+    /// <summary>
+    /// Handles player input events and processes them according to the current input mode.
+    /// Adjusts camera yaw and pitch based on mouse movement when input is enabled.
+    /// I don't want to write docs anymore AAHHHHHHHHHHH
+    /// </summary>
+    /// <param name="event">The input event captured, such as mouse motion or action presses.</param>
     public void AcceptInput(InputEvent @event)
     {
         if(!_enableInput) return;
