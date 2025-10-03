@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://d4b6y71mjk8pw"]
+[gd_scene load_steps=10 format=3 uid="uid://d4b6y71mjk8pw"]
 
 [ext_resource type="PackedScene" uid="uid://b5lsmomafcocw" path="res://rock/rock.blend" id="1_xnnxx"]
 
@@ -42,8 +42,6 @@ size = Vector2(50, 50)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_7qcyj"]
 data = PackedVector3Array(25, 0, 25, -25, 0, 25, 25, 0, -25, -25, 0, 25, -25, 0, -25, 25, 0, -25)
 
-[sub_resource type="BoxMesh" id="BoxMesh_xnnxx"]
-
 [node name="Level" type="NavigationRegion3D"]
 navigation_mesh = SubResource("NavigationMesh_xnnxx")
 
@@ -62,14 +60,6 @@ transform = Transform3D(1, 0, 0, 0, 0.7147901, -0.69933903, 0, 0.69933903, 0.714
 [node name="rock2" parent="." instance=ExtResource("1_xnnxx")]
 transform = Transform3D(1, 0, 0, 0, 0.7147901, -0.69933903, 0, 0.69933903, 0.7147901, -9.965897, 0.09453452, -3.531129)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.5, 0)
-mesh = SubResource("BoxMesh_xnnxx")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.5, -1)
-mesh = SubResource("BoxMesh_xnnxx")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.5, -2)
-mesh = SubResource("BoxMesh_xnnxx")
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.601, 0.8, 4.542)
+use_collision = true

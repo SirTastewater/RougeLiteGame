@@ -41,8 +41,9 @@ public sealed partial class EntityController : NavigationAgent3D
             SetProcessInput(newBehavior is IInputAcceptor);
         }
     }
+    
+    private float _runTimer;
 
-    private int _currentStamina;
     #endregion
     
     [ExportGroup("Behavior")]
@@ -53,7 +54,7 @@ public sealed partial class EntityController : NavigationAgent3D
 
     [ExportGroup("Gravity")] 
     [Export] private bool EnableGravity { get; set; } = true;
-    [Export] private float GravityMultiplier { get; set; } = 1.14f;
+    [Export] private float GravityMultiplier { get; set; } = 1f;
     #endregion Gravity
 
     #region Editor Movement Settings
@@ -61,9 +62,6 @@ public sealed partial class EntityController : NavigationAgent3D
     [Export] private float BaseSpeed { get; set; } = 3f;
     [Export] public float JumpHeight { get; private set; } = 1f;
     [Export] private float SneakPenalty { get; set; } = 2.0f;
-    [ExportSubgroup("Sprint")]
-    // I am preparing something big
-    [Export] private int Stamina { get; set; } = 2;
     [Export] private Curve SprintCurve { get; set; }
     #endregion
     
@@ -96,12 +94,8 @@ public sealed partial class EntityController : NavigationAgent3D
         
         CurrentBehaviour = _idleBehavior;
         VelocityComputed += ApplyMovement;
-        _currentStamina = Stamina;
     }
 
-    private int _currentTimer;
-    private float _sprintCurveTimer;
-    private bool exausted;
     public override void _PhysicsProcess(double delta)
     {
         // Do not query when the map has never synchronized and is empty.
@@ -111,53 +105,31 @@ public sealed partial class EntityController : NavigationAgent3D
         MovementState = ComputeMovementState(movement);
         
         if (MovementState == MoveState.Fall && EnableGravity) movement += ComputeGravity(delta);
-        
-        _currentTimer++;
-        // we will have a problem if the physic tick rate is lower than 1 tick per second, which is not possible. I think
-        if (_currentTimer % TicksPerSecond == 0)
-        {
-            _currentTimer = 0;
-            if (MovementState == MoveState.Sprint && _currentStamina-- == 0)
-            {
-                Logger.Info("{}: Sprint finished.", Entity.Name);
-            }
-            SecondsHook();
-        }
 
-        if (!MovementState.Equals(MoveState.Sprint))
+        if (MovementState == MoveState.Sprint)
         {
-            // I am a monster. I know
-            exausted = (_currentStamina = Math.Min(++_currentStamina, Stamina)) != Stamina;
-            _sprintCurveTimer = 0;
-        }
-        else
-        {
-            float sprintCurveStep = 1f / (_currentStamina * TicksPerSecond);
-            _sprintCurveTimer = Math.Min(1f, _sprintCurveTimer + sprintCurveStep);
+            // each second increment by one
+            _runTimer += 1f / TicksPerSecond;
+            if (_runTimer > SprintCurve.MaxDomain)
+            {
+                Logger.Debug("{}: SprintCurve has reached maximum time of {} seconds.", Entity.Name, SprintCurve.MaxDomain);
+                _runTimer = 0;
+            }
         }
         
         if (AvoidanceEnabled)
         {
-            // Godot uses black magic to compute a vector spacing out agents.
-            // When calling the setter of the NavigationsAgent velocity, it will calculate a new velocity spacing out from other
-            // agents and send the result via the VelocityComputed signal.
-            // more information can be found here:
+            // When calling the setter of the NavigationsAgent velocity, it uses black magic to calculate a new velocity spacing out from other
+            // agents and send the result to the VelocityComputed signal which we then use to apply the movement.
+            // More information can be found here:
             // https://docs.godotengine.org/en/4.0/tutorials/navigation/navigation_using_agent_avoidance.html
+            // (it's not actually black magic. I think)
             Velocity = movement;
             return;
         }
         
         Entity.Velocity = movement;
         ApplyMovement(movement);
-    }
-
-    
-    private void SecondsHook()
-    {
-        if (MovementState == MoveState.Sprint && (--_currentStamina) == 0)
-        {
-            
-        }
     }
 
     public override void _Input(InputEvent @event)
@@ -275,7 +247,7 @@ public sealed partial class EntityController : NavigationAgent3D
         if (movement == Vector3.Zero) return MoveState.Stand;
         if (CurrentBehaviour.IsSneaking()) return MoveState.Sneak;
 
-        return CurrentBehaviour.IsSprinting() && !exausted ? MoveState.Sprint : MoveState.Walk;
+        return CurrentBehaviour.IsSprinting() ? MoveState.Sprint : MoveState.Walk;
     }
 
     /// <summary>
@@ -292,7 +264,38 @@ public sealed partial class EntityController : NavigationAgent3D
         return GravityMultiplier * Entity.GetGravity() * (float) delta;
     }
 
-    public Vector3 Gravity()
+    /// <summary>
+    /// Computes the jump velocity required to achieve a specified jump height.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="Vector3"/> representing the upward velocity needed to reach the desired jump height.
+    /// </returns>
+    /// <remarks>
+    /// The calculation is based on the formula for uniformly faster motion (v² = u² + 2as),
+    /// where gravity and the specified jump height are used to find the necessary jump velocity.
+    /// </remarks>
+    public Vector3 ComputeJumpVelocity()
+    {
+        // he's jumping a bit higher and can jump on thing 0.2 m taller than JumpHeight.
+        // For making our lives easier, we could just subtract -0.2f, so he can just jump on objects as tall as JumpHeight
+        float jumpHeight = JumpHeight; //- 0.2f; 
+        
+        // I am very bad at physics
+        // v² = u² + 2as | v² - 2as = u² and v² = 0
+        return new Vector3(0, (float) Math.Sqrt(-2 * Gravity().Y * jumpHeight), 0);
+    }
+
+    /// <summary>
+    /// Calculates the gravity vector applied to the entity.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="Vector3"/> representing the gravity force, scaled by the <see cref="GravityMultiplier"/>.
+    /// </returns>
+    /// <remarks>
+    /// This method combines the base gravity value provided by the connected <see cref="Entity"/> with
+    /// the <see cref="GravityMultiplier"/> to determine the total gravity influence.
+    /// </remarks>
+    private Vector3 Gravity()
     {
         return GravityMultiplier * Entity.GetGravity();
     }
@@ -311,9 +314,9 @@ public sealed partial class EntityController : NavigationAgent3D
     public float MovementSpeed()
     {
         if (CurrentBehaviour.IsSneaking()) return BaseSpeed / SneakPenalty;
-        if (!CurrentBehaviour.IsSprinting() || _currentStamina == 0) return BaseSpeed;
+        if (!CurrentBehaviour.IsSprinting()) { return BaseSpeed; }
         
-        return BaseSpeed + SprintCurve.Sample(_sprintCurveTimer);
+        return BaseSpeed + SprintCurve.Sample(_runTimer);
     }
     
     /// <summary>
@@ -342,7 +345,7 @@ public sealed partial class EntityController : NavigationAgent3D
         }
         
         // I know, I know. Isolating sounds harsh. But they just WANT to be alone.
-        Logger.Debug("{}: Isolate behavior: [Resource: {}].", Entity.Name, behavior.GetType().Name, behavior.ResourcePath);
+        Logger.Trace("{}: Isolate behavior: [Resource: {}].", Entity.Name, behavior.GetType().Name, behavior.ResourcePath);
         Behavior duplicated = (Behavior)behavior.Duplicate();
         _duplicated.Add(behavior.ResourcePath);
         

@@ -32,22 +32,9 @@ public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
         float speed = MovementSpeed();
         Vector3 velocity = Entity.Velocity;
 
-        if (Input.IsActionJustPressed("jump") && Entity.IsOnFloor())
-        {
-            // v² = u² + 2as
-            // v = 0 (final velocity) 
-            // u = ? (initial velocity)
-            // a = -Entities Gravity (acceleration)
-            // s = JumpHeight (Distance)
-
-            Vector3 gravity = Entity.GetGravity();
-            float jumpVelocity = (float) Math.Sqrt(-2.0f * gravity.Y * Controller.JumpHeight);
-            
-            velocity.Y += jumpVelocity;
-        }
+        if (Input.IsActionJustPressed("jump") && Entity.IsOnFloor()) velocity += Controller.ComputeJumpVelocity();
         
         Vector2 inputDir = Input.GetVector("left", "right", "forward", "backward");
-        
         Vector3 direction = (Entity.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 
         if (direction != Vector3.Zero)
@@ -81,15 +68,11 @@ public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
         if(Input.IsActionJustPressed("switch_input"))
         {
             bool isMouseCaptured = Input.GetMouseMode() == Input.MouseModeEnum.Captured;
-            if (isMouseCaptured)
-            {
-                Logger.Debug("Releasing mouse capture.");
-                Input.SetMouseMode(Input.MouseModeEnum.Visible);
-                return;
-            }
+            Input.MouseModeEnum mouseMode = isMouseCaptured ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
             
-            Logger.Debug("Capturing mouse.");
-            Input.SetMouseMode(Input.MouseModeEnum.Captured);
+            Logger.Info("Changing mouse mode to [{}].", mouseMode);
+            Input.SetMouseMode(mouseMode);
+            return;
         }
         
         if (Input.MouseMode != Input.MouseModeEnum.Captured) return;
