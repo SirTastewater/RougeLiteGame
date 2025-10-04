@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using RougeLiteGame.entity.behavior.idle;
+using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity.behavior.reaction;
 

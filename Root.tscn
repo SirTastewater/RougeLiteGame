@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=11 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
@@ -22,6 +22,9 @@ glow_enabled = true
 script = ExtResource("6_g0d6c")
 _path = NodePath("../../Path3D/PathFollow3D")
 metadata/_custom_type_script = "uid://sh6qy5qm61re"
+
+[sub_resource type="Curve" id="Curve_cwqeq"]
+_limits = [0.0, 6.0, 0.0, 15.0]
 
 [sub_resource type="Curve3D" id="Curve3D_n0g3p"]
 closed = true
@@ -58,6 +61,7 @@ debug_enabled = true
 script = ExtResource("3_n0g3p")
 _idleBehavior = SubResource("Resource_f5i44")
 BaseSpeed = 4.0
+SprintCurve = SubResource("Curve_cwqeq")
 metadata/_custom_type_script = "uid://bqgeix1vcei8x"
 
 [node name="Path3D" type="Path3D" parent="."]

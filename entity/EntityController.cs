@@ -15,6 +15,8 @@ namespace RougeLiteGame.entity;
 [GlobalClass]
 public sealed partial class EntityController : NavigationAgent3D
 {
+    private static readonly float JumpCorrection = 0.2f;
+    
     private static int TicksPerSecond => Engine.GetPhysicsTicksPerSecond();
     private static readonly ILogger Logger = LoggerFactory.GetLogger(typeof(EntityController));
     
@@ -276,9 +278,9 @@ public sealed partial class EntityController : NavigationAgent3D
     /// </remarks>
     public Vector3 ComputeJumpVelocity()
     {
-        // he's jumping a bit higher and can jump on thing 0.2 m taller than JumpHeight.
+        // he's jumping a bit higher and can jump on things 0.2 m taller than JumpHeight.
         // For making our lives easier, we could just subtract -0.2f, so he can just jump on objects as tall as JumpHeight
-        float jumpHeight = JumpHeight; //- 0.2f; 
+        float jumpHeight = JumpHeight - JumpCorrection; 
         
         // I am very bad at physics
         // v² = u² + 2as | v² - 2as = u² and v² = 0
