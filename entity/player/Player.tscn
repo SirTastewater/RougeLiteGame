@@ -1,36 +1,19 @@
-[gd_scene load_steps=14 format=3 uid="uid://46wmtnfnlyqu"]
+[gd_scene load_steps=7 format=3 uid="uid://46wmtnfnlyqu"]
 
 [ext_resource type="Script" uid="uid://c621010pj8lg8" path="res://entity/player/Player.cs" id="1_sntwv"]
-[ext_resource type="Texture2D" uid="uid://b4koj8rtmjedy" path="res://scary.jpg" id="2_o3s7f"]
 [ext_resource type="Script" uid="uid://bqgeix1vcei8x" path="res://entity/EntityController.cs" id="2_u8k42"]
-[ext_resource type="Script" uid="uid://diracah62385j" path="res://entity/player/PlayerBehavior.cs" id="3_rykwh"]
-[ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="5_etv1g"]
-[ext_resource type="PackedScene" uid="uid://b5lsmomafcocw" path="res://rock/rock.blend" id="6_m44ds"]
+[ext_resource type="Script" uid="uid://cl6fsdj2scj2y" path="res://entity/player/PlayerBehavior.cs" id="3_rykwh"]
 
-[sub_resource type="Resource" id="Resource_etv1g"]
+[sub_resource type="Resource" id="Resource_u8k42"]
 script = ExtResource("3_rykwh")
 _yawPivot = NodePath("..")
 _pitchPivot = NodePath("../View")
-metadata/_custom_type_script = "uid://diracah62385j"
+metadata/_custom_type_script = "uid://cl6fsdj2scj2y"
 
 [sub_resource type="Curve" id="Curve_u8k42"]
-_limits = [0.0, 100.0, 0.0, 1.0]
-_data = [Vector2(0.0854367, 0.40459114), 0.0, 0.0, 0, 0, Vector2(0.15646033, 100), 0.0, 0.0, 0, 0, Vector2(0.18423477, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5o33p"]
-albedo_texture = ExtResource("2_o3s7f")
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_sntwv"]
-radius = 0.4
-height = 1.8
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sntwv"]
-albedo_color = Color(0, 0, 0, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_o3s7f"]
-material = SubResource("StandardMaterial3D_sntwv")
-size = Vector3(0.6, 0.2, 0.2)
+_limits = [0.0, 4.5, 0.0, 14.660413]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.04827535, 4.5), 0.0, 0.0, 0, 0, Vector2(11.519383, 4.3082256), 0.0, 0.0, 0, 0, Vector2(14.660413, 1.0588655), 0.0, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sntwv"]
 radius = 0.57177734
@@ -42,20 +25,10 @@ _entityController = NodePath("PlayerController")
 
 [node name="PlayerController" type="NavigationAgent3D" parent="."]
 script = ExtResource("2_u8k42")
-_idleBehavior = SubResource("Resource_etv1g")
+_idleBehavior = SubResource("Resource_u8k42")
 BaseSpeed = 1.5
 SprintCurve = SubResource("Curve_u8k42")
 metadata/_custom_type_script = "uid://bqgeix1vcei8x"
-
-[node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
-material_override = SubResource("StandardMaterial3D_5o33p")
-mesh = SubResource("CapsuleMesh_sntwv")
-
-[node name="glasses" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -0.325)
-layers = 512
-mesh = SubResource("BoxMesh_o3s7f")
 
 [node name="Hitbox" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8891337, 0)
@@ -63,7 +36,3 @@ shape = SubResource("CapsuleShape3D_sntwv")
 
 [node name="View" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -0.45)
-
-[node name="Level" parent="." instance=ExtResource("5_etv1g")]
-
-[node name="rock3" parent="Level" instance=ExtResource("6_m44ds")]
