@@ -1,5 +1,4 @@
 using Godot;
-using RougeLiteGame.entity.camera;
 
 namespace RougeLiteGame.entity;
 
