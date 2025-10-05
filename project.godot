@@ -19,6 +19,16 @@ config/icon="res://icon.svg"
 
 project/assembly_name="RougeLiteGame"
 
+[file_customization]
+
+folder_colors={
+"res://entity/": "orange",
+"res://entity/behavior/": "orange",
+"res://entity/limbs/": "red",
+"res://level/": "yellow",
+"res://logger/": "green"
+}
+
 [input]
 
 left={

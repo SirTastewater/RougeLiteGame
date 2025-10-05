@@ -1,4 +1,10 @@
 using Godot;
+using Godot.Collections;
+using RougeLiteGame.entity.limbs;
+using RougeLiteGame.entity.limbs.arm;
+using RougeLiteGame.entity.limbs.head;
+using RougeLiteGame.entity.limbs.leg;
+using RougeLiteGame.entity.limbs.torso;
 
 namespace RougeLiteGame.entity;
 
@@ -13,11 +19,24 @@ namespace RougeLiteGame.entity;
 public abstract partial class Entity : CharacterBody3D
 {
     [Export] private EntityController _entityController;
+    private BodyStructure _bodyStructure;
+    
+    [ExportGroup("Limbs")]
+    [Export] private TorsoLimb _torso;
+    [Export] private Array<HeadLimb> _headLimbs = [];
+    [Export] private Array<ArmLimb> _armLimbs = [];
+    [Export] private Array<LegLimb> _legLimbs = [];
     
     public override void _Ready()
     {
         base._Ready();
 
         _entityController?.Connect(this);
+        _bodyStructure = new BodyStructure(_torso, _headLimbs, _armLimbs, _legLimbs);
+    }
+
+    public BodyStructure GetLimbs()
+    {
+        return _bodyStructure;
     }
 }

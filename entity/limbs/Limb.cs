@@ -5,25 +5,13 @@ namespace RougeLiteGame.entity.limbs;
 [GlobalClass]
 public abstract partial class Limb : Node3D
 {
-    [Export] private LimbAttributes _limbAttributes;
+    [Export(PropertyHint.Range, "-100,100,0.5")] private float _life, _strength, _speed;
     
-    private LimbAttributes LimbAttributes
-    {
-        get => _limbAttributes;
-        set { 
-            _limbAttributes?.Uninitialize();
-            _limbAttributes = value;
-            _limbAttributes.Initialize(this);
-        }
-    }
-
-    public override void _Ready()
-    {
-        // we must manually initialize as the editor does not call the setter at runtime
-        // it's important that child classes still call base._Ready()
-        _limbAttributes?.Initialize(this);
-        base._Ready();
-    }
-
-    public abstract LimbType GetLimbType();
+    public float Life => _life;
+    public float Strength => _strength;
+    public float Speed => _speed;
+    
+    public LimbType Type => GetLimbType();
+    
+    protected abstract LimbType GetLimbType();
 }
