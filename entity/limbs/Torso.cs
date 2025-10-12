@@ -1,8 +1,8 @@
 using Godot;
 
-namespace RougeLiteGame.entity.limbs.torso;
+namespace RougeLiteGame.entity.limbs;
 
-[GlobalClass] public partial class TorsoLimb : Limb
+[GlobalClass] public partial class Torso : Limb
 {
     protected override LimbType GetLimbType()
     {

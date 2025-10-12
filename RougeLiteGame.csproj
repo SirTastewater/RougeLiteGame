@@ -4,4 +4,10 @@
         <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
         <EnableDynamicLoading>true</EnableDynamicLoading>
     </PropertyGroup>
+    <ItemGroup>
+      <Folder Include="entity\limbs\arm\" />
+      <Folder Include="entity\limbs\head\" />
+      <Folder Include="entity\limbs\leg\" />
+      <Folder Include="entity\limbs\torso\" />
+    </ItemGroup>
 </Project>

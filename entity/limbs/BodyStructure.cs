@@ -1,14 +1,10 @@
 using System;
 using System.Linq;
 using Godot.Collections;
-using RougeLiteGame.entity.limbs.arm;
-using RougeLiteGame.entity.limbs.head;
-using RougeLiteGame.entity.limbs.leg;
-using RougeLiteGame.entity.limbs.torso;
 
 namespace RougeLiteGame.entity.limbs;
 
-public readonly struct BodyStructure(TorsoLimb torso, Array<HeadLimb> heads, Array<ArmLimb> arms, Array<LegLimb> legs)
+public readonly struct BodyStructure(Torso torso, Array<Head> heads, Array<Arm> arms, Array<Leg> legs)
 {
     public bool HasHeads => heads.Count > 0;
     public bool HasArms => arms.Count > 0;

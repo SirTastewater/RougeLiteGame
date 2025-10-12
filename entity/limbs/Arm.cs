@@ -1,6 +1,6 @@
-namespace RougeLiteGame.entity.limbs.arm;
+namespace RougeLiteGame.entity.limbs;
 
-public abstract partial class ArmLimb : Limb
+public abstract partial class Arm : Limb
 {
     protected override LimbType GetLimbType()
     {
