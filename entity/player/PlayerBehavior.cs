@@ -1,6 +1,4 @@
-using System;
 using Godot;
-using RougeLiteGame.entity.behavior;
 using RougeLiteGame.entity.behavior.idle;
 using RougeLiteGame.logger;
 
