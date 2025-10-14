@@ -2,18 +2,27 @@ using Godot;
 
 namespace RougeLiteGame.entity.limbs.instance;
 
-public partial class LimbInstance<T>(T limb) : Resource where T: Limb
+public abstract partial class LimbInstance<T> : Node, ILimbStats where T: Limb
 {
-    public T Limb => limb;
-    public bool IsValid => limb != null;
-    public bool IsDead => _life < 0;
-
-    private float _life;
+    public T Limb => GetLimb();
+    public bool IsValid => Limb != null;
+    public bool IsDead => Life < 0;
     
-    public LimbInstance(T limb, float life) : this(limb)
-    {
-        _life = life;
-    }
+    public float Life { get; private set; }
 
-    public LimbInstance() : this(null) { }
+    public float Strength { get; private set; }
+
+    public float Speed { get; private set; }
+
+    protected abstract T GetLimb(); 
+
+    public override void _Ready()
+    {
+        if (!IsValid) return;
+        Life = Limb.LifeGain;
+        Strength = Limb.StrengthGain;
+        Speed = Limb.SpeedGain;
+        
+        base._Ready();
+    }
 }
