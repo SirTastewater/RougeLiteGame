@@ -1,6 +1,7 @@
 using Godot;
+using RougeLiteGame.entity.behavior;
 
-namespace RougeLiteGame.entity.behavior;
+namespace RougeLiteGame.entity;
 
 /// <summary>
 /// Defines a contract for classes that handle input events, typically for entities. Provides a mechanism to accept and
