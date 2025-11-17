@@ -1,9 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Godot;
-using RougeLiteGame.entity.behavior.idle;
-using RougeLiteGame.entity.behavior.reaction;
-
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace RougeLiteGame.entity.behavior;

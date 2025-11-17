@@ -15,6 +15,10 @@ run/main_scene="uid://b6as4qrovbk6f"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+display_server/driver.linuxbsd="wayland"
+
 [dotnet]
 
 project/assembly_name="RougeLiteGame"

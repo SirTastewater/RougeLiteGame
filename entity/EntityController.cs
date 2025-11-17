@@ -5,7 +5,6 @@ using Godot.Collections;
 using RougeLiteGame.entity.behavior;
 using RougeLiteGame.entity.behavior.idle;
 using RougeLiteGame.entity.behavior.reaction;
-using RougeLiteGame.entity.limbs;
 using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity;
@@ -317,7 +316,6 @@ public sealed partial class EntityController : NavigationAgent3D
     public float MovementSpeed()
     {
         float baseSpeed = BaseSpeed;
-        baseSpeed += Entity.GetLimbs().ComputeGain(BodyStructure.LimbAttribute.Speed);
         
         if (CurrentBehaviour.IsSneaking()) return baseSpeed / SneakPenalty;
         if (!CurrentBehaviour.IsSprinting()) { return baseSpeed; }
