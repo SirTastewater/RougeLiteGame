@@ -1,10 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://d4b6y71mjk8pw"]
-
-[ext_resource type="PackedScene" uid="uid://b5lsmomafcocw" path="res://rock/rock.blend" id="1_xnnxx"]
+[gd_scene load_steps=9 format=3 uid="uid://d4b6y71mjk8pw"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_xnnxx"]
-vertices = PackedVector3Array(-23, 0.25884545, -3.75, -13.25, 0.25884545, -3.75, -12.5, 0.25884545, -5.75, -9.25, 0.25884545, -6.5, -9.5, 0.25884545, -23, -23, 0.25884545, -23, -6.75, 0.25884545, -4, -3.75, 0.25884545, -4, -3, 0.25884545, -5.75, -7.5, 0.25884545, -6, 0, 0.25884545, -6.5, 0, 0.25884545, -23, 2.25, 0.25884545, -5.75, 2.75, 0.25884545, -3.5, 23, 0.25884545, -3.5, 23, 0.25884545, -23, -6.75, 0.25884545, -2.5, -3, 0.25884545, -1.5, -7.5, 0.25884545, -1, -8.75, 0.25884545, -0.5, -8.75, 0.25884545, 23, -1.25, 0.25884545, 23, -1.25, 0.25884545, -0.5, -12, 0.25884545, -1, -10.25, 0.25884545, -0.25, -23, 0.25884545, 23, 2, 0.25884545, -1, 0.75, 0.25884545, -0.5, 0.75, 0.25884545, 23, 23, 0.25884545, 23)
-polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(2, 0, 3), PackedInt32Array(3, 0, 4), PackedInt32Array(4, 0, 5), PackedInt32Array(7, 6, 8), PackedInt32Array(8, 6, 9), PackedInt32Array(9, 3, 8), PackedInt32Array(8, 3, 10), PackedInt32Array(10, 3, 11), PackedInt32Array(11, 3, 4), PackedInt32Array(11, 12, 10), PackedInt32Array(12, 11, 13), PackedInt32Array(13, 11, 14), PackedInt32Array(14, 11, 15), PackedInt32Array(16, 6, 7), PackedInt32Array(16, 7, 18), PackedInt32Array(18, 7, 17), PackedInt32Array(18, 17, 19), PackedInt32Array(19, 17, 22), PackedInt32Array(19, 22, 21), PackedInt32Array(19, 21, 20), PackedInt32Array(0, 1, 23), PackedInt32Array(23, 24, 0), PackedInt32Array(0, 24, 25), PackedInt32Array(25, 24, 20), PackedInt32Array(24, 19, 20), PackedInt32Array(26, 13, 14), PackedInt32Array(26, 14, 27), PackedInt32Array(27, 14, 28), PackedInt32Array(28, 14, 29), PackedInt32Array(27, 28, 22), PackedInt32Array(22, 28, 21)]
+vertices = PackedVector3Array(-23, 0.5, -23, -23, 0.5, 23, 23, 0.5, 23, 23, 0.5, -23)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 agent_radius = 2.0
 agent_max_climb = 0.7
 agent_max_slope = 90.0
@@ -42,29 +40,14 @@ size = Vector2(50, 50)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_7qcyj"]
 data = PackedVector3Array(25, 0, 25, -25, 0, 25, 25, 0, -25, -25, 0, 25, -25, 0, -25, 25, 0, -25)
 
-[node name="Level" type="NavigationRegion3D"]
+[node name="Level" type="NavigationRegion3D" unique_id=1078285267]
 navigation_mesh = SubResource("NavigationMesh_xnnxx")
 
-[node name="Ground" type="MeshInstance3D" parent="."]
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=254226572]
 mesh = SubResource("PlaneMesh_s6u1s")
 skeleton = NodePath("../..")
 
-[node name="StaticBody" type="StaticBody3D" parent="Ground"]
+[node name="StaticBody" type="StaticBody3D" parent="Ground" unique_id=128254551]
 
-[node name="Hitbox" type="CollisionShape3D" parent="Ground/StaticBody"]
+[node name="Hitbox" type="CollisionShape3D" parent="Ground/StaticBody" unique_id=471897085]
 shape = SubResource("ConcavePolygonShape3D_7qcyj")
-
-[node name="rock" parent="." instance=ExtResource("1_xnnxx")]
-transform = Transform3D(1, 0, 0, 0, 0.7147901, -0.69933903, 0, 0.69933903, 0.7147901, -0.4989624, 0.09453452, -3.531129)
-
-[node name="rock2" parent="." instance=ExtResource("1_xnnxx")]
-transform = Transform3D(1, 0, 0, 0, 0.7147901, -0.69933903, 0, 0.69933903, 0.7147901, -9.965897, 0.09453452, -3.531129)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.601, 0.5, 4.542)
-use_collision = true
-
-[node name="CSGBox3D2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.601, 0.505, 5.816)
-use_collision = true
-size = Vector3(1, 1.01, 1)
