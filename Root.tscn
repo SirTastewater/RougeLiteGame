@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
+[ext_resource type="PackedScene" uid="uid://fdufxn4uw83j" path="res://entity/limbs/Limb.tscn" id="3_170dk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -16,17 +17,21 @@ sky = SubResource("Sky_gxo8o")
 tonemap_mode = 2
 glow_enabled = true
 
-[node name="root" type="Node3D"]
+[node name="root" type="Node3D" unique_id=141209749]
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1367195632]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Environment" type="WorldEnvironment" parent="."]
+[node name="Environment" type="WorldEnvironment" parent="." unique_id=106845419]
 environment = SubResource("Environment_24d08")
 
-[node name="Level" parent="." instance=ExtResource("1_f5i44")]
+[node name="Level" parent="." unique_id=1796910625 instance=ExtResource("1_f5i44")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011890411, 0.044784546, -0.00630188)
 
-[node name="Player" parent="." instance=ExtResource("1_170dk")]
+[node name="Player" parent="." unique_id=1675002700 instance=ExtResource("1_170dk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96214926, -3.1935349)
+
+[node name="Limb" parent="." unique_id=1052995389 instance=ExtResource("3_170dk")]
+transform = Transform3D(0.028462457, -0.99959487, 0, 0.99959487, 0.028462457, 0, 0, 0, 1, 0, 0.5652826, 0)
+freeze = false
