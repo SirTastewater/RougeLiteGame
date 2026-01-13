@@ -1,15 +1,20 @@
 using System;
 using Godot;
+using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity.limbs;
 
 [GlobalClass]
-public partial class Limb : RigidBody3D
+public partial class Limb : Node3D
 {
+	private static readonly ILogger logger = LoggerFactory.GetLogger<Limb>();
+	
 	[Export(PropertyHint.Range, "0,10,0.5")] private float _lifeGain = 0.5f;
 	[Export(PropertyHint.Range, "0,10,0.5")] private float _speedGain = 0.5f;
 	[Export(PropertyHint.Range, "0,100,1")] private float _strengthGain = 10;
 
+	[Export] private PhysicalBoneSimulator3D _skeleton;
+	
 	public float Life { get; private set; }
 
 	public float Speed { get; private set; }
@@ -21,7 +26,16 @@ public partial class Limb : RigidBody3D
 		get => _host;
 		set
 		{
-			SetFreezeEnabled(value != null);	
+			if (value == null)
+			{
+				logger.Debug("Starting the simulation.");
+				_skeleton.PhysicalBonesStartSimulation();
+			}
+			else
+			{
+				logger.Debug("Stopping the simulation.");
+				_skeleton.PhysicalBonesStopSimulation();
+			}
 			_host = value;
 		}
 	}
@@ -32,7 +46,9 @@ public partial class Limb : RigidBody3D
 	{
 		Life = _lifeGain;
 		Speed = _speedGain;
-		_strengthGain = _lifeGain;
+		Strength = _strengthGain;
+		
+		Host = null;
 	}
 
 	public void Initialize(Entity host)
@@ -50,17 +66,17 @@ public partial class Limb : RigidBody3D
 		{
 			throw new Exception("Limb is not initialized");
 		}
-
+		
 		Host = null;
 	}
 	
 	public void Damage(float damage)
 	{
-		Life = Math.Min(Life - damage, 0);
+		Life = Math.Max(Life - damage, 0);
 	}
 
 	public void Heal(float heal)
 	{
-		Life = Math.Max(Life + heal, _lifeGain);
+		Life = Math.Min(Life + heal, _lifeGain);
 	}
 }

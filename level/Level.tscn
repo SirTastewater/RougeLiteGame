@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://d4b6y71mjk8pw"]
+[gd_scene format=3 uid="uid://d4b6y71mjk8pw"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_xnnxx"]
 agent_radius = 2.0
@@ -38,14 +38,18 @@ size = Vector2(50, 50)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_7qcyj"]
 data = PackedVector3Array(25, 0, 25, -25, 0, 25, 25, 0, -25, -25, 0, 25, -25, 0, -25, 25, 0, -25)
 
-[node name="Level" type="NavigationRegion3D"]
+[node name="Level" type="NavigationRegion3D" unique_id=798150585]
 navigation_mesh = SubResource("NavigationMesh_xnnxx")
 
-[node name="Ground" type="MeshInstance3D" parent="."]
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=586480332]
 mesh = SubResource("PlaneMesh_s6u1s")
 skeleton = NodePath("../..")
 
-[node name="StaticBody" type="StaticBody3D" parent="Ground"]
+[node name="StaticBody" type="StaticBody3D" parent="Ground" unique_id=601831352]
 
-[node name="Hitbox" type="CollisionShape3D" parent="Ground/StaticBody"]
+[node name="Hitbox" type="CollisionShape3D" parent="Ground/StaticBody" unique_id=657933907]
 shape = SubResource("ConcavePolygonShape3D_7qcyj")
+
+[node name="box" type="CSGBox3D" parent="." unique_id=828306228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4174633, -8.761797)
+use_collision = true

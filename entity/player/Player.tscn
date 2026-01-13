@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://c621010pj8lg8" path="res://entity/player/Player.cs" id="1_sntwv"]
 [ext_resource type="Script" uid="uid://dg40h1v3bxtsr" path="res://entity/EntityController.cs" id="2_u8k42"]
 [ext_resource type="Script" uid="uid://dao158fk8u453" path="res://entity/player/PlayerBehavior.cs" id="3_rykwh"]
-[ext_resource type="PackedScene" uid="uid://fdufxn4uw83j" path="res://entity/limbs/Limb.tscn" id="4_u8k42"]
 
 [sub_resource type="Resource" id="Resource_u8k42"]
 script = ExtResource("3_rykwh")
@@ -15,8 +14,7 @@ _limits = [0.0, 4.5, 0.0, 14.660413]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.04827535, 4.5), 0.0, 0.0, 0, 0, Vector2(11.519383, 4.3082256), 0.0, 0.0, 0, 0, Vector2(14.660413, 1.0588655), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_rykwh"]
-size = Vector3(0.8036499, 1.2389832, 0.23321533)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5o33p"]
 
 [node name="Player" type="CharacterBody3D" unique_id=1005609153 node_paths=PackedStringArray("_entityController")]
 script = ExtResource("1_sntwv")
@@ -29,32 +27,9 @@ BaseSpeed = 1.5
 SprintCurve = SubResource("Curve_u8k42")
 
 [node name="View" type="Camera3D" parent="." unique_id=442611266]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -0.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.40949482, 0)
+current = true
 
-[node name="RightLeg" parent="." unique_id=1060317018 instance=ExtResource("4_u8k42")]
-transform = Transform3D(0.9712424, 0.23809275, 0, -0.23809275, 0.9712424, 0, 0, 0, 1, -0.20446995, 0.23977101, 0)
-_speedGain = 2.0
-
-[node name="LeftLeg" parent="." unique_id=2103756814 instance=ExtResource("4_u8k42")]
-transform = Transform3D(0.96851367, -0.24896035, 0, 0.24896035, 0.96851367, 0, 0, 0, 1, 0.09397921, 0.23977101, 0)
-_speedGain = 2.0
-
-[node name="Torso" parent="." unique_id=1748405293 instance=ExtResource("4_u8k42")]
-transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, -0.038907662, 0.73103553, 0)
-_speedGain = 0.0
-
-[node name="LeftArm" parent="." unique_id=43693553 instance=ExtResource("4_u8k42")]
-transform = Transform3D(0.94243145, -0.334399, 0, 0.334399, 0.94243145, 0, 0, 0, 1, 0.17559074, 0.73103553, 0)
-_speedGain = 0.0
-
-[node name="RightArm" parent="." unique_id=1129155188 instance=ExtResource("4_u8k42")]
-transform = Transform3D(0.86120355, 0.50825995, 0, -0.50825995, 0.86120355, 0, 0, 0, 1, -0.2806072, 0.7458784, 0)
-_speedGain = 0.0
-
-[node name="Head" parent="." unique_id=602594641 instance=ExtResource("4_u8k42")]
-transform = Transform3D(-0.0020244904, 0.99999785, 0, -0.99999785, -0.0020244904, 0, 0, 0, 1, -0.040694445, 1.11813, 0)
-_speedGain = 0.0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1743854377]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.07913208, 0.5952301, 0.008270264)
-shape = SubResource("BoxShape3D_rykwh")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=167677149]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46981055, 0)
+shape = SubResource("CapsuleShape3D_5o33p")
