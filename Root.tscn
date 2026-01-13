@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene load_steps=10 format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="Script" uid="uid://onv3e2hhcglw" path="res://entity/camera/CameraController.cs" id="3_170dk"]
 [ext_resource type="Script" uid="uid://p5q08xcu2eqe" path="res://entity/player/PlayerController.cs" id="3_cwqeq"]
+[ext_resource type="PackedScene" uid="uid://b2aubsqgpsfpo" path="res://environment/dungeon/dungeon.tscn" id="4_cwqeq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -16,12 +17,6 @@ background_mode = 2
 sky = SubResource("Sky_gxo8o")
 tonemap_mode = 2
 glow_enabled = true
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_170dk"]
-size = Vector2(10, 10)
-
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_cwqeq"]
-data = PackedVector3Array(5, 0, 5, -5, 0, 5, 5, 0, -5, -5, 0, 5, -5, 0, -5, 5, 0, -5)
 
 [sub_resource type="LabelSettings" id="LabelSettings_170dk"]
 font_size = 32
@@ -39,14 +34,6 @@ shadow_enabled = true
 [node name="Environment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_24d08")
 
-[node name="Ground" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_170dk")
-
-[node name="StaticBody" type="StaticBody3D" parent="Ground"]
-
-[node name="Hitbox" type="CollisionShape3D" parent="Ground/StaticBody"]
-shape = SubResource("ConcavePolygonShape3D_cwqeq")
-
 [node name="Player" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98506665, 0)
 _entityController = NodePath("PlayerController")
@@ -54,6 +41,7 @@ _entityController = NodePath("PlayerController")
 [node name="PlayerController" type="NavigationAgent3D" parent="Player" node_paths=PackedStringArray("CameraController", "_debugLabel")]
 script = ExtResource("3_cwqeq")
 CameraController = NodePath("../FirstPersonController")
+JumpVelocity = 5.0
 _debugLabel = NodePath("debug")
 
 [node name="debug" type="Label" parent="Player/PlayerController"]
@@ -101,3 +89,5 @@ _yawPivot = NodePath("..")
 
 [node name="ThirdPersonView" type="Camera3D" parent="Player/ThirdPersonController"]
 transform = Transform3D(0.99896264, -0.02057148, 0.040625896, 0, 0.89214474, 0.4517497, -0.045537338, -0.45128107, 0.89121926, 0.5842447, 0.8063383, 1.3540978)
+
+[node name="Dungeon" parent="." instance=ExtResource("4_cwqeq")]

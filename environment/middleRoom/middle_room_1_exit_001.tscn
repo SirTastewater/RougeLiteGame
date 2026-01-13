@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1bblpu8vv15o"]
+
+[ext_resource type="Script" uid="uid://emjwd2nwti16" path="res://environment/middleRoom/middle_room_1_exit_001.gd" id="1_671jc"]
+[ext_resource type="PackedScene" uid="uid://y4kopcwt86b3" path="res://environment/middleRoom/middle_room_1_exit_001.blend" id="2_wg5l1"]
+
+[node name="MiddleRoom1Exit001" type="Node3D" node_paths=PackedStringArray("EntranceMarker", "ExitMarker")]
+script = ExtResource("1_671jc")
+EntranceMarker = NodePath("Marker/EntranceMarker")
+ExitMarker = NodePath("Marker/ExitMarker")
+
+[node name="middle_room_1_exit_001" parent="." instance=ExtResource("2_wg5l1")]
+
+[node name="Marker" type="Node3D" parent="."]
+
+[node name="EntranceMarker" type="Marker3D" parent="Marker"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+
+[node name="ExitMarker" type="Marker3D" parent="Marker"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
