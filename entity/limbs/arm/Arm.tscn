@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://b74uvl6wuwdfa"]
+
+[ext_resource type="PackedScene" uid="uid://cnyqv08w0gd8f" path="res://entity/limbs/arm/Arm.blend" id="1_d5e4r"]
+[ext_resource type="Script" uid="uid://drxdcre8tre6" path="res://entity/limbs/Limb.cs" id="1_hxycx"]
+
+[node name="arm" type="Node3D" unique_id=1967278978]
+script = ExtResource("1_hxycx")
+metadata/_custom_type_script = "uid://drxdcre8tre6"
+
+[node name="model" parent="." unique_id=609243491 instance=ExtResource("1_d5e4r")]
+
+[editable path="model"]

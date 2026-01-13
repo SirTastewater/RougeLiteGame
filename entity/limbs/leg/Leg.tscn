@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://dy8ummlaxahk"]
+
+[ext_resource type="Script" uid="uid://drxdcre8tre6" path="res://entity/limbs/Limb.cs" id="1_0fkjd"]
+[ext_resource type="PackedScene" uid="uid://c4cga5ys3y82f" path="res://entity/limbs/leg/Leg.blend" id="2_bbwad"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ch8n5"]
+radius = 0.07714844
+height = 0.40174
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0fkjd"]
+radius = 0.06201172
+height = 0.45716304
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bbwad"]
+radius = 0.037109375
+height = 0.20921105
+
+[node name="Leg" type="Node3D" unique_id=2123525825 node_paths=PackedStringArray("_skeleton")]
+script = ExtResource("1_0fkjd")
+_skeleton = NodePath("model/Armature/Skeleton3D/simulator")
+metadata/_custom_type_script = "uid://drxdcre8tre6"
+
+[node name="model" parent="." unique_id=273703925 instance=ExtResource("2_bbwad")]
+
+[node name="simulator" type="PhysicalBoneSimulator3D" parent="model/Armature/Skeleton3D" parent_id_path=PackedInt32Array(273703925, 1455576315) index="1" unique_id=428646505]
+
+[node name="upper-leg" type="PhysicalBone3D" parent="model/Armature/Skeleton3D/simulator" unique_id=1983095508]
+transform = Transform3D(2.6034367, 6.207076e-07, 9.2492745e-15, -6.607644e-08, 0.27714473, -2.5886433, -6.1718055e-07, 2.5886433, 0.27714473, -5.775058e-10, 0.47896087, -0.0038257658)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.218122e-10, 4.4301594e-08, 0.18502389)
+body_offset = Transform3D(2.603437, 5.684342e-14, 1.4210855e-14, 7.1054274e-15, -5.9604645e-08, -2.603437, 0, 2.603437, -5.9604645e-08, -5.7747673e-10, 0.48169804, -1.0430813e-07)
+bone_name = "upper-leg"
+
+[node name="hitbox" type="CollisionShape3D" parent="model/Armature/Skeleton3D/simulator/upper-leg" unique_id=1825514360]
+transform = Transform3D(1, 6.306067e-13, -3.5527137e-12, 0, 1.4901161e-07, 1.0000052, 0, -1.0000052, 1.4901161e-07, 3.4772185e-13, 1.6763806e-08, 0.020693585)
+shape = SubResource("CapsuleShape3D_ch8n5")
+
+[node name="lower-leg" type="PhysicalBone3D" parent="model/Armature/Skeleton3D/simulator" unique_id=1686949933]
+transform = Transform3D(0.04603489, -2.603024, 0.0054571806, -0.13717908, -0.007876473, -2.5998082, 2.5994127, 0.04568318, -0.13729662, -0.0010938607, 0.95462424, -0.049083706)
+joint_type = 3
+joint_offset = Transform3D(-4.3711385e-08, 0.99999946, -4.3711363e-08, 0, -4.3711363e-08, -0.99999946, -0.9999999, -4.3711363e-08, 1.9106844e-15, -0.002368774, -0.0004645206, -0.0011455219)
+joint_rotation = Vector3(1.5707964, 1.5707964, 0)
+body_offset = Transform3D(0.04570964, -2.6030357, -0.0007035027, 0.13987114, 0.00315875, -2.5996752, 2.599275, 0.045605794, 0.13990496, -0.0011016938, -0.0026451945, 0.006338544)
+angular_damp = 0.8
+bone_name = "lower-leg"
+joint_constraints/angular_limit_enabled = false
+joint_constraints/angular_limit_upper = 90.0
+joint_constraints/angular_limit_lower = -90.0
+joint_constraints/angular_limit_bias = 0.3
+joint_constraints/angular_limit_softness = 0.9
+joint_constraints/angular_limit_relaxation = 1.0
+
+[node name="hitbox" type="CollisionShape3D" parent="model/Armature/Skeleton3D/simulator/lower-leg" unique_id=315263228]
+transform = Transform3D(0.99999964, 0.00032523694, -0.00015032431, 0.00012833206, 0.06658597, 0.9977801, 0.0003345248, -0.9977803, 0.06658594, 0.00042452387, 0.010321818, -0.19345908)
+shape = SubResource("CapsuleShape3D_0fkjd")
+
+[node name="upper-feet" type="PhysicalBone3D" parent="model/Armature/Skeleton3D/simulator" unique_id=1023337130]
+transform = Transform3D(2.5930185, 1.3281496e-07, 0.23267505, 0.056431994, 2.5257041, -0.62890077, -0.22572798, 0.6314276, 2.515597, -0.009247794, 2.021164, 0.09673608)
+joint_type = 3
+joint_offset = Transform3D(-4.3711154e-08, 0.022163749, 0.99975425, 0, 0.999749, -0.022163866, -0.99999464, -9.688083e-10, -4.370065e-08, 0.005758713, -0.016349085, -0.033834208)
+joint_rotation = Vector3(0.022165682, 1.5707964, 0)
+body_offset = Transform3D(2.6034372, 0, -8.940697e-08, -4.4703484e-08, -3.9339066e-06, -2.6034362, 0, 2.6034367, -3.9339066e-06, -0.0149924485, -0.088085264, 0.042563677)
+bone_name = "upper-feet"
+joint_constraints/angular_limit_enabled = false
+joint_constraints/angular_limit_upper = 90.0
+joint_constraints/angular_limit_lower = -90.0
+joint_constraints/angular_limit_bias = 0.3
+joint_constraints/angular_limit_softness = 0.9
+joint_constraints/angular_limit_relaxation = 1.0
+
+[node name="hitbox" type="CollisionShape3D" parent="model/Armature/Skeleton3D/simulator/upper-feet" unique_id=943641589]
+transform = Transform3D(1.0000075, 1.0430813e-06, -2.6077032e-08, -3.7252903e-09, 4.3213367e-07, 1.0000002, -1.1175871e-07, -1.0000099, 2.2351742e-07, 0.006165093, -0.01724568, -0.08324214)
+shape = SubResource("CapsuleShape3D_bbwad")
+
+[editable path="model"]
