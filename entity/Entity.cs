@@ -1,7 +1,4 @@
-using System;
-using System.Diagnostics;
 using Godot;
-using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity;
 
@@ -15,20 +12,11 @@ namespace RougeLiteGame.entity;
 [GlobalClass]
 public abstract partial class Entity : CharacterBody3D
 {
-    private readonly ILogger _logger = LoggerFactory.GetLogger<Entity>();
     [Export] private EntityController _entityController;
 
     public override void _Ready()
     {
         base._Ready();
-        string name = GetName();
-        for (int i = 0; i < 1000000; i++)
-        {
-            _logger.Debug("Hey {}.", name);
-            _logger.Error("Yes {}.", i);
-            _logger.Info("Nice {}.", name);
-        }
-        _logger.Flush();
         _entityController?.Connect(this);
     }
 }
