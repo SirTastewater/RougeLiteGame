@@ -33,6 +33,7 @@ public class ConsoleLogger(Type type) : BasicLogger(type)
 
             if (logEntries[i].Throwable == null)
             {
+                if (i != logEntries.Length - 1) { _stringBuilder.AppendLine(); }
                 continue;
             }
 

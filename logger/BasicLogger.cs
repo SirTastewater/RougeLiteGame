@@ -1,5 +1,4 @@
 using System;
-using Godot;
 
 namespace RougeLiteGame.logger;
 
@@ -7,19 +6,19 @@ public abstract class BasicLogger : ILogger
 {
     private readonly string _typeName;
 
-    protected const int MaxEntries = 1024;
+    private const int MaxEntries = 1024;
 
-    protected readonly LogEntry[] Buffer = new LogEntry[MaxEntries];
-    protected readonly object Lock = new();
-    protected int Count;
-    protected int Index;
+    private readonly LogEntry[] _buffer = new LogEntry[MaxEntries];
+    private readonly object _lock = new();
+    private int _count;
+    private int _index;
 
     protected BasicLogger(Type type)
     {
         _typeName = type.Name;
-        for (int i = 0; i < Buffer.Length; i++)
+        for (int i = 0; i < _buffer.Length; i++)
         {
-            Buffer[i] = new LogEntry();
+            _buffer[i] = new LogEntry();
         }
     }
 
@@ -43,45 +42,48 @@ public abstract class BasicLogger : ILogger
     {
         if (message == null) return;
         
-        lock (Lock)
+        lock (_lock)
         {
-            Buffer[Index].Level = level;
-            Buffer[Index].Message = message;
-            Buffer[Index].Arguments = parameters;
-            Buffer[Index].Type = _typeName;
+            _buffer[_index].Level = level;
+            _buffer[_index].Message = message;
+            _buffer[_index].Arguments = parameters;
+            _buffer[_index].Type = _typeName;
 
-            Index++;
-            if (Index == MaxEntries)
+            _index++;
+            if (_index == MaxEntries)
             {
-                Index = 0;
+                LoggerFactory.AsyncWorker.RequestFlush();
+                _index = 0;
+                _count = 0;
+                return;
             }
 
-            if (Count < MaxEntries)
+            if (_count < MaxEntries)
             {
-                Count++;
+                _count++;
             }
         }
     }
 
     protected LogEntry[] Drain()
     {
-        lock (Lock)
+        lock (_lock)
         {
-            if (Count == 0)
+            if (_count == 0)
             {
                 return [];
             }
 
-            LogEntry[] result = new LogEntry[Count];
+            LogEntry[] result = new LogEntry[_count];
 
-            int start = (Index - Count + MaxEntries) % MaxEntries;
-            for (int i = 0; i < Count; i++)
+            int start = (_index - _count + MaxEntries) % MaxEntries;
+            for (int i = 0; i < _count; i++)
             {
-                result[i] = Buffer[(start + i) % MaxEntries];
+                result[i] = _buffer[(start + i) % MaxEntries];
             }
 
-            Index = 0;
-            Count = 0;
+            _index = 0;
+            _count = 0;
 
             return result;
         }

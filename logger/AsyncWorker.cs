@@ -25,6 +25,11 @@ public sealed class AsyncWorker : IDisposable
         _thread.Start();
     }
     
+    public void RequestFlush()
+    {
+        _signal.Set(); // wake worker early
+    }
+    
     private void WorkerLoop()
     {
         _logger.Info("The system has started the asynchronous Logger-Thread");

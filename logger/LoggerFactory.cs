@@ -11,7 +11,7 @@ public class LoggerFactory
     private static readonly ConsoleLogger Logger = new(typeof(LoggerFactory));
     private static readonly Dictionary<Type, ILogger> Loggers = new();
 
-    private static readonly AsyncWorker AsyncWorker = new(TimeSpan.FromMilliseconds(250));
+    public static readonly AsyncWorker AsyncWorker = new(TimeSpan.FromMilliseconds(250));
 
     /// <summary>
     ///     Retrieves an instance of <see cref="ILogger" /> for the specified type.
