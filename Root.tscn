@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b6as4qrovbk6f"]
+[gd_scene format=3 uid="uid://b6as4qrovbk6f"]
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="Script" uid="uid://onv3e2hhcglw" path="res://entity/camera/CameraController.cs" id="3_170dk"]
@@ -30,33 +30,33 @@ font_color = Color(0, 0, 0, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_cwqeq"]
 font_color = Color(0, 0, 0, 1)
 
-[node name="root" type="Node3D"]
+[node name="root" type="Node3D" unique_id=391229255]
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=2087597194]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Environment" type="WorldEnvironment" parent="."]
+[node name="Environment" type="WorldEnvironment" parent="." unique_id=1548097625]
 environment = SubResource("Environment_24d08")
 
-[node name="Ground" type="MeshInstance3D" parent="."]
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=1059570813]
 mesh = SubResource("PlaneMesh_170dk")
 
-[node name="StaticBody" type="StaticBody3D" parent="Ground"]
+[node name="StaticBody" type="StaticBody3D" parent="Ground" unique_id=847049048]
 
-[node name="Hitbox" type="CollisionShape3D" parent="Ground/StaticBody"]
+[node name="Hitbox" type="CollisionShape3D" parent="Ground/StaticBody" unique_id=1610821293]
 shape = SubResource("ConcavePolygonShape3D_cwqeq")
 
-[node name="Player" parent="." node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
+[node name="Player" parent="." unique_id=958478419 node_paths=PackedStringArray("_entityController") instance=ExtResource("1_170dk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98506665, 0)
 _entityController = NodePath("PlayerController")
 
-[node name="PlayerController" type="NavigationAgent3D" parent="Player" node_paths=PackedStringArray("CameraController", "_debugLabel")]
+[node name="PlayerController" type="NavigationAgent3D" parent="Player" unique_id=1450051375 node_paths=PackedStringArray("CameraController", "_debugLabel")]
 script = ExtResource("3_cwqeq")
 CameraController = NodePath("../FirstPersonController")
 _debugLabel = NodePath("debug")
 
-[node name="debug" type="Label" parent="Player/PlayerController"]
+[node name="debug" type="Label" parent="Player/PlayerController" unique_id=597848028]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -68,7 +68,7 @@ text = "Test"
 label_settings = SubResource("LabelSettings_170dk")
 metadata/_edit_use_anchors_ = true
 
-[node name="Message" type="Label" parent="Player/PlayerController"]
+[node name="Message" type="Label" parent="Player/PlayerController" unique_id=603055098]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -82,22 +82,22 @@ size_flags_horizontal = 4
 text = "Press left mouse button to relase or capture the mouse"
 label_settings = SubResource("LabelSettings_cwqeq")
 
-[node name="FirstPersonController" type="Node3D" parent="Player" node_paths=PackedStringArray("_yawPivot", "_pitchPivot")]
+[node name="FirstPersonController" type="Node3D" parent="Player" unique_id=1389236371 node_paths=PackedStringArray("_yawPivot", "_pitchPivot")]
 transform = Transform3D(1, 0, 0, 0, 0.99898404, 0.04506658, 0, -0.04506658, 0.99898404, 0, 0.48, 0)
 script = ExtResource("3_170dk")
 _yawPivot = NodePath("..")
 _pitchPivot = NodePath("FirstPersonView")
 
-[node name="FirstPersonView" type="Camera3D" parent="Player/FirstPersonController"]
+[node name="FirstPersonView" type="Camera3D" parent="Player/FirstPersonController" unique_id=2043780769]
 transform = Transform3D(1, 0, 0, 0, 0.9918433, 0.12746277, 0, -0.12746277, 0.9918433, 0, 0.02624631, -0.58179736)
 cull_mask = 1048063
 current = true
 
-[node name="ThirdPersonController" type="Node3D" parent="Player" node_paths=PackedStringArray("_yawPivot")]
+[node name="ThirdPersonController" type="Node3D" parent="Player" unique_id=293679188 node_paths=PackedStringArray("_yawPivot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
 visible = false
 script = ExtResource("3_170dk")
 _yawPivot = NodePath("..")
 
-[node name="ThirdPersonView" type="Camera3D" parent="Player/ThirdPersonController"]
+[node name="ThirdPersonView" type="Camera3D" parent="Player/ThirdPersonController" unique_id=1756892193]
 transform = Transform3D(0.99896264, -0.02057148, 0.040625896, 0, 0.89214474, 0.4517497, -0.045537338, -0.45128107, 0.89121926, 0.5842447, 0.8063383, 1.3540978)
