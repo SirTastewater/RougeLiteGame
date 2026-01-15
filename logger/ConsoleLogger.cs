@@ -1,41 +1,51 @@
 using System;
+using System.Text;
 using Godot;
 
 namespace RougeLiteGame.logger;
 
 public class ConsoleLogger(Type type) : BasicLogger(type)
 {
-    private readonly Type _type = type;
+    private readonly StringBuilder _stringBuilder = new(1024);
 
-    protected override void Out(LogLevel level, string message, Exception throwable = null)
+    public override void Flush()
     {
-        string outMessage = $"{DateTime.Now} {level.ToString().ToUpper()} [{_type.Name}] {message}";
-        GD.PrintRich($"[color={LogLevelToColor(level)}]{outMessage}");
-        
-        if (throwable != null)
-        {
-            GD.PrintRich($"[color={LogLevelToColor(LogLevel.Trace)}]{throwable.StackTrace}");
-        }
+        Output(Drain());
     }
 
-    private static string LogLevelToColor(LogLevel level)
+    private void Output(LogEntry[] logEntries)
     {
-        // inspired by LTRO-1 Palette
-        // https://lospec.com/palette-list/ltro-1
-        // slightly modified
+        if(logEntries == null || logEntries.Length == 0) return;
         
-        return level switch
+        _stringBuilder.Clear();
+
+        for (int i = 0; i < logEntries.Length; i++)
         {
-            LogLevel.Trace    => "#7d7781", // dark-grey 
-            LogLevel.Debug    => "#4159cb", // blue
-            LogLevel.Fine     => "#59a7af", // cyan
-            LogLevel.Info     => "#b8afbe", // light gray
-            LogLevel.Success  => "#8d902e", // green
-            LogLevel.Warn     => "#fdbb27", // yellow
-            LogLevel.Error    => "#997171", // lighter gray-redish
-            LogLevel.Critical => "#89423f", // matt red
-            LogLevel.Fatal    => "#f63f4c", // burning eyes red
-            _ => "#FFFFFF"
-        };
+            logEntries[i].Interpolate();
+            logEntries[i].Render();
+            
+            string color = ILogger.LogLevelToColor(logEntries[i].Level);
+
+            _stringBuilder.Append("[color=");
+            _stringBuilder.Append(color);
+            _stringBuilder.Append(']');
+            _stringBuilder.Append(logEntries[i].Message);
+
+            if (logEntries[i].Throwable == null)
+            {
+                if (i != logEntries.Length - 1) { _stringBuilder.AppendLine(); }
+                continue;
+            }
+
+            _stringBuilder.AppendLine();
+
+            string traceColor = ILogger.LogLevelToColor(LogLevel.Trace);
+            _stringBuilder.Append("[color=");
+            _stringBuilder.Append(traceColor);
+            _stringBuilder.Append(']');
+            _stringBuilder.Append(logEntries[i].Throwable);
+        }
+        
+        GD.PrintRich(_stringBuilder.ToString());
     }
 }
