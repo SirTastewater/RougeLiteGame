@@ -1,10 +1,5 @@
 using System;
-using System.Collections.Concurrent;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Godot;
-using RougeLiteGame.logger.console;
 
 namespace RougeLiteGame.logger;
 
@@ -12,66 +7,49 @@ public sealed class AsyncWorker : IDisposable
 {
     private readonly ConsoleLogger _logger = new(typeof(AsyncWorker));
     
-    private readonly ConcurrentQueue<LogEntry[]> _queue = new();
-    private readonly SemaphoreSlim _signal = new(0);
-    private readonly CancellationTokenSource _cts = new();
+    private readonly Thread _thread;
+    private readonly AutoResetEvent _signal = new(false);
 
-    private readonly Task _workerTask;
+    private volatile bool _running = true;
+    private readonly TimeSpan _interval;
 
-    public AsyncWorker()
+    public AsyncWorker(TimeSpan interval)
     {
-        _workerTask = Task.Run(WorkerLoop);
-    }
+        _interval = interval;
 
-    public void Dispose()
-    {
-        Stop();
-        _workerTask.Wait();
-        _signal.Dispose();
-        _cts.Dispose();
-    }
-
-    public void Enqueue(LogEntry[] command)
-    {
-        _queue.Enqueue(command);
-        _signal.Release();
-    }
-    
-    public void Stop()
-    {
-        _cts.Cancel();
-        _signal.Release(); // wake worker
-    }
-    
-    private async void WorkerLoop()
-    {
-        try
+        _thread = new Thread(WorkerLoop)
         {
-            _logger.Info("The worker has started running asynchronously.");
-            _logger.Flush();
+            IsBackground = true,
+            Name = "Log-Thread"
+        };
+        _thread.Start();
+    }
+    
+    private void WorkerLoop()
+    {
+        _logger.Info("The system has started the asynchronous Logger-Thread");
+        _logger.Flush();
+        
+        while (_running)
+        {
+            _signal.WaitOne(_interval);
 
-            while (true)
+            try
             {
-                await _signal.WaitAsync(_cts.Token);
-                
-                while (_queue.TryDequeue(out LogEntry[] entries))
-                {
-                    ConsoleStream.Output(entries);   
-                }
+                LoggerFactory.GlobalFlush();
+            }
+            catch (Exception exception)
+            {
+                _logger.Error("Could not globally flush logger.", exception);
+                _logger.Flush();
             }
         }
-        catch (OperationCanceledException)
-        {
-            // task is being canceled
-        }
-        catch (Exception exception)
-        {
-            _logger.Error("An error occurred when running the logger thread.", exception);
-        }
-        finally
-        {
-            _logger.Info("The worker has been stopped.");
-            _logger.Flush();
-        }
+    }
+    
+    public void Dispose()
+    {
+        _running = false;
+        _signal.Set();
+        _thread.Join();
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using RougeLiteGame.logger.console;
 
 namespace RougeLiteGame.logger;
 
@@ -12,7 +11,7 @@ public class LoggerFactory
     private static readonly ConsoleLogger Logger = new(typeof(LoggerFactory));
     private static readonly Dictionary<Type, ILogger> Loggers = new();
 
-    private static readonly AsyncWorker AsyncWorker = new();
+    private static readonly AsyncWorker AsyncWorker = new(TimeSpan.FromMilliseconds(250));
 
     /// <summary>
     ///     Retrieves an instance of <see cref="ILogger" /> for the specified type.
@@ -27,16 +26,19 @@ public class LoggerFactory
     public static ILogger GetLogger(Type type)
     {
         Logger.Trace("Getting logger for type {}.", type.Name);
-        if (Loggers.TryGetValue(type, out var value)) return value;
+        if (Loggers.TryGetValue(type, out ILogger value))
+        {
+            return value;
+        }
 
-        value = new AsyncConsoleLogger(type, AsyncWorker);
+        value = new ConsoleLogger(type);
         Loggers.Add(type, value);
         return value;
     }
 
     public static void GlobalFlush()
     {
-        foreach (var loggersValue in Loggers.Values) loggersValue.Flush();
+        foreach (ILogger loggersValue in Loggers.Values) loggersValue.Flush();
     }
 
     /// <summary>

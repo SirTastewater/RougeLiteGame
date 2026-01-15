@@ -63,6 +63,30 @@ public abstract class BasicLogger : ILogger
         }
     }
 
+    protected LogEntry[] Drain()
+    {
+        lock (Lock)
+        {
+            if (Count == 0)
+            {
+                return [];
+            }
+
+            LogEntry[] result = new LogEntry[Count];
+
+            int start = (Index - Count + MaxEntries) % MaxEntries;
+            for (int i = 0; i < Count; i++)
+            {
+                result[i] = Buffer[(start + i) % MaxEntries];
+            }
+
+            Index = 0;
+            Count = 0;
+
+            return result;
+        }
+    }
+
     public void Trace(object message, params object[] parameters)
     {
         Log(LogLevel.Trace, message, parameters);

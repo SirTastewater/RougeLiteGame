@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Godot;
 
 namespace RougeLiteGame.logger;
 
@@ -10,7 +11,7 @@ public struct LogEntry
     public LogLevel Level;
     public string Message;
     public object[] Arguments;
-    public string Throwable; // later set. Do not trust checking
+    public string Throwable; // lazily set. Do not trust checking
     public string Type;
 
     public void Interpolate()
@@ -37,7 +38,7 @@ public struct LogEntry
             {
                 if (argumentIndex < argumentCount)
                 {
-                    builder.Append(Arguments[argumentIndex++]?.ToString() ?? "null");
+                    builder.Append(Arguments![argumentIndex++]?.ToString() ?? "null");
                     i++;
                     continue;
                 }
@@ -62,6 +63,7 @@ public struct LogEntry
             stringBuilder.Append('[').Append(Thread.CurrentThread.Name).Append(']').Append(' ');
         }
 
+        stringBuilder.Append('[').Append(Time.GetTimeStringFromSystem()).Append(']').Append(' ');
         stringBuilder.Append(Level).Append(' ');
         stringBuilder.Append('[').Append(Type).Append(']').Append(' ');
         stringBuilder.Append(Message);
