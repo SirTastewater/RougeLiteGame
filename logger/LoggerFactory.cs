@@ -10,6 +10,7 @@ public class LoggerFactory
 {
     private static readonly ConsoleLogger Logger = new(typeof(LoggerFactory));
     private static readonly Dictionary<Type, ILogger> Loggers = new();
+    private static readonly ISet<IAsyncLogger> AsyncLoggers = new HashSet<IAsyncLogger>();
 
     public static readonly AsyncWorker AsyncWorker = new(TimeSpan.FromMilliseconds(250));
 
@@ -31,14 +32,25 @@ public class LoggerFactory
             return value;
         }
 
-        value = new ConsoleLogger(type);
+        value = new AsyncConsoleLogger(type);
         Loggers.Add(type, value);
+
+        if (value is IAsyncLogger asyncLogger)
+        {
+            AsyncLoggers.Add(asyncLogger);
+        }
+        
         return value;
     }
 
     public static void GlobalFlush()
     {
         foreach (ILogger loggersValue in Loggers.Values) loggersValue.Flush();
+    }
+    
+    public static void GlobalAsyncFlush()
+    {
+        foreach (IAsyncLogger loggersValue in AsyncLoggers) loggersValue.Flush();
     }
 
     /// <summary>
