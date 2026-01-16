@@ -45,7 +45,6 @@ public class ConsoleLogger(Type type) : BasicLogger(type)
             _stringBuilder.Append(']');
             _stringBuilder.Append(logEntries[i].Throwable);
         }
-        
         GD.PrintRich(_stringBuilder.ToString());
     }
 }

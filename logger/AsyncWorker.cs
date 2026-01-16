@@ -41,7 +41,7 @@ public sealed class AsyncWorker : IDisposable
 
             try
             {
-                LoggerFactory.GlobalFlush();
+                LoggerFactory.GlobalAsyncFlush();
             }
             catch (Exception exception)
             {

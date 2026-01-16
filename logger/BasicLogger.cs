@@ -52,7 +52,15 @@ public abstract class BasicLogger : ILogger
             _index++;
             if (_index == MaxEntries)
             {
-                LoggerFactory.AsyncWorker.RequestFlush();
+                if (this is IAsyncLogger)
+                {
+                    LoggerFactory.AsyncWorker.RequestFlush();
+                }
+                else
+                {
+                    Flush();
+                }
+                
                 _index = 0;
                 _count = 0;
                 return;
