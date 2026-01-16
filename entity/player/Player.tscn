@@ -14,7 +14,8 @@ _limits = [0.0, 4.5, 0.0, 14.660413]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.04827535, 4.5), 0.0, 0.0, 0, 0, Vector2(11.519383, 4.3082256), 0.0, 0.0, 0, 0, Vector2(14.660413, 1.0588655), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5o33p"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_5o33p"]
+size = Vector3(1, 0.8144531, 0.5567627)
 
 [node name="Player" type="CharacterBody3D" unique_id=1005609153 node_paths=PackedStringArray("_entityController")]
 script = ExtResource("1_sntwv")
@@ -31,5 +32,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.40949482, 0)
 current = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=167677149]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46981055, 0)
-shape = SubResource("CapsuleShape3D_5o33p")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5192997, -0.22161865)
+shape = SubResource("BoxShape3D_5o33p")

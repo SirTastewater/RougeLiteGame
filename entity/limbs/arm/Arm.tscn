@@ -3,10 +3,126 @@
 [ext_resource type="PackedScene" uid="uid://cnyqv08w0gd8f" path="res://entity/limbs/arm/Arm.blend" id="1_d5e4r"]
 [ext_resource type="Script" uid="uid://drxdcre8tre6" path="res://entity/limbs/Limb.cs" id="1_hxycx"]
 
-[node name="arm" type="Node3D" unique_id=1967278978]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hxycx"]
+radius = 0.045898438
+height = 0.2851906
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hi56b"]
+radius = 0.03564453
+height = 0.24662131
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_35bxu"]
+size = Vector3(0.11037445, 0.1663208, 0.041139603)
+
+[node name="Arm" type="Node3D" unique_id=1967278978 node_paths=PackedStringArray("_skeleton")]
 script = ExtResource("1_hxycx")
+_skeleton = NodePath("model/Armature/Skeleton3D/Simulator")
 metadata/_custom_type_script = "uid://drxdcre8tre6"
 
 [node name="model" parent="." unique_id=609243491 instance=ExtResource("1_d5e4r")]
+
+[node name="Simulator" type="PhysicalBoneSimulator3D" parent="model/Armature/Skeleton3D" parent_id_path=PackedInt32Array(609243491, 1289712260) index="1" unique_id=235515899]
+
+[node name="upper-arm" type="PhysicalBone3D" parent="model/Armature/Skeleton3D/Simulator" unique_id=147540779]
+transform = Transform3D(0.9999526, -9.0123666e-07, 0.009733318, -0.009730708, 0.023064382, 0.99968666, -0.0002253939, -0.999734, 0.023063283, -0.0012889539, 0.3886934, -0.003053599)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0014325795, -0.003394995, -0.014749407)
+body_offset = Transform3D(1, 4.5110937e-09, -9.18621e-07, -9.1947186e-07, 0, -1.0000001, -4.5401976e-09, 1, -1.8626451e-09, -0.001432593, -0.014749408, 0.003394995)
+bone_name = "upper-arm"
+
+[node name="Hitbox" type="CollisionShape3D" parent="model/Armature/Skeleton3D/Simulator/upper-arm" unique_id=1343866938]
+transform = Transform3D(1, 8.734014e-08, 3.6379788e-10, 0, 0, 1.0000098, 2.5602276e-10, -1.0000098, 1.2293458e-07, 0.0012351198, -0.0029275669, -0.11665335)
+shape = SubResource("CapsuleShape3D_hxycx")
+
+[node name="lower-arm" type="PhysicalBone3D" parent="model/Armature/Skeleton3D/Simulator" unique_id=1007854668]
+transform = Transform3D(-0.0064856117, -0.99848515, -0.054639116, 0.0030604708, -0.054659836, 0.99850035, -0.9999743, 0.006308664, 0.0034103368, -0.0021536166, 0.11331391, 0.0006436182)
+joint_type = 3
+joint_offset = Transform3D(-4.3711196e-08, -0.9999934, 4.371117e-08, 0, -4.37111e-08, -0.99999505, 0.99999565, -4.37111e-08, 1.910676e-15, 0.006738912, 0.0006036405, -0.004085525)
+joint_rotation = Vector3(1.5707964, -1.5707964, 0)
+body_offset = Transform3D(1.0291114e-05, -0.99866915, -0.05157768, -0.057709616, 0.051491138, -0.99700475, 0.99833345, 0.0029867887, -0.05763226, 0.00039204594, -0.0037154704, -0.006964942)
+bone_name = "lower-arm"
+joint_constraints/angular_limit_enabled = true
+joint_constraints/angular_limit_upper = -30.0
+joint_constraints/angular_limit_lower = -180.0
+joint_constraints/angular_limit_bias = 0.3
+joint_constraints/angular_limit_softness = 0.9
+joint_constraints/angular_limit_relaxation = 1.0
+
+[node name="Hitbox" type="CollisionShape3D" parent="model/Armature/Skeleton3D/Simulator/lower-arm" unique_id=331228246]
+transform = Transform3D(1, 1.9557774e-08, -4.656613e-10, 0, -2.2351742e-08, 1.0000005, 5.820766e-11, -1, -3.1664968e-07, -0.00036992668, 0.0065489667, -0.12769406)
+shape = SubResource("CapsuleShape3D_hi56b")
+
+[node name="upper-palm" type="PhysicalBone3D" parent="model/Armature/Skeleton3D/Simulator" unique_id=1703040875]
+transform = Transform3D(0.99998105, -0.006154246, -1.6690059e-09, 1.8019335e-09, 2.1593767e-08, 1, -0.0061542457, -0.99998105, 2.160445e-08, -0.0017385739, -0.14781559, 0.007336425)
+joint_type = 5
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.952078e-06, -1.1763346e-05, 0.011156055)
+body_offset = Transform3D(1.0000001, -2.1387823e-06, -5.3735555e-10, -2.3121118e-09, 7.57975e-10, -0.9999997, 2.1373853e-06, 0.9999998, 2.310276e-08, -7.952098e-06, 0.011156052, 1.176307e-05)
+bone_name = "upper-palm"
+joint_constraints/x/linear_limit_enabled = true
+joint_constraints/x/linear_limit_upper = 0.0
+joint_constraints/x/linear_limit_lower = 0.0
+joint_constraints/x/linear_limit_softness = 0.7
+joint_constraints/x/linear_spring_enabled = false
+joint_constraints/x/linear_spring_stiffness = 0.0
+joint_constraints/x/linear_spring_damping = 0.0
+joint_constraints/x/linear_equilibrium_point = 0.0
+joint_constraints/x/linear_restitution = 0.5
+joint_constraints/x/linear_damping = 1.0
+joint_constraints/x/angular_limit_enabled = true
+joint_constraints/x/angular_limit_upper = 0.0
+joint_constraints/x/angular_limit_lower = 0.0
+joint_constraints/x/angular_limit_softness = 0.5
+joint_constraints/x/angular_restitution = 0.0
+joint_constraints/x/angular_damping = 1.0
+joint_constraints/x/erp = 0.5
+joint_constraints/x/angular_spring_enabled = false
+joint_constraints/x/angular_spring_stiffness = 0.0
+joint_constraints/x/angular_spring_damping = 0.0
+joint_constraints/x/angular_equilibrium_point = 0.0
+joint_constraints/y/linear_limit_enabled = true
+joint_constraints/y/linear_limit_upper = 0.0
+joint_constraints/y/linear_limit_lower = 0.0
+joint_constraints/y/linear_limit_softness = 0.7
+joint_constraints/y/linear_spring_enabled = false
+joint_constraints/y/linear_spring_stiffness = 0.0
+joint_constraints/y/linear_spring_damping = 0.0
+joint_constraints/y/linear_equilibrium_point = 0.0
+joint_constraints/y/linear_restitution = 0.5
+joint_constraints/y/linear_damping = 1.0
+joint_constraints/y/angular_limit_enabled = true
+joint_constraints/y/angular_limit_upper = 0.0
+joint_constraints/y/angular_limit_lower = 0.0
+joint_constraints/y/angular_limit_softness = 0.5
+joint_constraints/y/angular_restitution = 0.0
+joint_constraints/y/angular_damping = 1.0
+joint_constraints/y/erp = 0.5
+joint_constraints/y/angular_spring_enabled = false
+joint_constraints/y/angular_spring_stiffness = 0.0
+joint_constraints/y/angular_spring_damping = 0.0
+joint_constraints/y/angular_equilibrium_point = 0.0
+joint_constraints/z/linear_limit_enabled = true
+joint_constraints/z/linear_limit_upper = 0.0
+joint_constraints/z/linear_limit_lower = 0.0
+joint_constraints/z/linear_limit_softness = 0.7
+joint_constraints/z/linear_spring_enabled = false
+joint_constraints/z/linear_spring_stiffness = 0.0
+joint_constraints/z/linear_spring_damping = 0.0
+joint_constraints/z/linear_equilibrium_point = 0.0
+joint_constraints/z/linear_restitution = 0.5
+joint_constraints/z/linear_damping = 1.0
+joint_constraints/z/angular_limit_enabled = true
+joint_constraints/z/angular_limit_upper = 0.0
+joint_constraints/z/angular_limit_lower = 0.0
+joint_constraints/z/angular_limit_softness = 0.5
+joint_constraints/z/angular_restitution = 0.0
+joint_constraints/z/angular_damping = 1.0
+joint_constraints/z/erp = 0.5
+joint_constraints/z/angular_spring_enabled = false
+joint_constraints/z/angular_spring_stiffness = 0.0
+joint_constraints/z/angular_spring_damping = 0.0
+joint_constraints/z/angular_equilibrium_point = 0.0
+
+[node name="Hitbox" type="CollisionShape3D" parent="model/Armature/Skeleton3D/Simulator/upper-palm" unique_id=1883117235]
+transform = Transform3D(1, -5.551115e-17, 0, 0, 0, 1, 1.1875223e-13, -1, 1.9007018e-12, -0.010768509, 0.0008662883, -0.07966083)
+shape = SubResource("BoxShape3D_35bxu")
 
 [editable path="model"]
