@@ -28,6 +28,7 @@ metadata/_custom_type_script = "uid://drxdcre8tre6"
 transform = Transform3D(2.6034367, 6.207076e-07, 9.2492745e-15, -6.607644e-08, 0.27714473, -2.5886433, -6.1718055e-07, 2.5886433, 0.27714473, 0.028422358, -0.015973806, 0.047495697)
 joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.010917245, 0.0006367559, -0.0061025782)
 body_offset = Transform3D(2.603437, 5.684342e-14, 1.4210855e-14, 7.1054274e-15, -5.9604645e-08, -2.603437, 0, 2.603437, -5.9604645e-08, 0.028422361, -0.015887678, -0.0016577542)
+mass = 0.3
 bone_name = "upper-leg"
 
 [node name="Hitbox" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/Simulator/upper-leg" unique_id=1149225700]
@@ -37,13 +38,14 @@ shape = SubResource("CapsuleShape3D_ch8n5")
 [node name="lower-leg" type="PhysicalBone3D" parent="Model/Armature/Skeleton3D/Simulator" unique_id=1975000015]
 transform = Transform3D(2.603399, -0.012896508, 0.0054569193, 0.0047691646, -0.13731673, -2.5998085, 0.013166358, 2.5997808, -0.13729112, -0.0010938605, 0.9610069, -0.08858413)
 joint_type = 3
-joint_offset = Transform3D(4.2075943e-08, -1.1842876e-08, 0.99999446, -0.27093318, -0.9625862, 0, 0.9625854, -0.27093345, -4.3711147e-08, 0.00048302446, 0.012901741, 0.00050257455)
-joint_rotation = Vector3(1.0760237e-16, 1.5707964, -2.8672268)
+joint_offset = Transform3D(-1.492847e-08, 4.1082583e-08, 0.99999446, 0.9398592, 0.3415238, 0, -0.34152356, 0.9398599, -4.3711147e-08, 0.00048302446, 0.012901741, 0.00050257455)
+joint_rotation = Vector3(0, 1.5707964, 1.2222542)
 body_offset = Transform3D(2.603403, -0.013221926, -0.00070376485, 7.816707e-06, 0.13991228, -2.599675, 0.013240639, 2.599641, 0.13991046, -0.0010865679, -0.0004985854, -0.03361661)
+mass = 0.2
 bone_name = "lower-leg"
 joint_constraints/angular_limit_enabled = true
-joint_constraints/angular_limit_upper = -99.99999
-joint_constraints/angular_limit_lower = -169.99998
+joint_constraints/angular_limit_upper = 168.63
+joint_constraints/angular_limit_lower = 154.65999
 joint_constraints/angular_limit_bias = 0.3
 joint_constraints/angular_limit_softness = 0.9
 joint_constraints/angular_limit_relaxation = 1.0
@@ -53,14 +55,15 @@ transform = Transform3D(0.99999344, 0.00032049173, -0.00014828239, 0.00012686942
 shape = SubResource("CapsuleShape3D_0fkjd")
 
 [node name="upper-feet" type="PhysicalBone3D" parent="Model/Armature/Skeleton3D/Simulator" unique_id=101830731]
-transform = Transform3D(2.5930185, 1.3169549e-07, 0.23267505, 0.056431994, 2.5257041, -0.62890077, -0.22572798, 0.6314276, 2.515597, -0.00947218, 2.021164, 0.03300268)
+transform = Transform3D(2.5930185, 1.3281496e-07, 0.23267505, 0.056431994, 2.5257041, -0.62890077, -0.22572798, 0.6314276, 2.515597, -0.00947218, 2.021164, 0.03300268)
 joint_type = 3
 joint_offset = Transform3D(-4.3711385e-08, 0, 0.99999976, 0, 0.9999998, 0, -0.99999994, 0, -4.3711378e-08, 0.0037220037, -0.010411702, -0.010171978)
 joint_rotation = Vector3(0, 1.5707964, 0)
-body_offset = Transform3D(2.6034372, 3.7252903e-09, -8.940697e-08, -4.4703484e-08, -3.9339066e-06, -2.6034362, 0, 2.6034367, -3.9339066e-06, -0.0096900035, -0.026482135, 0.027106166)
+body_offset = Transform3D(2.6034372, 0, -8.940697e-08, -4.4703484e-08, -3.9339066e-06, -2.6034362, 0, 2.6034367, -3.9339066e-06, -0.0096900035, -0.026482135, 0.027106166)
+mass = 0.1
 bone_name = "upper-feet"
 joint_constraints/angular_limit_enabled = true
-joint_constraints/angular_limit_upper = 49.999996
+joint_constraints/angular_limit_upper = 49.999992
 joint_constraints/angular_limit_lower = -65.0
 joint_constraints/angular_limit_bias = 0.3
 joint_constraints/angular_limit_softness = 0.9

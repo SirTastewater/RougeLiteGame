@@ -46,6 +46,8 @@ mesh = SubResource("PlaneMesh_s6u1s")
 skeleton = NodePath("../..")
 
 [node name="StaticBody" type="StaticBody3D" parent="Ground" unique_id=601831352]
+collision_layer = 3
+collision_mask = 3
 
 [node name="Hitbox" type="CollisionShape3D" parent="Ground/StaticBody" unique_id=657933907]
 shape = SubResource("ConcavePolygonShape3D_7qcyj")
