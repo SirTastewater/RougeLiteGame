@@ -11,7 +11,9 @@ public class BasicLogger : ILogger
     private const int MaxEntries = 1024;
 
     private readonly object _writerLock = new();
-    private readonly ISet<ILogWriter> _writers = new HashSet<ILogWriter>();
+    private readonly HashSet<ILogWriter> _writers = [];
+
+    private ILogRenderer _renderer;
 
     private readonly LogEntry[] _buffer = new LogEntry[MaxEntries];
     private readonly object _lock = new();
@@ -20,15 +22,16 @@ public class BasicLogger : ILogger
 
     private readonly bool _isAsync;
 
-    public BasicLogger(Type type, params ILogWriter[] writers)
+    public BasicLogger(Type type, ILogRenderer renderer, params ILogWriter[] writers)
     {
         _typeName = type.Name;
+        _renderer = renderer;
+        _isAsync = this is IAsyncLogger;
+        
         for (int i = 0; i < _buffer.Length; i++)
         {
             _buffer[i] = new LogEntry();
         }
-
-        _isAsync = this is IAsyncLogger;
         
         foreach (ILogWriter logWriter in writers)
         {
@@ -44,6 +47,11 @@ public class BasicLogger : ILogger
         }
     }
 
+    public void SetRenderer(ILogRenderer renderer)
+    {
+        _renderer = renderer;
+    }
+
     public void Log(object message, params object[] parameters)
     {
         Log(LogLevel.Info, message, parameters);
@@ -51,11 +59,6 @@ public class BasicLogger : ILogger
 
     public void Log(LogLevel level, object message, params object[] parameters)
     {
-        /*if (!EngineDebugger.IsActive())
-        { // TODO find better solution to not exclude rider runs
-            return; // disable in production as logging is hilariously slow
-        }*/
-
         // ToString is very slow, so yeah
         Log((level, message.ToString(), parameters));
     }
@@ -110,6 +113,10 @@ public class BasicLogger : ILogger
             for (int i = 0; i < _count; i++)
             {
                 result[i] = _buffer[(start + i) % MaxEntries];
+                
+                // render and interpolate
+                result[i].Interpolate();
+                _renderer.Render(ref result[i]);
             }
 
             _index = 0;

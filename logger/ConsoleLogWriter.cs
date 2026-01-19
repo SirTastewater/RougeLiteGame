@@ -6,7 +6,7 @@ namespace RougeLiteGame.logger;
 public class ConsoleLogWriter : ILogWriter
 {
     private readonly StringBuilder _stringBuilder = new(1024);
-    
+
     public void Write(LogEntry[] buffered)
     {
         if(buffered == null || buffered.Length == 0) return;
@@ -15,7 +15,6 @@ public class ConsoleLogWriter : ILogWriter
 
         for (int i = 0; i < buffered.Length; i++)
         {
-            buffered[i].Interpolate();
             buffered[i].Render();
             
             string color = ILogger.LogLevelToColor(buffered[i].Level);

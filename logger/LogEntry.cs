@@ -59,18 +59,6 @@ public struct LogEntry
     
     public void Render()
     {
-        StringBuilder stringBuilder = new(128);
-
-        if (!string.IsNullOrEmpty(Thread.CurrentThread.Name))
-        {
-            stringBuilder.Append('[').Append(Thread.CurrentThread.Name).Append(']').Append(' ');
-        }
-
-        stringBuilder.Append('[').Append(Time.GetTimeStringFromSystem()).Append(']').Append(' ');
-        stringBuilder.Append(Level).Append(' ');
-        stringBuilder.Append('[').Append(Type).Append(']').Append(' ');
-        stringBuilder.Append(Message);
-
-        Message = stringBuilder.ToString();
+        
     }
 }
