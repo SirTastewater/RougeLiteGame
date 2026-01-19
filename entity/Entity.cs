@@ -1,5 +1,4 @@
 using Godot;
-using RougeLiteGame.logger;
 
 namespace RougeLiteGame.entity;
 
@@ -13,13 +12,11 @@ namespace RougeLiteGame.entity;
 [GlobalClass]
 public abstract partial class Entity : CharacterBody3D
 {
-    private static readonly ILogger _logger = LoggerFactory.GetLogger<Entity>();
     [Export] private EntityController _entityController;
 
     public override void _Ready()
     {
         base._Ready();
-        _logger.Info("Initializing entity");
         _entityController?.Connect(this);
     }
 }
