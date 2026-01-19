@@ -12,7 +12,7 @@ public class LoggerFactory
     private static readonly ConsoleLogWriter ConsoleLogWriter = new();
     private static readonly BasicLogger Logger = new(typeof(LoggerFactory), ConsoleLogWriter);
     private static readonly Dictionary<Type, ILogger> Loggers = new();
-    private static readonly ISet<IAsyncLogger> AsyncLoggers = new HashSet<IAsyncLogger>();
+    private static readonly HashSet<IAsyncLogger> AsyncLoggers = [];
 
     public static readonly AsyncWorker AsyncWorker = new(TimeSpan.FromMilliseconds(250));
 
