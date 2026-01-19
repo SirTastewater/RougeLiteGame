@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using RougeLiteGame.logger.async;
 
 namespace RougeLiteGame.logger;
 
@@ -8,7 +9,8 @@ namespace RougeLiteGame.logger;
 /// </summary>
 public class LoggerFactory
 {
-    private static readonly ConsoleLogger Logger = new(typeof(LoggerFactory));
+    private static readonly ConsoleLogWriter ConsoleLogWriter = new();
+    private static readonly BasicLogger Logger = new(typeof(LoggerFactory), ConsoleLogWriter);
     private static readonly Dictionary<Type, ILogger> Loggers = new();
     private static readonly ISet<IAsyncLogger> AsyncLoggers = new HashSet<IAsyncLogger>();
 
@@ -24,7 +26,7 @@ public class LoggerFactory
     /// <returns>
     ///     An implementation of <see cref="ILogger" /> associated with the specified type.
     /// </returns>
-    public static ILogger GetLogger(Type type)
+    public static ILogger GetLogger(Type type, bool async = true)
     {
         Logger.Trace("Getting logger for type {}.", type.Name);
         if (Loggers.TryGetValue(type, out ILogger value))
@@ -32,7 +34,7 @@ public class LoggerFactory
             return value;
         }
 
-        value = new AsyncConsoleLogger(type);
+        value = async ? new BasicAsyncLogger(type, ConsoleLogWriter) : new BasicLogger(type, ConsoleLogWriter);
         Loggers.Add(type, value);
 
         if (value is IAsyncLogger asyncLogger)
@@ -42,7 +44,7 @@ public class LoggerFactory
         
         return value;
     }
-
+    
     public static void GlobalFlush()
     {
         foreach (ILogger loggersValue in Loggers.Values) loggersValue.Flush();
@@ -63,8 +65,8 @@ public class LoggerFactory
     /// <returns>
     ///     An implementation of <see cref="ILogger" /> associated with the specified type <typeparamref name="T" />.
     /// </returns>
-    public static ILogger GetLogger<T>()
+    public static ILogger GetLogger<T>(bool async = true)
     {
-        return GetLogger(typeof(T));
+        return GetLogger(typeof(T), async);
     }
 }

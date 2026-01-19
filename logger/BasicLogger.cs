@@ -1,24 +1,46 @@
 using System;
+using System.Collections.Generic;
+using RougeLiteGame.logger.async;
 
 namespace RougeLiteGame.logger;
 
-public abstract class BasicLogger : ILogger
+public class BasicLogger : ILogger
 {
     private readonly string _typeName;
 
     private const int MaxEntries = 1024;
+
+    private readonly object _writerLock = new();
+    private readonly ISet<ILogWriter> _writers = new HashSet<ILogWriter>();
 
     private readonly LogEntry[] _buffer = new LogEntry[MaxEntries];
     private readonly object _lock = new();
     private int _count;
     private int _index;
 
-    protected BasicLogger(Type type)
+    private readonly bool _isAsync;
+
+    public BasicLogger(Type type, params ILogWriter[] writers)
     {
         _typeName = type.Name;
         for (int i = 0; i < _buffer.Length; i++)
         {
             _buffer[i] = new LogEntry();
+        }
+
+        _isAsync = this is IAsyncLogger;
+        
+        foreach (ILogWriter logWriter in writers)
+        {
+            _writers.Add(logWriter);
+        }
+    }
+
+    public void RegisterWriter(ILogWriter writer)
+    {
+        lock (_writerLock)
+        {
+            _writers.Add(writer);
         }
     }
 
@@ -52,7 +74,7 @@ public abstract class BasicLogger : ILogger
             _index++;
             if (_index == MaxEntries)
             {
-                if (this is IAsyncLogger)
+                if (_isAsync)
                 {
                     LoggerFactory.AsyncWorker.RequestFlush();
                 }
@@ -73,7 +95,7 @@ public abstract class BasicLogger : ILogger
         }
     }
 
-    protected LogEntry[] Drain()
+    private LogEntry[] Drain()
     {
         lock (_lock)
         {
@@ -187,5 +209,15 @@ public abstract class BasicLogger : ILogger
         Log(LogLevel.Fatal, message, parameters);
     }
 
-    public abstract void Flush();
+    public void Flush()
+    {
+        LogEntry[] logEntries = Drain();
+        lock (_writerLock)
+        {
+            foreach (ILogWriter writer in _writers)
+            {
+                writer.Write(logEntries);
+            }
+        }
+    }
 }

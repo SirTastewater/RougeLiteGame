@@ -20,8 +20,11 @@ public struct LogEntry
         
         int argumentCount = Arguments.Length;
         
-        Throwable = (Arguments?.LastOrDefault() as Exception)?.StackTrace;
-        if (Throwable != null) argumentCount--;
+        if(Arguments?.LastOrDefault() is Exception exception)
+        {
+            Throwable = exception.StackTrace ?? exception.Message;
+            argumentCount--;
+        }
 
         int argumentIndex = 0;
         StringBuilder builder = new(Message.Length + 32);

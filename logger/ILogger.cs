@@ -7,6 +7,8 @@ namespace RougeLiteGame.logger;
 /// </summary>
 public interface ILogger
 {
+    public void RegisterWriter(ILogWriter writer);
+    
     /// <summary>
     ///     Logs a formatted message at the <c>INFO</c> level, optionally replacing placeholders in the message with provided
     ///     parameter values.
