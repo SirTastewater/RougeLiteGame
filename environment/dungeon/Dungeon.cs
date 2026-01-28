@@ -45,7 +45,7 @@ public partial class Dungeon : Node
 		_grid[startCoordinate][startCoordinate] = 1;
 		_mainPath.Add(startNode);
 
-		DungeonNode lastNode = new(startCoordinate, startCoordinate, DIRECTION.NONE, DIRECTION.NONE);
+		DungeonNode lastNode = startNode;
 
 		for (int i = 1; i < _mainPathLength; i++)
 		{
@@ -65,42 +65,34 @@ public partial class Dungeon : Node
 
 				DungeonNode currentNode = new(tmpX, tmpY, DIRECTION.NONE, DIRECTION.NONE);
 
-				if(uncheckedDirections[tmp].X == 0 && uncheckedDirections[tmp].Y == -1)
+				switch (uncheckedDirections[tmp].X)
 				{
-					currentNode.LastRoomDirection = DIRECTION.SOUTH;
-					lastNode.NextRoomDirection = DIRECTION.NORD;
-				}
-				else if(uncheckedDirections[tmp].X == 1 && uncheckedDirections[tmp].Y == 0)
-				{
-					currentNode.LastRoomDirection = DIRECTION.WEST;
-					lastNode.NextRoomDirection = DIRECTION.EAST;
-				}
-				else if(uncheckedDirections[tmp].X == 0 && uncheckedDirections[tmp].Y == 1)
-				{
-					currentNode.LastRoomDirection = DIRECTION.NORD;
-					lastNode.NextRoomDirection = DIRECTION.SOUTH;
-				}
-				else if(uncheckedDirections[tmp].X == -1 && uncheckedDirections[tmp].Y == 0)
-				{
-					currentNode.LastRoomDirection = DIRECTION.EAST;
-					lastNode.NextRoomDirection = DIRECTION.WEST;
+					case 0 when uncheckedDirections[tmp].Y == -1:
+						currentNode.LastRoomDirection = DIRECTION.SOUTH;
+						lastNode.NextRoomDirection = DIRECTION.NORD;
+						break;
+					case 1 when uncheckedDirections[tmp].Y == 0:
+						currentNode.LastRoomDirection = DIRECTION.WEST;
+						lastNode.NextRoomDirection = DIRECTION.EAST;
+						break;
+					case 0 when uncheckedDirections[tmp].Y == 1:
+						currentNode.LastRoomDirection = DIRECTION.NORD;
+						lastNode.NextRoomDirection = DIRECTION.SOUTH;
+						break;
+					case -1 when uncheckedDirections[tmp].Y == 0:
+						currentNode.LastRoomDirection = DIRECTION.EAST;
+						lastNode.NextRoomDirection = DIRECTION.WEST;
+						break;
 				}
 
 				Logger.Info(currentNode.LastRoomDirection);
-				Logger.Info(currentNode.NextRoomDirection);
+				//Logger.Info(currentNode.NextRoomDirection);
 				
 				int connections = _randomNumberGenerator.RandiRange(2, 4);
-				if (i == _mainPathLength - 1)
-				{
-					connections = 1;
-				}
-				DungeonNode tmpNode = new(tmpX, tmpY, DIRECTION.NONE, DIRECTION.NONE)
-				{
-					Connections = connections
-				};
+				currentNode.Connections = i == _mainPathLength - 1 ? 1 : connections;
 				
 				_grid[tmpX][tmpY] = connections;
-				_mainPath.Add(tmpNode);
+				_mainPath.Add(currentNode);
 				suitableTileFound = true;
 
 				lastNode = currentNode;
@@ -117,7 +109,7 @@ public partial class Dungeon : Node
 
 		do
 		{
-			DungeonNode currentNode = _mainPath.First<DungeonNode>();
+			DungeonNode currentNode = _mainPath.First();
 			_mainPath.RemoveAt(0);
 
 			if (isFirstRoom)
