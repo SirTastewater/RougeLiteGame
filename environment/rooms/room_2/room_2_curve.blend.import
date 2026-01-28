@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bqrqyb66wnlt0"
-path="res://.godot/imported/middle_room_3_exit_001.blend-862532ca5e14e5f61432fec03654eaae.scn"
+uid="uid://dayr4p05g1u2m"
+path="res://.godot/imported/room_2_curve.blend-4d7fb319ae169f00ac819f4ac31924a8.scn"
 
 [deps]
 
-source_file="res://environment/middleRoom/middle_room_3_exit_001.blend"
-dest_files=["res://.godot/imported/middle_room_3_exit_001.blend-862532ca5e14e5f61432fec03654eaae.scn"]
+source_file="res://environment/rooms/room_2/room_2_curve.blend"
+dest_files=["res://.godot/imported/room_2_curve.blend-4d7fb319ae169f00ac819f4ac31924a8.scn"]
 
 [params]
 
@@ -48,7 +48,6 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
-blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false

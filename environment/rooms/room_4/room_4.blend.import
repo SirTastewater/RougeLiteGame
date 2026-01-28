@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bsvjvprauikm2"
-path="res://.godot/imported/end_room_001.blend-5af2917affb0dad1902404d399123bba.scn"
+uid="uid://y3o7rx5l80w2"
+path="res://.godot/imported/room_4.blend-91b3cad262838656f1c320334e4af703.scn"
 
 [deps]
 
-source_file="res://environment/endRoom/end_room_001.blend"
-dest_files=["res://.godot/imported/end_room_001.blend-5af2917affb0dad1902404d399123bba.scn"]
+source_file="res://environment/rooms/room_4/room_4.blend"
+dest_files=["res://.godot/imported/room_4.blend-91b3cad262838656f1c320334e4af703.scn"]
 
 [params]
 
@@ -48,7 +48,6 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
-blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false

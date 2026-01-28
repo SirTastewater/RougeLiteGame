@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bp853bt6ii1gq"]
+
+[ext_resource type="Script" uid="uid://tdjc3wr0vqkt" path="res://environment/rooms/Room.cs" id="1_bo288"]
+[ext_resource type="PackedScene" uid="uid://b3yogql6cfpt7" path="res://environment/rooms/room_2/room_2_straight.blend" id="1_tfngb"]
+
+[node name="Room2Straight" type="Node3D" node_paths=PackedStringArray("_markerContainer")]
+script = ExtResource("1_bo288")
+_markerContainer = NodePath("MarkerContainer")
+
+[node name="room_2_straight" parent="." instance=ExtResource("1_tfngb")]
+
+[node name="MarkerContainer" type="Node3D" parent="."]
+
+[node name="Marker3D" type="Marker3D" parent="MarkerContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="Marker3D2" type="Marker3D" parent="MarkerContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)

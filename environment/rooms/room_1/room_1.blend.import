@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://wxmck6u0xslo"
-path="res://.godot/imported/corridor_001.blend-296655bcae2b67a7f1b2acaf100d4520.scn"
+uid="uid://0va2iqpkw3nl"
+path="res://.godot/imported/room_1.blend-800026f12dcb1f5c8239c8babcc8f19a.scn"
 
 [deps]
 
-source_file="res://environment/corridor/corridor_001.blend"
-dest_files=["res://.godot/imported/corridor_001.blend-296655bcae2b67a7f1b2acaf100d4520.scn"]
+source_file="res://environment/rooms/room_1/room_1.blend"
+dest_files=["res://.godot/imported/room_1.blend-800026f12dcb1f5c8239c8babcc8f19a.scn"]
 
 [params]
 
@@ -48,7 +48,6 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
-blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false
