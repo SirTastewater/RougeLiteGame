@@ -4,8 +4,7 @@
 
 [node name="Dungeon" type="Node3D" node_paths=PackedStringArray("_roomContainer")]
 script = ExtResource("1_jle14")
-_mainPathLength = 2
-_gridSideLength = 1000
+_mainPathLength = 3
 _roomContainer = NodePath("RoomContainer")
 
 [node name="RoomContainer" type="Node3D" parent="."]
