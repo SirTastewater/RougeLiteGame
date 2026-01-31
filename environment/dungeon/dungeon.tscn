@@ -1,13 +1,12 @@
-[gd_scene format=3 uid="uid://b2aubsqgpsfpo"]
+[gd_scene load_steps=2 format=3 uid="uid://b2aubsqgpsfpo"]
 
-[ext_resource type="Script" uid="uid://db4c1c64dawdo" path="res://environment/dungeon/Dungeon.cs" id="1_jle14"]
+[ext_resource type="Script" uid="uid://ccdlmbmcy0eaj" path="res://environment/dungeon/Dungeon.cs" id="1_jle14"]
 
-[node name="Dungeon" type="Node3D" unique_id=470187451 node_paths=PackedStringArray("_roomContainer")]
+[node name="Dungeon" type="Node3D" node_paths=PackedStringArray("_roomContainer")]
 script = ExtResource("1_jle14")
-_mainPathLength = 2
-_gridSideLength = 2000
+_mainPathLength = 3
 _roomContainer = NodePath("RoomContainer")
 
-[node name="RoomContainer" type="Node3D" parent="." unique_id=1711120054]
+[node name="RoomContainer" type="Node3D" parent="."]
 
-[node name="CorridorContainer" type="Node3D" parent="." unique_id=1879752625]
+[node name="CorridorContainer" type="Node3D" parent="."]
