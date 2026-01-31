@@ -278,13 +278,9 @@ public partial class Dungeon : Node
 			default: break;
 		}
 
-		if (roomIsCurved)
-		{
-			path = "res://environment/rooms/room_2/room_2_curve.tscn";
-		}else
-		{
-			path = "res://environment/rooms/room_2/room_2_straight.tscn";
-		}
+
+		string roomName = roomIsCurved ? "room_2_curve.tscn" : "room_2_straight.tscn";
+		string path = $"res://environment/rooms/room_2/{roomName}";
 
 		PackedScene packedScene = GD.Load<PackedScene>(path);
 
