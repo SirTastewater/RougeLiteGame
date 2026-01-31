@@ -126,7 +126,7 @@ public partial class Dungeon : Node
 
 		do
 		{
-			DungeonNode currentNode = _mainPath.First<DungeonNode>();
+			DungeonNode currentNode = _mainPath.First();
 			_mainPath.RemoveAt(0);
 
 			if (isFirstRoom)
