@@ -16,7 +16,7 @@ public partial class Dungeon : Node
 	private RandomNumberGenerator _randomNumberGenerator = new();
 
 	private int[][] _grid;
-	private List<DungeonNode> _mainPath = [];
+	private readonly List<DungeonNode> _mainPath = [];
 	private readonly Vector2I[] _directions = [new(1, 0), new(0, 1), new(-1, 0), new(0, -1)];
 
 	private enum Direction {Nord, East, South, West, None}
