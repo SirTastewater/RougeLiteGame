@@ -198,7 +198,7 @@ public partial class Dungeon : Node
 
 	private Room PlaceRoomWithOneDoor(ref DungeonNode currentNode, ref Room lastRoom)
 	{
-		string path = "res://environment/rooms/room_1/room_1.tscn";
+		const string path = "res://environment/rooms/room_1/room_1.tscn";
 		PackedScene packedScene = GD.Load<PackedScene>(path);
 
 		Room tmpRoom = packedScene.Instantiate<Room>();
