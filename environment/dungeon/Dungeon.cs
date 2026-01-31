@@ -240,20 +240,24 @@ public partial class Dungeon : Node
 			rotationDirection = currentNode.LastRoomDirection;
 		}
 
+		float y = 0;
 		switch (rotationDirection)
 		{
-			case DIRECTION.NORD:
-				rotationVector = new(0,180,0);
+			case Direction.Nord:
+				y = 180;
 				break;
-			case DIRECTION.EAST:
-				rotationVector = new(0,270,0);
+			case Direction.East:
+				y = 270;
 				break;
-			case DIRECTION.SOUTH:
+			case Direction.West:
+				y = 90;
 				break;
-			case DIRECTION.WEST:
-				rotationVector = new(0,90,0);
-				break;
+			case Direction.South:
+			case Direction.None: // fall-through
+			default: break;
 		}
+
+		rotationVector.Y = y;
 		tmpRoom.RotationDegrees = rotationVector;
 	}
 
