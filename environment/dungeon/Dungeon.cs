@@ -230,7 +230,7 @@ public partial class Dungeon : Node
 	}
 
 
-	private void RotateRoomWithOneDoor(ref Room tmpRoom, ref DungeonNode currentNode)
+	private static void RotateRoomWithOneDoor(ref Room tmpRoom, ref DungeonNode currentNode)
 	{
 		Vector3 rotationVector = new(0,0,0);
 		Direction rotationDirection;
