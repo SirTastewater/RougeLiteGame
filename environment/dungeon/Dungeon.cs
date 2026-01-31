@@ -290,17 +290,19 @@ public partial class Dungeon : Node
 		Vector3 positionOffset = new(_roomLength,0,0);
 		switch (currentNode.LastRoomDirection)
 		{
-			case DIRECTION.NORD:
-				positionOffset = new(0,0,_roomLength);
+			case Direction.Nord:
+				positionOffset = new Vector3(0,0,_roomLength);
 				break;
-			case DIRECTION.EAST:
+			case Direction.East:
 				break;
-			case DIRECTION.SOUTH:
-				positionOffset = new(0,0,_roomLength * -1);
+			case Direction.South:
+				positionOffset = new Vector3(0,0,_roomLength * -1);
 				break;
-			case DIRECTION.WEST:
-				positionOffset = new(_roomLength * -1,0,0);
+			case Direction.West:
+				positionOffset = new Vector3(_roomLength * -1,0,0);
 				break;
+			case Direction.None: // fall-through
+			default: break;
 		}
 		tmpRoom.Position += positionOffset;
 
