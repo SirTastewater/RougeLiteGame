@@ -320,35 +320,36 @@ public partial class Dungeon : Node
 		{
 			switch (currentNode.NextRoomDirection)
 			{
-				case DIRECTION.NORD:
-					rotationVector = new(0,180,0);
+				case Direction.Nord:
+					rotationVector = new Vector3(0,180,0);
 					break;
-				case DIRECTION.EAST:
-					rotationVector = new(0,270,0);
+				case Direction.East:
+					rotationVector = new Vector3(0,270,0);
 					break;
-				case DIRECTION.SOUTH:
+				case Direction.South:
 					break;
-				case DIRECTION.WEST:
-					rotationVector = new(0,90,0);
+				case Direction.West:
+					rotationVector = new Vector3(0,90,0);
 					break;
+				case Direction.None: // fall-through
+				default: break;
 			}
-			tmpRoom.RotationDegrees = rotationVector;
-		}else
+		}
+		else
 		{
 			switch (currentNode.NextRoomDirection)
 			{
-				case DIRECTION.NORD:
+				case Direction.East:
+				case Direction.West:
+					rotationVector = new Vector3(0,90,0);
 					break;
-				case DIRECTION.EAST:
-					rotationVector = new(0,90,0);
-					break;
-				case DIRECTION.SOUTH:
-					break;
-				case DIRECTION.WEST:
-					rotationVector = new(0,90,0);
-					break;
+				case Direction.South:
+				case Direction.Nord:
+				case Direction.None:
+				default: break;
 			}
-			tmpRoom.RotationDegrees = rotationVector;
 		}
+
+		tmpRoom.RotationDegrees = rotationVector;
 	}
 }
