@@ -265,21 +265,17 @@ public partial class Dungeon : Node
 	private Room PlaceRoomWithTwoDoors(ref DungeonNode currentNode, ref Room lastRoom)
 	{
 		bool roomIsCurved = true;
-		string path;
+		
 		switch (currentNode.LastRoomDirection)
 		{
-			case DIRECTION.NORD when currentNode.LastRoomDirection == DIRECTION.SOUTH:
+			case Direction.Nord when currentNode.NextRoomDirection == Direction.South: // fall-through
+			case Direction.South when currentNode.NextRoomDirection == Direction.Nord:
+			case Direction.West when currentNode.NextRoomDirection == Direction.East:
+			case Direction.East when currentNode.NextRoomDirection == Direction.West:
 				roomIsCurved = false;
 				break;
-			case DIRECTION.SOUTH when currentNode.LastRoomDirection == DIRECTION.NORD:
-				roomIsCurved = false;
-				break;
-			case DIRECTION.WEST when currentNode.LastRoomDirection == DIRECTION.EAST:
-				roomIsCurved = false;
-				break;
-			case DIRECTION.EAST when currentNode.LastRoomDirection == DIRECTION.WEST:
-				roomIsCurved = false;
-				break;
+			case Direction.None: // fall-through
+			default: break;
 		}
 
 		if (roomIsCurved)
