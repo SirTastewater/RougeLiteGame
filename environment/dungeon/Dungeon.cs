@@ -4,7 +4,7 @@ using System.Linq;
 using Godot;
 using RougeLiteGame.logger;
 
-namespace RougeLiteGame.environment;
+namespace RougeLiteGame.environment.dungeon;
 
 
 public partial class Dungeon : Node
