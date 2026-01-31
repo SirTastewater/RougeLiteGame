@@ -18,15 +18,16 @@ public partial class Dungeon : Node
 	private int[][] _grid;
 	private List<DungeonNode> _mainPath = [];
 	private readonly Vector2I[] _directions = [new(1, 0), new(0, 1), new(-1, 0), new(0, -1)];
-	enum DIRECTION {NORD, EAST, SOUTH, WEST, NONE}
+
+	private enum Direction {Nord, East, South, West, None}
 	private int _roomLength = 6;
-	private struct DungeonNode(int x, int y, DIRECTION nextRoomDirection, DIRECTION lastRoomDirection)
+	private struct DungeonNode(int x, int y, Direction nextRoomDirection, Direction lastRoomDirection)
 	{
 		public int X { get; } = x;
 		public int Y { get; } = y;
 		public int Connections { get; set; }
-		public DIRECTION NextRoomDirection { get; set; } = nextRoomDirection;
-		public DIRECTION LastRoomDirection { get; set; } = lastRoomDirection;
+		public Direction NextRoomDirection { get; set; } = nextRoomDirection;
+		public Direction LastRoomDirection { get; set; } = lastRoomDirection;
 	}
 
 	public override void _Ready()
@@ -38,7 +39,7 @@ public partial class Dungeon : Node
 		}
 
 		int startCoordinate = _gridSideLength / 2;
-		DungeonNode startNode = new(startCoordinate, startCoordinate, DIRECTION.NONE, DIRECTION.NONE)
+		DungeonNode startNode = new(startCoordinate, startCoordinate, Direction.None, Direction.None)
 		{
 			Connections = 1
 		};
@@ -59,7 +60,7 @@ public partial class Dungeon : Node
 				if (tmpX >= _gridSideLength || tmpY >= _gridSideLength) continue;
 				if (_grid[tmpX][tmpY] != 0 || CheckForNeighbour(tmpX, tmpY)) continue;
 
-				DungeonNode currentNode = new(tmpX, tmpY, DIRECTION.NONE, DIRECTION.NONE);
+				DungeonNode currentNode = new(tmpX, tmpY, Direction.None, Direction.None);
 
 				if(uncheckedDirections[tmp].X == 0 && uncheckedDirections[tmp].Y == -1)
 				{
@@ -222,9 +223,9 @@ public partial class Dungeon : Node
 	private void RotateRoomWithOneDoor(ref Room tmpRoom, ref DungeonNode currentNode)
 	{
 		Vector3 rotationVector = new(0,0,0);
-		DIRECTION rotationDirection;
+		Direction rotationDirection;
 
-		if((rotationDirection = currentNode.NextRoomDirection) == DIRECTION.NONE)
+		if((rotationDirection = currentNode.NextRoomDirection) == Direction.None)
 		{
 			rotationDirection = currentNode.LastRoomDirection;
 		}
