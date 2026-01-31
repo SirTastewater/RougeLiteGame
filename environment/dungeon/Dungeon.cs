@@ -204,20 +204,23 @@ public partial class Dungeon : Node
 		Room tmpRoom = packedScene.Instantiate<Room>();
 		tmpRoom.Position = lastRoom.Position;
 
-		Vector3 positionOffset = new(_roomLength,0,0);
+		Vector3 positionOffset = new(_roomLength, 0, 0);
 		switch (currentNode.LastRoomDirection)
 		{
-			case DIRECTION.NORD:
-				positionOffset = new(0,0,_roomLength);
+			case Direction.Nord:
+				positionOffset.X = 0;
+				positionOffset.Z = _roomLength;
 				break;
-			case DIRECTION.EAST:
+			case Direction.South:
+				positionOffset.X = 0;
+				positionOffset.Z = _roomLength * -1;
 				break;
-			case DIRECTION.SOUTH:
-				positionOffset = new(0,0,_roomLength * -1);
+			case Direction.West:
+				positionOffset.X = _roomLength * -1;
 				break;
-			case DIRECTION.WEST:
-				positionOffset = new(_roomLength * -1,0,0);
-				break;
+			case Direction.East:
+			case Direction.None: // fall-through
+			default: break;
 		}
 		tmpRoom.Position += positionOffset;
 
