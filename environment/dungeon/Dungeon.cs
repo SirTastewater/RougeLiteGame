@@ -62,33 +62,40 @@ public partial class Dungeon : Node
 
 				DungeonNode currentNode = new(tmpX, tmpY, Direction.None, Direction.None);
 
-				if(uncheckedDirections[tmp].X == 0 && uncheckedDirections[tmp].Y == -1)
+				switch (uncheckedDirections[tmp].X)
 				{
-                    currentNode.LastRoomDirection = DIRECTION.SOUTH;
-                    DungeonNode tmpNode = _mainPath[i];
-					tmpNode.NextRoomDirection = DIRECTION.NORD;
-					_mainPath[i] = tmpNode;
-				}
-				else if(uncheckedDirections[tmp].X == 1 && uncheckedDirections[tmp].Y == 0)
-				{
-					currentNode.LastRoomDirection = DIRECTION.WEST;
-					DungeonNode tmpNode = _mainPath[i];
-					tmpNode.NextRoomDirection = DIRECTION.EAST;
-					_mainPath[i] = tmpNode;
-				}
-				else if(uncheckedDirections[tmp].X == 0 && uncheckedDirections[tmp].Y == 1)
-				{
-					currentNode.LastRoomDirection = DIRECTION.NORD;
-					DungeonNode tmpNode = _mainPath[i];
-					tmpNode.NextRoomDirection = DIRECTION.SOUTH;
-					_mainPath[i] = tmpNode;
-				}
-				else if(uncheckedDirections[tmp].X == -1 && uncheckedDirections[tmp].Y == 0)
-				{
-					currentNode.LastRoomDirection = DIRECTION.EAST;
-					DungeonNode tmpNode = _mainPath[i];
-					tmpNode.NextRoomDirection = DIRECTION.WEST;
-					_mainPath[i] = tmpNode;
+					case 0 when uncheckedDirections[tmp].Y == -1:
+					{
+						currentNode.LastRoomDirection = Direction.South;
+						DungeonNode tmpNode = _mainPath[i];
+						tmpNode.NextRoomDirection = Direction.Nord;
+						_mainPath[i] = tmpNode;
+						break;
+					}
+					case 1 when uncheckedDirections[tmp].Y == 0:
+					{
+						currentNode.LastRoomDirection = Direction.West;
+						DungeonNode tmpNode = _mainPath[i];
+						tmpNode.NextRoomDirection = Direction.East;
+						_mainPath[i] = tmpNode;
+						break;
+					}
+					case 0 when uncheckedDirections[tmp].Y == 1:
+					{
+						currentNode.LastRoomDirection = Direction.Nord;
+						DungeonNode tmpNode = _mainPath[i];
+						tmpNode.NextRoomDirection = Direction.South;
+						_mainPath[i] = tmpNode;
+						break;
+					}
+					case -1 when uncheckedDirections[tmp].Y == 0:
+					{
+						currentNode.LastRoomDirection = Direction.East;
+						DungeonNode tmpNode = _mainPath[i];
+						tmpNode.NextRoomDirection = Direction.West;
+						_mainPath[i] = tmpNode;
+						break;
+					}
 				}
 
 				uncheckedDirections.RemoveAt(tmp);
