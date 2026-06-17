@@ -1,11 +1,14 @@
 using System;
 using System.Threading;
 
-namespace RougeLiteGame.logger;
+namespace RougeLiteGame.logger.async;
 
 public sealed class AsyncWorker : IDisposable
 {
-    private readonly ConsoleLogger _logger = new(typeof(AsyncWorker));
+    // The async loggers logger is actually not asynchronous,
+    // as it is already completely executed asynchronous by itself
+    // We don't want it to flush itself, but keep control of its flushes if necessary 
+    private readonly ILogger _logger = LoggerFactory.GetLogger<AsyncWorker>(false);
     
     private readonly Thread _thread;
     private readonly AutoResetEvent _signal = new(false);
@@ -32,7 +35,7 @@ public sealed class AsyncWorker : IDisposable
     
     private void WorkerLoop()
     {
-        _logger.Info("The system has started the asynchronous Logger-Thread");
+        _logger.Trace("The system has started the asynchronous Logger-Thread");
         _logger.Flush();
         
         while (_running)

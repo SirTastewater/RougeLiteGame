@@ -1,25 +1,55 @@
 using System;
+using System.Collections.Generic;
+using RougeLiteGame.logger.async;
 
 namespace RougeLiteGame.logger;
 
-public abstract class BasicLogger : ILogger
+public class BasicLogger : ILogger
 {
     private readonly string _typeName;
 
     private const int MaxEntries = 1024;
+
+    private readonly object _writerLock = new();
+    private readonly HashSet<ILogWriter> _writers = [];
+
+    private ILogRenderer _renderer;
 
     private readonly LogEntry[] _buffer = new LogEntry[MaxEntries];
     private readonly object _lock = new();
     private int _count;
     private int _index;
 
-    protected BasicLogger(Type type)
+    private readonly bool _isAsync;
+
+    public BasicLogger(Type type, ILogRenderer renderer, params ILogWriter[] writers)
     {
         _typeName = type.Name;
+        _renderer = renderer;
+        _isAsync = this is IAsyncLogger;
+        
         for (int i = 0; i < _buffer.Length; i++)
         {
             _buffer[i] = new LogEntry();
         }
+        
+        foreach (ILogWriter logWriter in writers)
+        {
+            _writers.Add(logWriter);
+        }
+    }
+
+    public void RegisterWriter(ILogWriter writer)
+    {
+        lock (_writerLock)
+        {
+            _writers.Add(writer);
+        }
+    }
+
+    public void SetRenderer(ILogRenderer renderer)
+    {
+        _renderer = renderer;
     }
 
     public void Log(object message, params object[] parameters)
@@ -29,11 +59,6 @@ public abstract class BasicLogger : ILogger
 
     public void Log(LogLevel level, object message, params object[] parameters)
     {
-        /*if (!EngineDebugger.IsActive())
-        { // TODO find better solution to not exclude rider runs
-            return; // disable in production as logging is hilariously slow
-        }*/
-
         // ToString is very slow, so yeah
         Log((level, message.ToString(), parameters));
     }
@@ -52,7 +77,7 @@ public abstract class BasicLogger : ILogger
             _index++;
             if (_index == MaxEntries)
             {
-                if (this is IAsyncLogger)
+                if (_isAsync)
                 {
                     LoggerFactory.AsyncWorker.RequestFlush();
                 }
@@ -73,7 +98,7 @@ public abstract class BasicLogger : ILogger
         }
     }
 
-    protected LogEntry[] Drain()
+    private LogEntry[] Drain()
     {
         lock (_lock)
         {
@@ -88,6 +113,10 @@ public abstract class BasicLogger : ILogger
             for (int i = 0; i < _count; i++)
             {
                 result[i] = _buffer[(start + i) % MaxEntries];
+                
+                // render and interpolate
+                result[i].Interpolate();
+                _renderer.Render(ref result[i]);
             }
 
             _index = 0;
@@ -187,5 +216,15 @@ public abstract class BasicLogger : ILogger
         Log(LogLevel.Fatal, message, parameters);
     }
 
-    public abstract void Flush();
+    public void Flush()
+    {
+        LogEntry[] logEntries = Drain();
+        lock (_writerLock)
+        {
+            foreach (ILogWriter writer in _writers)
+            {
+                writer.Write(logEntries);
+            }
+        }
+    }
 }
