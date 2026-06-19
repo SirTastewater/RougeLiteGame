@@ -7,7 +7,7 @@ namespace RougeLiteGame.entity.limbs;
 [GlobalClass]
 public partial class Limb : Node3D
 {
-	private static readonly ILogger logger = LoggerFactory.GetLogger<Limb>();
+	private static readonly ILogger Logger = LoggerFactory.GetLogger<Limb>();
 	
 	[Export(PropertyHint.Range, "0,10,0.5")] private float _lifeGain = 0.5f;
 	[Export(PropertyHint.Range, "0,10,0.5")] private float _speedGain = 0.5f;
@@ -36,12 +36,12 @@ public partial class Limb : Node3D
 		{
 			if (value == null)
 			{
-				logger.Debug("Starting the simulation.");
+				Logger.Debug("Starting the simulation.");
 				_skeleton.PhysicalBonesStartSimulation();
 			}
 			else
 			{
-				logger.Debug("Stopping the simulation.");
+				Logger.Debug("Stopping the simulation.");
 				_skeleton.PhysicalBonesStopSimulation();
 			}
 			_host = value;
