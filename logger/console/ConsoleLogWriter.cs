@@ -1,7 +1,7 @@
 using System.Text;
 using Godot;
 
-namespace RougeLiteGame.logger;
+namespace RougeLiteGame.logger.console;
 
 public class ConsoleLogWriter : ILogWriter
 {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using RougeLiteGame.logger.async;
+using RougeLiteGame.logger.console;
 
 namespace RougeLiteGame.logger;
 

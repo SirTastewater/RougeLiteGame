@@ -1,4 +1,4 @@
-namespace RougeLiteGame.logger;
+namespace RougeLiteGame.logger.console;
 
 public class ConsoleLogRenderer : BasicLogRenderer
 {
