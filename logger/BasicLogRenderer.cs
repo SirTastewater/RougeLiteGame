@@ -6,7 +6,7 @@ namespace RougeLiteGame.logger;
 
 public class BasicLogRenderer : ILogRenderer
 {
-    public void Render(ref LogEntry logEntry)
+    public virtual void Render(ref LogEntry logEntry)
     {
         StringBuilder stringBuilder = new(128);
 
@@ -22,4 +22,6 @@ public class BasicLogRenderer : ILogRenderer
 
         logEntry.Message = stringBuilder.ToString();
     }
+
+    public virtual void RenderArgument(ref string argument) { }
 }

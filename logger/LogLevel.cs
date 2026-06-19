@@ -13,5 +13,7 @@ public enum LogLevel
     Warn, // Something unexpected, but not an error
     Error, // An error occurred, but the game can continue
     Critical, // Serious failure could compromise stability
-    Fatal // System shutdown or unrecoverable error
+    Fatal, // System shutdown or unrecoverable error
+    
+    Argument // Arguments that were parsed into the message
 }

@@ -14,7 +14,7 @@ public struct LogEntry
     public string Throwable; // lazily set. Do not trust checking
     public string Type;
 
-    public void Interpolate()
+    public void Interpolate(ILogRenderer renderer)
     {
         if (Arguments == null || Arguments.Length == 0) { return; }
         
@@ -41,7 +41,9 @@ public struct LogEntry
             {
                 if (argumentIndex < argumentCount)
                 {
-                    builder.Append(Arguments![argumentIndex++]?.ToString() ?? "null");
+                    string message = (Arguments![argumentIndex++]?.ToString() ?? "null");
+                    renderer.RenderArgument(ref message);
+                    builder.Append(message);
                     i++;
                     continue;
                 }

@@ -114,8 +114,8 @@ public class BasicLogger : ILogger
             {
                 result[i] = _buffer[(start + i) % MaxEntries];
                 
-                // render and interpolate
-                result[i].Interpolate();
+                // interpolate and render
+                result[i].Interpolate(_renderer);
                 _renderer.Render(ref result[i]);
             }
 
