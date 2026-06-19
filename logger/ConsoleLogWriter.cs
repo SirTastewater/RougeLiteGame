@@ -27,11 +27,11 @@ public class ConsoleLogWriter : ILogWriter
             
             if (buffered[i].Throwable == null)
             {
-                if (i != buffered.Length - 1) { _stringBuilder.AppendLine(); }
+                if (i != buffered.Length - 1) { _stringBuilder.Append('\n'); }
                 continue;
             }
 
-            _stringBuilder.AppendLine();
+            _stringBuilder.Append('\n');
 
             string traceColor = ILogger.LogLevelToColor(LogLevel.Trace);
             _stringBuilder.Append("[color=");

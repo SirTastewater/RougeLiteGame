@@ -1,9 +1,6 @@
 # Godot 4+ specific ignores
 .godot/
 
-# Do not ignore the uid_cache
-!.godot/uid_cache.bin
-
 .nomedia
 
 # Godot-specific ignores
@@ -11,6 +8,7 @@
 export.cfg
 export_credentials.cfg
 *.tmp
+*.old
 
 # Imported translations (automatically generated from CSV files)
 *.translation
