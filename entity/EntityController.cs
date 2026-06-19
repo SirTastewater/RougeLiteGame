@@ -67,6 +67,9 @@ public sealed partial class EntityController : NavigationAgent3D
     [Export] private Curve SprintCurve { get; set; }
     #endregion
     
+    [Signal]
+    public delegate void JumpEventHandler(Entity value);
+    
     public override void _Ready()
     {
         SetPhysicsProcess(IsEntityConnected());
@@ -103,7 +106,7 @@ public sealed partial class EntityController : NavigationAgent3D
         // Do not query when the map has never synchronized and is empty.
         // Our Entity will just freeze when no navigation mesh is existent.
         bool navigationMeshExists = NavigationServer3D.MapGetIterationId(GetNavigationMap()) != 0;
-        Vector3 movement = !navigationMeshExists ? Vector3.Zero : CurrentBehaviour.Process(delta);
+        Vector3 movement = !navigationMeshExists ? Vector3.Zero : CurrentBehaviour.InitiateProcess(delta);
         MovementState = ComputeMovementState(movement);
         
         if (MovementState == MoveState.Fall && EnableGravity) movement += ComputeGravity(delta);

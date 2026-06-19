@@ -12,6 +12,8 @@ namespace RougeLiteGame.entity.behavior;
     
     protected EntityController Controller { get; private set; }
     protected Entity Entity { get; private set; }
+    
+    protected Vector3 Velocity;
 
     public void Initialize(EntityController controller, Entity entity)
     {
@@ -48,12 +50,25 @@ namespace RougeLiteGame.entity.behavior;
         Controller = null;
         Entity = null;
     }
+
+    public Vector3 InitiateProcess(double delta)
+    {
+        Velocity = Entity.Velocity;
+        Process(delta);
+        return Velocity;
+    }
     
-    public abstract Vector3 Process(double delta);
+    protected abstract void Process(double delta);
 
     protected Vector3 FollowControllerTarget()
     {
         return Entity.GlobalPosition.DirectionTo(Controller.GetNextPathPosition()) * Controller.MovementSpeed();
+    }
+    
+    protected void Jump()
+    {
+        Velocity += Controller.ComputeJumpVelocity();
+        Controller.EmitSignal(EntityController.SignalName.Jump, Entity);
     }
 
     protected float MovementSpeed()

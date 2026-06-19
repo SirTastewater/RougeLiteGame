@@ -14,19 +14,17 @@ namespace RougeLiteGame.entity.behavior.idle;
         SetTargetPosition(GetNextPosition());
     }
 
-    public override Vector3 Process(double delta)
+    protected override void Process(double delta)
     {
-        if (!Entity.IsOnFloor()) return Entity.Velocity;
+        if (!Entity.IsOnFloor()) return;
 
+        Velocity = FollowControllerTarget();
         if (GetTargetPosition() != Vector3.Zero && !Controller.IsNavigationFinished())
         {
             if (!IsFacingTarget()) RotateTowards(delta);
-
-            return FollowControllerTarget();
         }
         
         SetTargetPosition(GetNextPosition());
-        return FollowControllerTarget();
     }
 
     /// <summary>

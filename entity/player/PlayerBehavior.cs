@@ -24,29 +24,31 @@ public partial class PlayerBehavior : IdleBehavior, IInputAcceptor
         _pitchPivotNode = GetNode<Node3D>(_pitchPivot);
     }
 
-    public override Vector3 Process(double delta)
+    protected override void Process(double delta)
     {
-        if(!_enableInput) return Vector3.Zero;
+        if(!_enableInput)
+        {
+            Velocity = Vector3.Zero;
+            return;
+        }
+        
         float speed = MovementSpeed();
-        Vector3 velocity = Entity.Velocity;
 
-        if (Input.IsActionJustPressed("jump") && Entity.IsOnFloor()) velocity += Controller.ComputeJumpVelocity();
+        if (Input.IsActionJustPressed("jump") && Entity.IsOnFloor()) Jump();
         
         Vector2 inputDir = Input.GetVector("left", "right", "forward", "backward");
         Vector3 direction = (Entity.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 
         if (direction != Vector3.Zero)
         {
-            velocity.X = direction.X * speed;
-            velocity.Z = direction.Z * speed;
+            Velocity.X = direction.X * speed;
+            Velocity.Z = direction.Z * speed;
         }
         else
         {
-            velocity.X = Mathf.MoveToward(Entity.Velocity.X, 0, speed);
-            velocity.Z = Mathf.MoveToward(Entity.Velocity.Z, 0, speed);
+            Velocity.X = Mathf.MoveToward(Entity.Velocity.X, 0, speed);
+            Velocity.Z = Mathf.MoveToward(Entity.Velocity.Z, 0, speed);
         }
-
-        return velocity;
     }
 
     public override bool IsSneaking()

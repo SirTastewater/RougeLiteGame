@@ -10,24 +10,15 @@ public partial class Limb : Node3D
 	private static readonly ILogger Logger = LoggerFactory.GetLogger<Limb>();
 	
 	[Export(PropertyHint.Range, "0,10,0.5")] private float _lifeGain = 0.5f;
-	[Export(PropertyHint.Range, "0,10,0.5")] private float _speedGain = 0.5f;
-	[Export(PropertyHint.Range, "0,100,1")] private float _strengthGain = 10;
-
+	[Export] private Curve SpeedCurve { get; set; }
+	[Export] private Curve StrengthCurve { get; set; }
+	
 	[Export] private PhysicalBoneSimulator3D _skeleton;
 	
 	public float Life { get; private set; }
 
-	public float Speed
-	{
-		get
-		{
-			// easing function x² -> 50% life-loss leads to 75% loss of speed performance
-			float value = (float) Math.Pow(Life / _lifeGain, 2f);
-			return (float) Math.Ceiling(_speedGain * value * 100) / 100;
-		}
-	}
-
-	public float Strength { get; private set; }
+	public float Speed => SpeedCurve.Sample(SpeedCurve.MaxDomain / Math.Max(Life, 1)); // don't divide by 0
+	public float Strength =>  StrengthCurve.Sample(StrengthCurve.MaxDomain / Math.Max(Life, 1));
 
 	private Entity Host
 	{
@@ -53,8 +44,8 @@ public partial class Limb : Node3D
 	public override void _Ready()
 	{
 		Life = _lifeGain;
-		Speed = _speedGain;
-		Strength = _strengthGain;
+		SpeedCurve ??= new Curve();
+		StrengthCurve ??= new Curve();
 		
 		Host = null;
 	}
