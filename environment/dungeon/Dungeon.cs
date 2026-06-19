@@ -10,346 +10,272 @@ namespace RougeLiteGame.environment.dungeon;
 public partial class Dungeon : Node
 {
 	private static readonly ILogger Logger = LoggerFactory.GetLogger<Dungeon>();
-	[Export] private int _mainPathLength = 5;
-	[Export] private int _gridSideLength = 1000;
+	[Export] private int _pathLength = 2;
 	[Export] private Node3D _roomContainer;
+	private List<pathNode> _path = [];
 	private RandomNumberGenerator _randomNumberGenerator = new();
-
-	private int[][] _grid;
-	private readonly List<DungeonNode> _mainPath = [];
-	private readonly Vector2I[] _directions = [new(1, 0), new(0, 1), new(-1, 0), new(0, -1)];
-
-	private enum Direction {Nord, East, South, West, None}
+	private readonly List<Vector2I> _directions = [new(1, 0), new(0, 1), new(-1, 0), new(0, -1)];
+	enum DIRECTION {NORTH, EAST, SOUTH, WEST, NONE}
 	private int _roomLength = 6;
-	private struct DungeonNode(int x, int y, Direction nextRoomDirection, Direction lastRoomDirection)
+	private struct pathNode(int x, int y)
 	{
-		public int X { get; } = x;
-		public int Y { get; } = y;
-		public int Connections { get; set; }
-		public Direction NextRoomDirection { get; set; } = nextRoomDirection;
-		public Direction LastRoomDirection { get; set; } = lastRoomDirection;
+		public int X = x;
+		public int Y = y;
+		public int Connections;
+		public DIRECTION NextRoomDirection = DIRECTION.NONE;
+		public DIRECTION LastRoomDirection = DIRECTION.NONE;
 	}
 
 	public override void _Ready()
 	{
-		_grid = new int[_gridSideLength][];
-		for (int i = 0; i < _gridSideLength; i++)
-		{
-			_grid[i] = new int[_gridSideLength];
-		}
+        pathNode startNode = new(0, 0)
+        {
+            Connections = 1
+        };
 
-		int startCoordinate = _gridSideLength / 2;
-		DungeonNode startNode = new(startCoordinate, startCoordinate, Direction.None, Direction.None)
-		{
-			Connections = 1
-		};
-		_grid[startCoordinate][startCoordinate] = 1;
-		_mainPath.Add(startNode);
+		pathNode lastNode = startNode;
+		int lastX = 0;
+		int lastY = 0;
 
-		for (int i = 0; i < _mainPathLength - 1; i++)
+		for(int i = 0; i < _pathLength -1; i++)
 		{
-			List<Vector2I> uncheckedDirections = _directions.ToList();
-			bool suitableTileFound;
+			bool suitablePositionFound = false;
+			List<Vector2I> uncheckedDirections = new(_directions);
+
 			do
 			{
-				suitableTileFound = false;
-				int tmp = _randomNumberGenerator.RandiRange(0, uncheckedDirections.Count - 1);
-				int tmpX = _mainPath[i].X + uncheckedDirections[tmp].X;
-				int tmpY = _mainPath[i].Y + uncheckedDirections[tmp].Y;
+				if(uncheckedDirections.Count == 0) break;
 
-				if (tmpX >= _gridSideLength || tmpY >= _gridSideLength) continue;
-				if (_grid[tmpX][tmpY] != 0 || CheckForNeighbour(tmpX, tmpY)) continue;
+				int randomNumber = _randomNumberGenerator.RandiRange(0, uncheckedDirections.Count - 1);
+				Vector2I currentDirection = uncheckedDirections[randomNumber];
+				uncheckedDirections.RemoveAt(randomNumber);
 
-				DungeonNode currentNode = new(tmpX, tmpY, Direction.None, Direction.None);
+				int currentX = lastX + currentDirection.X;
+				int currentY = lastY + currentDirection.Y;
 
-				switch (uncheckedDirections[tmp].X)
+				if(!CheckIfPositionIsFree(currentX,currentY)) continue;
+				suitablePositionFound = true;
+
+				lastNode.NextRoomDirection = GetDirectionFromVector(currentDirection);
+				_path.Add(lastNode);
+
+				pathNode currentNode = new(currentX,currentY);
+
+				if((i + 2) < _pathLength)
 				{
-					case 0 when uncheckedDirections[tmp].Y == -1:
-					{
-						currentNode.LastRoomDirection = Direction.South;
-						DungeonNode tmpNode = _mainPath[i];
-						tmpNode.NextRoomDirection = Direction.Nord;
-						_mainPath[i] = tmpNode;
-						break;
-					}
-					case 1 when uncheckedDirections[tmp].Y == 0:
-					{
-						currentNode.LastRoomDirection = Direction.West;
-						DungeonNode tmpNode = _mainPath[i];
-						tmpNode.NextRoomDirection = Direction.East;
-						_mainPath[i] = tmpNode;
-						break;
-					}
-					case 0 when uncheckedDirections[tmp].Y == 1:
-					{
-						currentNode.LastRoomDirection = Direction.Nord;
-						DungeonNode tmpNode = _mainPath[i];
-						tmpNode.NextRoomDirection = Direction.South;
-						_mainPath[i] = tmpNode;
-						break;
-					}
-					case -1 when uncheckedDirections[tmp].Y == 0:
-					{
-						currentNode.LastRoomDirection = Direction.East;
-						DungeonNode tmpNode = _mainPath[i];
-						tmpNode.NextRoomDirection = Direction.West;
-						_mainPath[i] = tmpNode;
-						break;
-					}
+					currentNode.Connections = 2;
 				}
-
-				uncheckedDirections.RemoveAt(tmp);
-				
-				int connections = _randomNumberGenerator.RandiRange(2, 4);
-				if (i == _mainPathLength - 2)
+				else
 				{
 					currentNode.Connections = 1;
-					connections = 1;
-				}else
-				{
-					currentNode.Connections = connections;
 				}
+
+				currentNode.LastRoomDirection = GetOppositeDirection(lastNode.NextRoomDirection);
 				
-				_grid[tmpX][tmpY] = connections;
-				_mainPath.Add(currentNode);
-				suitableTileFound = true;
-			} while (!suitableTileFound && uncheckedDirections.Count > 0);
+				lastNode = currentNode;
+				lastX = currentX;
+				lastY = currentY;
+
+			} while (!suitablePositionFound);
+		}
+		
+		_path.Add(lastNode);
+
+		PrintPath();
+
+		foreach(pathNode currentNode in _path)
+		{
+			Room room;
+			Vector3 positionVector;
+			switch (currentNode.Connections)
+			{
+				case 1:
+					PackedScene oneDoorRoomScene = GD.Load<PackedScene>("res://environment/rooms/room_1/room_1.tscn");
+					room = oneDoorRoomScene.Instantiate<Room>();
+
+					DIRECTION doorDirection;
+					
+					if(currentNode.NextRoomDirection != DIRECTION.NONE)
+					{
+						doorDirection = currentNode.NextRoomDirection;
+					}
+					else
+					{
+						doorDirection = currentNode.LastRoomDirection;
+					}
+
+					RotateOneDoorRoom(doorDirection,ref room);
+
+					positionVector = new(currentNode.X * _roomLength, 0, currentNode.Y * _roomLength);
+					room.Position = positionVector;
+
+					_roomContainer.AddChild(room);
+					break;
+				case 2: 
+					if(RoomIsStraight(currentNode.LastRoomDirection, currentNode.NextRoomDirection))
+					{
+						PackedScene straightTwoDoorRoomScene = GD.Load<PackedScene>("res://environment/rooms/room_2/room_2_straight.tscn");
+						room = straightTwoDoorRoomScene.Instantiate<Room>();
+
+						RotateStraightRoom(currentNode.LastRoomDirection, ref room);
+					}else
+					{
+						PackedScene curvedTwoDoorRoomScene = GD.Load<PackedScene>("res://environment/rooms/room_2/room_2_curve.tscn");
+						room = curvedTwoDoorRoomScene.Instantiate<Room>();
+
+						RotateCurvedRoom(currentNode.LastRoomDirection, currentNode.NextRoomDirection, ref room);
+					}
+
+					positionVector = new(currentNode.X * _roomLength, 0, currentNode.Y * _roomLength);
+					room.Position = positionVector;
+
+					_roomContainer.AddChild(room);
+					break;
+			}
+		}
+	}
+
+	private bool CheckIfPositionIsFree(int x,int y)
+	{
+		foreach(pathNode node in _path)
+		{
+			if(node.X == x && node.Y == y)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	static private DIRECTION GetDirectionFromVector(Vector2I direction)
+	{
+		switch (direction)
+		{
+			case (1,0): 
+				return DIRECTION.EAST;
+			case (-1,0): 
+				return DIRECTION.WEST;
+			case (0,1): 
+				return DIRECTION.SOUTH;
+			case (0,-1): 
+				return DIRECTION.NORTH;
+			default:
+				return DIRECTION.NONE;
+		}
+	}
+
+	static private DIRECTION GetOppositeDirection(DIRECTION direction)
+	{
+		switch (direction)
+		{
+			case DIRECTION.WEST: 
+				return DIRECTION.EAST;
+			case DIRECTION.EAST: 
+				return DIRECTION.WEST;
+			case DIRECTION.NORTH: 
+				return DIRECTION.SOUTH;
+			case DIRECTION.SOUTH: 
+				return DIRECTION.NORTH;
+			default:
+				return DIRECTION.NONE;
+		}
+	}
+
+	private void PrintPath()
+	{
+		foreach(pathNode tmp in _path)
+		{
+			Logger.Debug("({}, {}), connections: {}, next room: {}, last room: {}", tmp.X, tmp.Y, tmp.Connections, tmp.NextRoomDirection, tmp.LastRoomDirection);
+		}
+	}
+
+	static private void RotateOneDoorRoom(DIRECTION direction, ref Room room)
+	{
+		Vector3 rotationVector = new(0,0,0);
+
+		switch (direction)
+		{
+			case DIRECTION.EAST:
+				rotationVector.Y += 90;
+				break;
+			case DIRECTION.WEST:
+				rotationVector.Y += 270;
+				break;
+			case DIRECTION.SOUTH:
+				break;
+			case DIRECTION.NORTH:
+				rotationVector.Y += 180;
+				break;
 		}
 
-		bool isFirstRoom = true;
+		room.RotationDegrees = rotationVector;
+	}
 
-		string path;
-		PackedScene packedScene;
-
-		Room lastRoom = null;
-		Room tmpRoom = null;
-
-		do
-		{
-			DungeonNode currentNode = _mainPath.First();
-			_mainPath.RemoveAt(0);
-
-			if (isFirstRoom)
-			{
-				path = "res://environment/rooms/room_1/room_1.tscn";
-				packedScene = GD.Load<PackedScene>(path);
-
-				tmpRoom = packedScene.Instantiate<Room>();
-
-				RotateRoomWithOneDoor(ref tmpRoom, ref currentNode);
-
-				lastRoom = tmpRoom;
-				_roomContainer.AddChild(tmpRoom);
-				isFirstRoom = false;
-			}
-			else
-			{
-				switch (currentNode.Connections)
-				{
-					case 1:
-						tmpRoom = PlaceRoomWithOneDoor(ref currentNode, ref lastRoom);
-						break;
-					case 2:
-						tmpRoom = PlaceRoomWithTwoDoors(ref currentNode, ref lastRoom);
-						break;
-					case 3:
-						break;
-					case 4:
-						path = "res://environment/rooms/room_4/room_4.tscn";
-						packedScene = GD.Load<PackedScene>(path);
-
-						tmpRoom = packedScene.Instantiate<Room>();
-						break;
-				}
-
-				_roomContainer.AddChild(tmpRoom);
-			}
-
-			
-		}while(_mainPath.Count > 0);
-    }
-
-
-	private bool CheckForNeighbour(int x, int y)
+	static private bool RoomIsStraight(DIRECTION startDirection, DIRECTION endDirection)
 	{
-		bool foundOneNeighbour = false;
-
-		foreach(Vector2I direction in _directions)
+		switch (startDirection)
 		{
-			int tmpX = x + direction.X;
-			int tmpY = y + direction.Y;
-
-			bool isInTheGrid = tmpX < _gridSideLength && tmpY < _gridSideLength;
-
-			if (!isInTheGrid) continue;
-			if (_grid[tmpX][tmpY] == 0) continue;
-			
-			if (foundOneNeighbour)
-			{
+			case DIRECTION.EAST when endDirection == DIRECTION.WEST:
+			case DIRECTION.WEST when endDirection == DIRECTION.EAST:
+			case DIRECTION.NORTH when endDirection == DIRECTION.SOUTH:
+			case DIRECTION.SOUTH when endDirection == DIRECTION.NORTH:
 				return true;
-			}
-			
-			foundOneNeighbour = true;
 		}
 
 		return false;
 	}
 
-
-	private Room PlaceRoomWithOneDoor(ref DungeonNode currentNode, ref Room lastRoom)
-	{
-		const string path = "res://environment/rooms/room_1/room_1.tscn";
-		PackedScene packedScene = GD.Load<PackedScene>(path);
-
-		Room tmpRoom = packedScene.Instantiate<Room>();
-		tmpRoom.Position = lastRoom.Position;
-
-		Vector3 positionOffset = new(_roomLength, 0, 0);
-		switch (currentNode.LastRoomDirection)
-		{
-			case Direction.Nord:
-				positionOffset.X = 0;
-				positionOffset.Z = _roomLength;
-				break;
-			case Direction.South:
-				positionOffset.X = 0;
-				positionOffset.Z = _roomLength * -1;
-				break;
-			case Direction.West:
-				positionOffset.X = _roomLength * -1;
-				break;
-			case Direction.East:
-			case Direction.None: // fall-through
-			default: break;
-		}
-		tmpRoom.Position += positionOffset;
-
-		RotateRoomWithOneDoor(ref tmpRoom, ref currentNode);
-
-		return tmpRoom;
-	}
-
-
-	private static void RotateRoomWithOneDoor(ref Room tmpRoom, ref DungeonNode currentNode)
-	{
-		Vector3 rotationVector = new(0,0,0);
-		Direction rotationDirection;
-
-		if((rotationDirection = currentNode.NextRoomDirection) == Direction.None)
-		{
-			rotationDirection = currentNode.LastRoomDirection;
-		}
-
-		float y = 0;
-		switch (rotationDirection)
-		{
-			case Direction.Nord:
-				y = 180;
-				break;
-			case Direction.East:
-				y = 270;
-				break;
-			case Direction.West:
-				y = 90;
-				break;
-			case Direction.South:
-			case Direction.None: // fall-through
-			default: break;
-		}
-
-		rotationVector.Y = y;
-		tmpRoom.RotationDegrees = rotationVector;
-	}
-
-
-	private Room PlaceRoomWithTwoDoors(ref DungeonNode currentNode, ref Room lastRoom)
-	{
-		bool roomIsCurved = true;
-		
-		switch (currentNode.LastRoomDirection)
-		{
-			case Direction.Nord when currentNode.NextRoomDirection == Direction.South: // fall-through
-			case Direction.South when currentNode.NextRoomDirection == Direction.Nord:
-			case Direction.West when currentNode.NextRoomDirection == Direction.East:
-			case Direction.East when currentNode.NextRoomDirection == Direction.West:
-				roomIsCurved = false;
-				break;
-			case Direction.None: // fall-through
-			default: break;
-		}
-
-
-		string roomName = roomIsCurved ? "room_2_curve.tscn" : "room_2_straight.tscn";
-		string path = $"res://environment/rooms/room_2/{roomName}";
-
-		PackedScene packedScene = GD.Load<PackedScene>(path);
-
-		Room tmpRoom = packedScene.Instantiate<Room>();
-		tmpRoom.Position = lastRoom.Position;
-
-		Vector3 positionOffset = new(_roomLength,0,0);
-		switch (currentNode.LastRoomDirection)
-		{
-			case Direction.Nord:
-				positionOffset = new Vector3(0,0,_roomLength);
-				break;
-			case Direction.East:
-				break;
-			case Direction.South:
-				positionOffset = new Vector3(0,0,_roomLength * -1);
-				break;
-			case Direction.West:
-				positionOffset = new Vector3(_roomLength * -1,0,0);
-				break;
-			case Direction.None: // fall-through
-			default: break;
-		}
-		tmpRoom.Position += positionOffset;
-
-		RotateRoomWithOneDoor(ref tmpRoom, ref currentNode);
-
-		return tmpRoom;
-	}
-
-
-	private void RotateRoomWithTwoDoors(ref Room tmpRoom, ref DungeonNode currentNode, bool roomIsCurved)
+	static private void RotateStraightRoom(DIRECTION direction, ref Room room)
 	{
 		Vector3 rotationVector = new(0,0,0);
 
-		if (roomIsCurved)
+		switch (direction)
 		{
-			switch (currentNode.NextRoomDirection)
-			{
-				case Direction.Nord:
-					rotationVector = new Vector3(0,180,0);
-					break;
-				case Direction.East:
-					rotationVector = new Vector3(0,270,0);
-					break;
-				case Direction.South:
-					break;
-				case Direction.West:
-					rotationVector = new Vector3(0,90,0);
-					break;
-				case Direction.None: // fall-through
-				default: break;
-			}
-		}
-		else
-		{
-			switch (currentNode.NextRoomDirection)
-			{
-				case Direction.East:
-				case Direction.West:
-					rotationVector = new Vector3(0,90,0);
-					break;
-				case Direction.South:
-				case Direction.Nord:
-				case Direction.None:
-				default: break;
-			}
+			case DIRECTION.EAST:
+			case DIRECTION.WEST:
+				rotationVector.Y += 90;
+				break;
+			case DIRECTION.SOUTH:
+			case DIRECTION.NORTH:
+				rotationVector.Y += 0;
+				break;
 		}
 
-		tmpRoom.RotationDegrees = rotationVector;
+		room.RotationDegrees = rotationVector;
+	}
+
+	static private void RotateCurvedRoom(DIRECTION startDirection, DIRECTION endDirection, ref Room room)
+	{
+		Vector3 rotationVector = new(0,0,0);
+
+		switch (startDirection)
+		{
+			case DIRECTION.EAST when endDirection == DIRECTION.NORTH:
+				rotationVector.Y += 180;
+				break;
+			case DIRECTION.EAST when endDirection == DIRECTION.SOUTH:
+				rotationVector.Y += 90;
+				break;
+			case DIRECTION.WEST when endDirection == DIRECTION.NORTH:
+				rotationVector.Y += 270;
+				break;
+			case DIRECTION.WEST when endDirection == DIRECTION.SOUTH:
+				rotationVector.Y += 0;
+				break;
+			case DIRECTION.SOUTH when endDirection == DIRECTION.EAST:
+				rotationVector.Y += 90;
+				break;
+			case DIRECTION.SOUTH when endDirection == DIRECTION.WEST:
+				rotationVector.Y += 0;
+				break;
+			case DIRECTION.NORTH when endDirection == DIRECTION.EAST:
+				rotationVector.Y += 180;
+				break;
+			case DIRECTION.NORTH when endDirection == DIRECTION.WEST:
+				rotationVector.Y += 270;
+				break;
+		}
+
+		room.RotationDegrees = rotationVector;
 	}
 }

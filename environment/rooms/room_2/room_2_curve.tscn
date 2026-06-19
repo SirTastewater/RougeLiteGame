@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dayr4p05g1u2m" path="res://environment/rooms/room_2/room_2_curve.blend" id="1_fau84"]
 
 [node name="Room2Curve" type="Node3D" node_paths=PackedStringArray("_markerContainer")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 0, 0, 0)
 script = ExtResource("1_17v7c")
 _markerContainer = NodePath("MarkerContainer")
 

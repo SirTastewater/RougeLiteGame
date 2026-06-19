@@ -41,7 +41,7 @@ _entityController = NodePath("PlayerController")
 [node name="PlayerController" type="NavigationAgent3D" parent="Player" node_paths=PackedStringArray("CameraController", "_debugLabel")]
 script = ExtResource("3_cwqeq")
 CameraController = NodePath("../FirstPersonController")
-JumpVelocity = 5.0
+JumpVelocity = 20.0
 _debugLabel = NodePath("debug")
 
 [node name="debug" type="Label" parent="Player/PlayerController"]
