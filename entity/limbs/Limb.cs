@@ -17,7 +17,15 @@ public partial class Limb : Node3D
 	
 	public float Life { get; private set; }
 
-	public float Speed { get; private set; }
+	public float Speed
+	{
+		get
+		{
+			// easing function x² -> 50% life-loss leads to 75% loss of speed performance
+			float value = (float) Math.Pow(Life / _lifeGain, 2f);
+			return (float) Math.Ceiling(_speedGain * value * 100) / 100;
+		}
+	}
 
 	public float Strength { get; private set; }
 
