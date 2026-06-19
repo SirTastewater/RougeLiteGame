@@ -19,11 +19,9 @@ public class ConsoleLogWriter : ILogWriter
             
             string color = ILogger.LogLevelToColor(buffered[i].Level);
 
-            _stringBuilder.Append("[color=");
-            _stringBuilder.Append(color);
-            _stringBuilder.Append(']');
+            _stringBuilder.Append("[color=" + color + "]");
             _stringBuilder.Append(buffered[i].Message);
-
+            _stringBuilder.Replace("[/color]", "[/color][color=" + color + "]");
             
             if (buffered[i].Throwable == null)
             {

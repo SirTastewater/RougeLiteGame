@@ -120,6 +120,8 @@ public interface ILogger
             LogLevel.Error => "#997171", // lighter gray-redish
             LogLevel.Critical => "#89423f", // matt red
             LogLevel.Fatal => "#f63f4c", // burning eyes red
+            
+            LogLevel.Argument => "#a05ad7",
             _ => "#FFFFFF"
         };
     }

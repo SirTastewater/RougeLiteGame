@@ -10,9 +10,9 @@ namespace RougeLiteGame.logger;
 public class LoggerFactory
 {
     private static readonly ConsoleLogWriter ConsoleLogWriter = new();
-    private static readonly BasicLogRenderer BasicLogRenderer = new();
+    private static readonly ConsoleLogRenderer ConsoleLogRenderer = new();
     
-    private static readonly BasicLogger Logger = new(typeof(LoggerFactory), BasicLogRenderer, ConsoleLogWriter);
+    private static readonly BasicLogger Logger = new(typeof(LoggerFactory), ConsoleLogRenderer, ConsoleLogWriter);
     private static readonly Dictionary<Type, ILogger> Loggers = new();
     private static readonly HashSet<IAsyncLogger> AsyncLoggers = [];
 
@@ -39,7 +39,7 @@ public class LoggerFactory
             return value;
         }
 
-        value = async ? new BasicAsyncLogger(type, BasicLogRenderer, ConsoleLogWriter) : new BasicLogger(type, BasicLogRenderer, ConsoleLogWriter);
+        value = async ? new BasicAsyncLogger(type, ConsoleLogRenderer, ConsoleLogWriter) : new BasicLogger(type, ConsoleLogRenderer, ConsoleLogWriter);
         Loggers.Add(type, value);
 
         if (value is IAsyncLogger asyncLogger)
