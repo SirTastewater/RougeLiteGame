@@ -61,14 +61,7 @@ public partial class Dungeon : Node
 
 				pathNode currentNode = new(currentX,currentY);
 
-				if((i + 2) < _pathLength)
-				{
-					currentNode.Connections = 2;
-				}
-				else
-				{
-					currentNode.Connections = 1;
-				}
+				currentNode.Connections = 2;
 
 				currentNode.LastRoomDirection = GetOppositeDirection(lastNode.NextRoomDirection);
 				
@@ -78,6 +71,8 @@ public partial class Dungeon : Node
 
 			} while (!suitablePositionFound);
 		}
+
+		lastNode.Connections = 1;
 		
 		_path.Add(lastNode);
 
