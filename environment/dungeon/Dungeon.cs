@@ -101,7 +101,7 @@ public partial class Dungeon : Node
 				lastNode.NextRoomDirection = GetDirectionFromVector(currentDirection);
 				_path.Add(lastNode);
 
-				int numberOfDoors = _randomNumberGenerator.RandiRange(2,3);
+				int numberOfDoors = _randomNumberGenerator.RandiRange(2,4);
 
 				Room currentNode = null;
 
