@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b2aubsqgpsfpo"]
+
+[ext_resource type="MeshLibrary" uid="uid://dwa0m8e03w8r2" path="res://environment/rooms/RoomLibrary.meshlib" id="1_g1iyp"]
+
+[node name="Dungeon" type="Node3D" unique_id=627893301]
+
+[node name="Grid" type="GridMap" parent="." unique_id=1215664204]
+mesh_library = ExtResource("1_g1iyp")
+cell_size = Vector3(10, 10, 10)
+metadata/_editor_floor_ = Vector3(0, 0, 0)
