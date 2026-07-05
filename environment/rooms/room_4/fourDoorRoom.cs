@@ -6,14 +6,14 @@ public partial class FourDoorRoom : Room
 {
     public FourDoorRoom(int x, int y) : base(x,y)
     {
-        PackedScene tmp = GD.Load<PackedScene>("res://environment/rooms/room_4/room_4.blend");
+        PackedScene tmp = GD.Load<PackedScene>("res://environment/rooms/room_4/main_path_four_door_room.blend");
         this._roomAssets.Add(tmp);
         this.Connections = 4;
     }
 
     public FourDoorRoom() : base()
     {
-        PackedScene tmp = GD.Load<PackedScene>("res://environment/rooms/room_4/room_4.blend");
+        PackedScene tmp = GD.Load<PackedScene>("res://environment/rooms/room_4/main_path_four_door_room.blend");
         this._roomAssets.Add(tmp);
         this.Connections = 4;
     }

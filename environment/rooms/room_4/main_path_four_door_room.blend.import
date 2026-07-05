@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cltanmuh1dhf7"
-path="res://.godot/imported/room_3.blend-504a52d27039dd9ca66ff096e41e9368.scn"
+uid="uid://b04r3fl43asna"
+path="res://.godot/imported/main_path_four_door_room.blend-7b7ea0b52fbc635ce517dc8fef48856f.scn"
 
 [deps]
 
-source_file="res://environment/rooms/room_3/room_3.blend"
-dest_files=["res://.godot/imported/room_3.blend-504a52d27039dd9ca66ff096e41e9368.scn"]
+source_file="res://environment/rooms/room_4/main_path_four_door_room.blend"
+dest_files=["res://.godot/imported/main_path_four_door_room.blend-7b7ea0b52fbc635ce517dc8fef48856f.scn"]
 
 [params]
 

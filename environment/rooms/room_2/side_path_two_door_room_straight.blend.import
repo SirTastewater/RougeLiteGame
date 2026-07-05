@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b3yogql6cfpt7"
-path="res://.godot/imported/room_2_straight.blend-609a031fc582eb851dbe12a3a84c527a.scn"
+uid="uid://dcsb2xptvs2mk"
+path="res://.godot/imported/side_path_two_door_room_straight.blend-93889fae517ad1a6d855ff8c66cd5878.scn"
 
 [deps]
 
-source_file="res://environment/rooms/room_2/room_2_straight.blend"
-dest_files=["res://.godot/imported/room_2_straight.blend-609a031fc582eb851dbe12a3a84c527a.scn"]
+source_file="res://environment/rooms/room_2/side_path_two_door_room_straight.blend"
+dest_files=["res://.godot/imported/side_path_two_door_room_straight.blend-93889fae517ad1a6d855ff8c66cd5878.scn"]
 
 [params]
 

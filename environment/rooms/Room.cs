@@ -7,7 +7,7 @@ public enum DIRECTION {NORTH, EAST, SOUTH, WEST, NONE}
 
 public partial class Room : Node3D
 {
-    [Export] protected int _roomLength = 6;
+    [Export] protected int _roomLength = 11;
     public int X;
     public int Y;
     public int Connections;

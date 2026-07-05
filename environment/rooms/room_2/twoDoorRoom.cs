@@ -8,24 +8,41 @@ public partial class TwoDoorRoom : Room
     private List<PackedScene> _curvedRoomAssets = [];
     private List<PackedScene> _straightRoomAssets = [];
     private bool _isStraight;
-    public TwoDoorRoom(int x, int y) : base(x,y)
+    private bool _isOnSidePath;
+    private List<PackedScene> _sidePathAssetsStraight = [];
+    private List<PackedScene> _sidePathAssetsCurved = [];
+    public TwoDoorRoom(int x, int y, bool isOnSidePath = false) : base(x,y)
     {
-        PackedScene tmp = GD.Load<PackedScene>("res://environment/rooms/room_2/room_2_curve.blend");
+        PackedScene tmp = GD.Load<PackedScene>("res://environment/rooms/room_2/main_path_two_door_room_curved.blend");
         this._curvedRoomAssets.Add(tmp);
 
-        tmp = GD.Load<PackedScene>("res://environment/rooms/room_2/room_2_straight.blend");
+        tmp = GD.Load<PackedScene>("res://environment/rooms/room_2/side_path_two_door_room_curved.blend");
+        this._sidePathAssetsCurved.Add(tmp);
+
+        tmp = GD.Load<PackedScene>("res://environment/rooms/room_2/main_path_two_door_room_straight.blend");
         this._straightRoomAssets.Add(tmp);
 
+        tmp = GD.Load<PackedScene>("res://environment/rooms/room_2/side_path_two_door_room_straight.blend");
+        this._sidePathAssetsStraight.Add(tmp);
+
         this.Connections = 2;
+
+        this._isOnSidePath = isOnSidePath;
     }
 
     public TwoDoorRoom() : base()
     {
-        PackedScene tmp = GD.Load<PackedScene>("environment\\rooms\\room_2\\room_2_curve.blend");
+        PackedScene tmp = GD.Load<PackedScene>("res://environment/rooms/room_2/main_path_two_door_room_curved.blend");
         this._curvedRoomAssets.Add(tmp);
 
-        tmp = GD.Load<PackedScene>("environment\\rooms\\room_2\\room_2_straight.blend");
+        tmp = GD.Load<PackedScene>("res://environment/rooms/room_2/side_path_two_door_room_curved.blend");
+        this._sidePathAssetsCurved.Add(tmp);
+
+        tmp = GD.Load<PackedScene>("res://environment/rooms/room_2/main_path_two_door_room_straight.blend");
         this._straightRoomAssets.Add(tmp);
+
+        tmp = GD.Load<PackedScene>("res://environment/rooms/room_2/side_path_two_door_room_straight.blend");
+        this._sidePathAssetsStraight.Add(tmp);
 
         this.Connections = 2;
     }
@@ -58,7 +75,7 @@ public partial class TwoDoorRoom : Room
 				break;
 		}
 
-		this.RotationDegrees = rotationVector;
+		this.GlobalRotationDegrees = rotationVector;
 	}
 
 	private void RotateCurvedRoom()
@@ -69,23 +86,23 @@ public partial class TwoDoorRoom : Room
 		{
 			case DIRECTION.EAST when this.NextRoomDirection == DIRECTION.NORTH:
             case DIRECTION.NORTH when this.NextRoomDirection == DIRECTION.EAST:
-				rotationVector.Y += 180;
+				rotationVector.Y += 90;
 				break;
 			case DIRECTION.EAST when this.NextRoomDirection == DIRECTION.SOUTH:
             case DIRECTION.SOUTH when this.NextRoomDirection == DIRECTION.EAST:
-				rotationVector.Y += 90;
+				rotationVector.Y += 0;
 				break;
 			case DIRECTION.WEST when this.NextRoomDirection == DIRECTION.NORTH:
             case DIRECTION.NORTH when this.NextRoomDirection == DIRECTION.WEST:
-				rotationVector.Y += 270;
+				rotationVector.Y += 180;
 				break;
 			case DIRECTION.WEST when this.NextRoomDirection == DIRECTION.SOUTH:
             case DIRECTION.SOUTH when this.NextRoomDirection == DIRECTION.WEST:
-				rotationVector.Y += 0;
+				rotationVector.Y += 270;
 				break;
 		}
 
-		this.RotationDegrees = rotationVector;
+		this.GlobalRotationDegrees = rotationVector;
 	}
 
     public override void Init()
@@ -98,19 +115,36 @@ public partial class TwoDoorRoom : Room
 			case DIRECTION.SOUTH when this.NextRoomDirection == DIRECTION.NORTH:
 				this._isStraight = true;
                 break;
+            default:
+				this._isStraight = false;
+				break;
 		}
-
-		this._isStraight = false;
 
         if (this._isStraight)
         {
-            Node tmp = this._straightRoomAssets[0].Instantiate();
-            this.AddChild(tmp);
+            if (this._isOnSidePath)
+            {
+                Node tmp = this._sidePathAssetsStraight[0].Instantiate();
+                this.AddChild(tmp);
+            }
+            else
+            {
+                Node tmp = this._straightRoomAssets[0].Instantiate();
+                this.AddChild(tmp);
+            }
         }
         else
         {
-            Node tmp = this._curvedRoomAssets[0].Instantiate();
-            this.AddChild(tmp);
+            if (this._isOnSidePath)
+            {
+                Node tmp = this._sidePathAssetsCurved[0].Instantiate();
+                this.AddChild(tmp);
+            }
+            else
+            {
+                Node tmp = this._curvedRoomAssets[0].Instantiate();
+                this.AddChild(tmp);
+            }
         }
     }
 

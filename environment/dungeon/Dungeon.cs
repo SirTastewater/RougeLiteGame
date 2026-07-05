@@ -34,13 +34,13 @@ public partial class Dungeon : Node
 
 		foreach(Room currentNode in _path)
 		{
+			_roomContainer.AddChild(currentNode);
+
 			currentNode.Init();
 
 			currentNode.Rotate();
 
 			currentNode.UpdatePosition();
-
-			_roomContainer.AddChild(currentNode);
 		}
 
 		PrintPath();
@@ -101,7 +101,7 @@ public partial class Dungeon : Node
 				lastNode.NextRoomDirection = GetDirectionFromVector(currentDirection);
 				_path.Add(lastNode);
 
-				int numberOfDoors = _randomNumberGenerator.RandiRange(2,4);
+				int numberOfDoors = _randomNumberGenerator.RandiRange(2,3);
 
 				Room currentNode = null;
 
@@ -127,7 +127,11 @@ public partial class Dungeon : Node
 			} while (!suitablePositionFound);
 		}
 
+		DIRECTION tmp = lastNode.LastRoomDirection;
+
 		lastNode = new OneDoorRoom(lastNode.X,lastNode.Y);
+		lastNode.LastRoomDirection = tmp;
+		
 		
 		_path.Add(lastNode);
 	}
@@ -140,6 +144,7 @@ public partial class Dungeon : Node
 		for(int i = 0; i < numberOfSidePaths; i++)
 		{
 			bool firstRun = true;
+			int roomsPlaced = 0;
 			Room lastNode = startNode;
 			int lastX = startNode.X;
 			int lastY = startNode.Y;
@@ -162,6 +167,7 @@ public partial class Dungeon : Node
 
 					if(!CheckIfPositionIsFree(currentX,currentY)) continue;
 					suitablePositionFound = true;
+					roomsPlaced++;
 
 					if (!firstRun)
 					{
@@ -174,7 +180,7 @@ public partial class Dungeon : Node
 						firstRun = false;
 					}
 
-					Room currentNode = new TwoDoorRoom(currentX,currentY);
+					Room currentNode = new TwoDoorRoom(currentX,currentY,true);
 
 					currentNode.LastRoomDirection = GetOppositeDirection(GetDirectionFromVector(currentDirection));
 					
@@ -185,9 +191,15 @@ public partial class Dungeon : Node
 				} while (!suitablePositionFound);
 			}
 
-			lastNode = new OneDoorRoom(lastNode.X,lastNode.Y);
-			
-			_path.Add(lastNode);
+			if(roomsPlaced != 0)
+			{
+				DIRECTION tmp = lastNode.LastRoomDirection;
+
+				lastNode = new OneDoorRoom(lastNode.X,lastNode.Y,true);
+				lastNode.LastRoomDirection = tmp;
+				
+				_path.Add(lastNode);
+			}
 		}
 		return returnValue;
 	}
@@ -230,7 +242,7 @@ public partial class Dungeon : Node
 	{
 		foreach(Room tmp in _path)
 		{
-			Logger.Debug("({}, {}), connections: {}, next room: {}, last room: {}", tmp.X, tmp.Y, tmp.Connections, tmp.NextRoomDirection, tmp.LastRoomDirection);
+			Logger.Debug("({}, {}), connections: {}, next room: {}, last room: {}, side room {}", tmp.X, tmp.Y, tmp.Connections, tmp.NextRoomDirection, tmp.LastRoomDirection, tmp.SideRoomDirection);
 		}
 	}
 }

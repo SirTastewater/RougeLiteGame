@@ -7,14 +7,14 @@ public partial class ThreeDoorRoom : Room
     private bool _isStraight;
     public ThreeDoorRoom(int x, int y) : base(x,y)
     {
-        PackedScene tmp = GD.Load<PackedScene>("res://environment/rooms/room_3/room_3.blend");
+        PackedScene tmp = GD.Load<PackedScene>("res://environment/rooms/room_3/main_path_three_door_room.blend");
         this._roomAssets.Add(tmp);
         Connections = 3;
     }
 
     public ThreeDoorRoom() : base()
     {
-        PackedScene tmp = GD.Load<PackedScene>("res://environment/rooms/room_3/room_3.blend");
+        PackedScene tmp = GD.Load<PackedScene>("res://environment/rooms/room_3/main_path_three_door_room.blend");
         this._roomAssets.Add(tmp);
         Connections = 3;
     }
@@ -47,7 +47,7 @@ public partial class ThreeDoorRoom : Room
 				break;
 		}
 
-		this.RotationDegrees = rotationVector;
+		this.GlobalRotationDegrees = rotationVector;
 	}
 
     private void RotateCurvedPathRoom()
@@ -90,7 +90,7 @@ public partial class ThreeDoorRoom : Room
 				break;
 		}
 
-		this.RotationDegrees = rotationVector;
+		this.GlobalRotationDegrees = rotationVector;
     }
 
     public override void Init()
@@ -103,9 +103,10 @@ public partial class ThreeDoorRoom : Room
 			case DIRECTION.SOUTH when this.NextRoomDirection == DIRECTION.NORTH:
 				this._isStraight = true;
                 break;
+			default:
+				this._isStraight = false;
+				break;
 		}
-
-		this._isStraight = false;
 
 		Node tmp = this._roomAssets[0].Instantiate();
 		this.AddChild(tmp);
