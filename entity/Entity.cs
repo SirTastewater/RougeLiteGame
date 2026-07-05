@@ -19,8 +19,6 @@ public abstract partial class Entity : CharacterBody3D
     private static readonly ILogger Logger = LoggerFactory.GetLogger<Entity>();
     [Export] private EntityController _entityController;
 
-    public float SpeedGain => _limbs.Sum(limb => limb.Speed);
-    public float StrengthGain => _limbs.Sum(limb => limb.Strength);
     public float LifeGain() => _limbs.Sum(limb => limb.Life);
     
     private List<Limb> _limbs = [];

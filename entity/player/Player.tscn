@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c621010pj8lg8" path="res://entity/player/Player.cs" id="1_sntwv"]
 [ext_resource type="Script" uid="uid://dg40h1v3bxtsr" path="res://entity/EntityController.cs" id="2_u8k42"]
-[ext_resource type="Script" uid="uid://dao158fk8u453" path="res://entity/player/PlayerBehavior.cs" id="3_rykwh"]
+[ext_resource type="Script" uid="uid://dr6qckdhlwn3d" path="res://entity/player/PlayerBehavior.cs" id="3_rykwh"]
 [ext_resource type="PackedScene" uid="uid://b8ow3bkwmsooa" path="res://entity/limbs/leg/Leg.tscn" id="4_u8k42"]
 [ext_resource type="PackedScene" uid="uid://b74uvl6wuwdfa" path="res://entity/limbs/arm/Arm.tscn" id="5_rykwh"]
 [ext_resource type="Material" uid="uid://6dse8jc10s3q" path="res://entity/limbs/materials/skin/human/skin.material" id="6_etv1g"]
@@ -19,6 +19,11 @@ point_count = 4
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5o33p"]
 size = Vector3(1, 1.7770996, 0.5567627)
+
+[sub_resource type="Curve" id="Curve_etv1g"]
+_limits = [0.0, 50.0, 0.0, 49.90649]
+_data = [Vector2(0, 0.021942139), 0.0, 0.0, 0, 0, Vector2(13.583688, 23.416138), 1.7374609, 1.7374609, 0, 0, Vector2(29.626074, 37.654114), 0.0, 0.0, 0, 0, Vector2(47.99542, 32.26776), 0.0, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="BoxMesh" id="BoxMesh_m44ds"]
 material = ExtResource("6_etv1g")
@@ -46,6 +51,7 @@ shape = SubResource("BoxShape3D_5o33p")
 
 [node name="RightLeg" parent="." unique_id=261294399 instance=ExtResource("4_u8k42")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.5, 0)
+ArcaneCurve = SubResource("Curve_etv1g")
 
 [node name="LeftLeg" parent="." unique_id=1912661430 instance=ExtResource("4_u8k42")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.5, 0)

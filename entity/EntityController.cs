@@ -319,7 +319,7 @@ public sealed partial class EntityController : NavigationAgent3D
     public float MovementSpeed()
     {
         float baseSpeed = BaseSpeed;
-        baseSpeed += Entity.SpeedGain;
+        baseSpeed += 10; // TODO implement speed based on current limbs
         
         if (CurrentBehaviour.IsSneaking()) return baseSpeed / SneakPenalty;
         if (!CurrentBehaviour.IsSprinting()) { return baseSpeed; }
