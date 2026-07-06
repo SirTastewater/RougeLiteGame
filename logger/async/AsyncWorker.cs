@@ -10,7 +10,7 @@ public sealed class AsyncWorker : IDisposable
     // We don't want it to flush itself, but keep control of its flushes if necessary 
     private readonly ILogger _logger = LoggerFactory.GetLogger<AsyncWorker>(false);
     
-    private readonly Thread _thread;
+    private Thread _thread;
     private readonly AutoResetEvent _signal = new(false);
 
     private volatile bool _running = true;
@@ -19,7 +19,10 @@ public sealed class AsyncWorker : IDisposable
     public AsyncWorker(TimeSpan interval)
     {
         _interval = interval;
-
+    }
+    
+    public void Start()
+    {
         _thread = new Thread(WorkerLoop)
         {
             IsBackground = true,
