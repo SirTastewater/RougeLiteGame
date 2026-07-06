@@ -4,16 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
 [ext_resource type="PackedScene" uid="uid://b2aubsqgpsfpo" path="res://environment/dungeon/Dungeon.tscn" id="3_170dk"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-
-[sub_resource type="Sky" id="Sky_gxo8o"]
-sky_material = SubResource("ProceduralSkyMaterial_ic2kv")
-
 [sub_resource type="Environment" id="Environment_24d08"]
-background_mode = 2
-sky = SubResource("Sky_gxo8o")
 tonemap_mode = 2
 glow_enabled = true
 
@@ -32,6 +23,18 @@ navigation_layers = 9
 
 [node name="Player" parent="." unique_id=1005609153 instance=ExtResource("1_170dk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96214926, -3.1935349)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Player" unique_id=1892688134]
+light_color = Color(0.114945896, 0.14150241, 0.28042027, 1)
+light_energy = 3.0
+light_size = 3.008
+omni_range = 6.235002
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Player" unique_id=914795028]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7170147, 4.309024)
+light_color = Color(0.67483455, 0.38156956, 0.3393791, 1)
+light_energy = 6.0
+spot_range = 83.651764
 
 [node name="Dungeon" parent="." unique_id=1428668472 instance=ExtResource("3_170dk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.111122, -10.673349, -22.181656)

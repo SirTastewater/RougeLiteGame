@@ -21,6 +21,8 @@ config/icon="res://icon.svg"
 
 [display]
 
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 display_server/driver.linuxbsd="wayland"
 
 [dotnet]
@@ -29,7 +31,7 @@ project/assembly_name="RougeLiteGame"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/rider-plugin/plugin.cfg")
+enabled=PackedStringArray()
 
 [file_customization]
 

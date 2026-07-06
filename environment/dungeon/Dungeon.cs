@@ -1,4 +1,3 @@
-using System;
 using Godot;
 using RougeLiteGame.environment.rooms;
 using RougeLiteGame.logger;
@@ -18,6 +17,12 @@ public partial class Dungeon : Node3D
 
     [ExportToolButton("Generate Dungeon")] private Callable GenerateButton => Callable.From(Generate);
     [ExportToolButton("Clear Dungeon")] private Callable ClearButton => Callable.From(Clear);
+
+    public override void _Ready()
+    {
+        base._Ready();
+        Generate();
+    }
 
     private void Clear()
     {
@@ -69,7 +74,7 @@ public partial class Dungeon : Node3D
 
                 if (from.IsOppositeOf(to))
                 {
-                    room = new StraightRoom(vecI, from, to);
+                    room = new StraightRoom(vecI, 1, from, to);
                 }
                 else
                 {
@@ -82,20 +87,5 @@ public partial class Dungeon : Node3D
 
         
         Logger.Flush();
-    }
-    
-    private static Direction GetDirectionByVectors(Vector3I from, Vector3I to)
-    {
-        Vector3I result = (to - from).Sign();
-        foreach (Direction dir in Enum.GetValues(typeof(Direction)))
-        {
-            Vector2I vector2I = dir.ToVector();
-            if (vector2I.X == result.X && vector2I.Y == result.Z)
-            {
-                return dir;
-            }
-        }
-
-        return Direction.East;
     }
 }
