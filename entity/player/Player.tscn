@@ -26,7 +26,8 @@ _entityController = NodePath("PlayerController")
 [node name="PlayerController" type="NavigationAgent3D" parent="." unique_id=211387455]
 script = ExtResource("2_u8k42")
 _idleBehavior = SubResource("Resource_u8k42")
-BaseSpeed = 1.5
+EnableGravity = false
+BaseSpeed = 200.0
 SprintCurve = SubResource("Curve_u8k42")
 
 [node name="View" type="Camera3D" parent="." unique_id=442611266]

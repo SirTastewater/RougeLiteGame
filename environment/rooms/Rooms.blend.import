@@ -3,7 +3,7 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dsnsmm4gad81v"
+uid="uid://ivi6lfnmi23t"
 path="res://.godot/imported/Rooms.blend-28b5cab5f9564b848abdf9969ca3762f.scn"
 
 [deps]
@@ -13,8 +13,8 @@ dest_files=["res://.godot/imported/Rooms.blend-28b5cab5f9564b848abdf9969ca3762f.
 
 [params]
 
-nodes/root_type="Node3D"
-nodes/root_name="RoomLibrary"
+nodes/root_type=""
+nodes/root_name=""
 nodes/root_script=null
 mesh_library/use_node_names_as_mesh_names=false
 array_mesh/deduplicate_surfaces=true
@@ -35,7 +35,7 @@ animation/fps=30
 animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
-import_script/path="uid://cyfqci24h1m56"
+import_script/path="uid://co7bfifs8uq4q"
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
@@ -46,7 +46,7 @@ blender/nodes/punctual_lights=true
 blender/nodes/cameras=true
 blender/nodes/custom_properties=true
 blender/nodes/modifiers=1
-blender/meshes/vertex_colors=2
+blender/meshes/vertex_colors=1
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
@@ -60,4 +60,4 @@ blender/animation/limit_playback=true
 blender/animation/always_sample=true
 blender/animation/group_tracks=true
 gltf/naming_version=2
-gltf/texture_map_mode=0
+gltf/texture_map_mode=1

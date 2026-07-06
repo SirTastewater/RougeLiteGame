@@ -1,7 +1,5 @@
 [gd_scene format=3 uid="uid://d4b6y71mjk8pw"]
 
-[ext_resource type="PackedScene" uid="uid://b2aubsqgpsfpo" path="res://environment/dungeon/Dungeon.tscn" id="1_xnnxx"]
-
 [sub_resource type="NavigationMesh" id="NavigationMesh_xnnxx"]
 agent_radius = 2.0
 agent_max_climb = 0.7
@@ -53,7 +51,3 @@ collision_mask = 3
 
 [node name="Hitbox" type="CollisionShape3D" parent="Ground/StaticBody" unique_id=657933907]
 shape = SubResource("ConcavePolygonShape3D_7qcyj")
-
-[node name="Dungeon" parent="." unique_id=1428668472 instance=ExtResource("1_xnnxx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.86141, -2.2211246, 23.321102)
-_pathLength = 4

@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://46wmtnfnlyqu" path="res://entity/player/Player.tscn" id="1_170dk"]
 [ext_resource type="PackedScene" uid="uid://d4b6y71mjk8pw" path="res://level/Level.tscn" id="1_f5i44"]
+[ext_resource type="PackedScene" uid="uid://b2aubsqgpsfpo" path="res://environment/dungeon/Dungeon.tscn" id="3_170dk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ic2kv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -31,3 +32,6 @@ navigation_layers = 9
 
 [node name="Player" parent="." unique_id=1005609153 instance=ExtResource("1_170dk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96214926, -3.1935349)
+
+[node name="Dungeon" parent="." unique_id=1428668472 instance=ExtResource("3_170dk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.111122, -10.673349, -22.181656)
