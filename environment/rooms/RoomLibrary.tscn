@@ -1,5 +1,0 @@
-[gd_scene format=3 uid="uid://ctvh8wwd27r5e"]
-
-[ext_resource type="PackedScene" uid="uid://dsnsmm4gad81v" path="res://environment/rooms/Rooms.blend" id="1_b1vll"]
-
-[node name="RoomLibrary" unique_id=2003483260 instance=ExtResource("1_b1vll")]
