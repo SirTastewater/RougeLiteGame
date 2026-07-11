@@ -4,7 +4,7 @@ namespace RougeLiteGame.environment.rooms;
 
 public interface IRoom
 {
-    Vector3I Location { get; }   
+    Vector3I[] Location { get; }   
     
     int Size { get; }
     

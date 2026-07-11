@@ -5,7 +5,7 @@ namespace RougeLiteGame.environment.rooms;
 
 public class EndRoom(Vector3I location, Vector3I from) : IRoom
 {
-    public Vector3I Location { get; } = location;
+    public Vector3I[] Location { get; } = [location];
     public int Size => 1;
     public int AssetId => 0;
 
@@ -13,7 +13,7 @@ public class EndRoom(Vector3I location, Vector3I from) : IRoom
 
     public int GetOrthogonalIndex(GridMap gridMap)
     {
-        Direction direction = DirectionExtensions.GetDirectionByVectors(Location, From);
+        Direction direction = DirectionExtensions.GetDirectionByVectors(Location[0], From);
         return direction.GetOrthogonalIndex(gridMap);
     }
 }

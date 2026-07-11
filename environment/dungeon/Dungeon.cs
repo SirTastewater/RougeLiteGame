@@ -11,10 +11,11 @@ public partial class Dungeon : Node3D
     private static readonly RandomNumberGenerator RandomNumberGenerator = new();
 
     [Export] private GridMap _gridMap;
-    [Export] private int _pathLength = 3;
+    [ExportGroup("Path generation")]
+    [Export(PropertyHint.Range, "0,1000,1")] private int _pathLength = 20;
     [Export] private Vector3I _startPosition;
 
-
+    [ExportGroup("In Editor")]
     [ExportToolButton("Generate Dungeon")] private Callable GenerateButton => Callable.From(Generate);
     [ExportToolButton("Clear Dungeon")] private Callable ClearButton => Callable.From(Clear);
 
@@ -28,9 +29,11 @@ public partial class Dungeon : Node3D
     {
         if (_gridMap == null)
         {
-            Logger.Error("Dungeon: GridMap was not set");
+            Logger.Error("GridMap was not set");
             return;
         }
+        
+        Logger.Trace("Clearing data from the grid map.");
         
         _gridMap.Clear();
     }
@@ -39,7 +42,7 @@ public partial class Dungeon : Node3D
     {
         if (_gridMap == null)
         {
-            Logger.Error("Dungeon: GridMap was not set");
+            Logger.Error("GridMap was not set");
             return;
         }
         
@@ -51,9 +54,9 @@ public partial class Dungeon : Node3D
             RandomNumberGenerator
         );
 
-        Logger.Info("Generating Dungeon");
+        Logger.Info("The dungeon-generation has been triggered and is now going to start.");
         Vector3I[] path = pathGenerator.GenerateMainPath();
-        Logger.Info("Finished generating Dungeon-path {}.", path);
+        Logger.Fine("Finished generating Dungeon-path.");
 
         for (int i = 0; i < path.Length; i++)
         {
@@ -82,7 +85,7 @@ public partial class Dungeon : Node3D
                 }
             }
             
-            _gridMap.SetCellItem(room.Location, room.AssetId, room.GetOrthogonalIndex(_gridMap));
+            _gridMap.SetCellItem(room.Location[0], room.AssetId, room.GetOrthogonalIndex(_gridMap));
         }
 
         

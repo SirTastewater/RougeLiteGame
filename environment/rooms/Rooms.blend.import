@@ -3,7 +3,7 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://ivi6lfnmi23t"
+uid="uid://k1d45pbqaidb"
 path="res://.godot/imported/Rooms.blend-28b5cab5f9564b848abdf9969ca3762f.scn"
 
 [deps]
@@ -35,19 +35,11 @@ animation/fps=30
 animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
-import_script/path="uid://co7bfifs8uq4q"
+import_script/path="uid://divo626hv4uoi"
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={
-"materials": {
-"Stone": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://environment/rooms/rock/Stone.material",
-"use_external/path": "uid://nxg4di1h1ug1"
-}
-}
-}
+_subresources={}
 blender/nodes/visible=1
 blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true

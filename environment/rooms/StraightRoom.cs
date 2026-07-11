@@ -5,7 +5,7 @@ namespace RougeLiteGame.environment.rooms;
 
 public class StraightRoom(Vector3I location, int assetId, Direction from, Direction to) : IPathRoom
 {
-    public Vector3I Location { get; } = location;
+    public Vector3I[] Location { get; } = [location];
     public int Size => 1;
     public int AssetId => assetId;
 

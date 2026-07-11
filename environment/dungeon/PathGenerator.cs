@@ -11,10 +11,11 @@ public class PathGenerator(int pathLength, Vector3I startPosition, RandomNumberG
     
     private Vector3I[] _path;
     private HashSet<Vector3I> _blockedTiles;
+    private HashSet<Vector3I> _stuckPathTile;
 
     public Vector3I[] GenerateMainPath()
     {
-        SetupForGeneration();
+        InitializeGeneration();
         Vector3I currentPosition = startPosition;
 
         for (int i = 1; i < _path.Length; i++)
@@ -30,6 +31,7 @@ public class PathGenerator(int pathLength, Vector3I startPosition, RandomNumberG
             {
                 i -= 2;
                 currentPosition = _path[i];
+                _stuckPathTile.Add(pathStuckException.Position);
                 
                 Logger.Warn("Path generation became stuck. Retry different route...", pathStuckException);
             }
@@ -40,20 +42,21 @@ public class PathGenerator(int pathLength, Vector3I startPosition, RandomNumberG
         return _path;
     }
 
-    private void SetupForGeneration()
+    private void InitializeGeneration()
     {
         _path = new Vector3I[pathLength];
         _path[0] = startPosition;
         _blockedTiles = [startPosition];
+        _stuckPathTile = [];
     }
-    
+
     private Vector3I GeneratePosition(Vector3I currentPosition)
     {
         List<Vector3I> candidates = GatherCandidates(currentPosition);
         
         if (candidates.Count == 0)
         {
-            throw new PathStuckException();
+            throw new PathStuckException(currentPosition);
         }
         
         Vector3I result = candidates[numberGenerator.RandiRange(0, candidates.Count - 1)];
@@ -70,7 +73,7 @@ public class PathGenerator(int pathLength, Vector3I startPosition, RandomNumberG
         {
             Vector3I resultPosition = currentPosition + ToVec3I(dir.ToVector());
 
-            if (_blockedTiles.Contains(resultPosition))
+            if (_blockedTiles.Contains(resultPosition) || _stuckPathTile.Contains(resultPosition))
             {
                 continue;
             }

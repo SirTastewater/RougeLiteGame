@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c621010pj8lg8" path="res://entity/player/Player.cs" id="1_sntwv"]
 [ext_resource type="Script" uid="uid://dg40h1v3bxtsr" path="res://entity/EntityController.cs" id="2_u8k42"]
-[ext_resource type="Script" uid="uid://bijdu46p3vmbv" path="res://entity/player/PlayerBehavior.cs" id="3_rykwh"]
+[ext_resource type="Script" uid="uid://dr6qckdhlwn3d" path="res://entity/player/PlayerBehavior.cs" id="3_rykwh"]
 
 [sub_resource type="Resource" id="Resource_u8k42"]
 script = ExtResource("3_rykwh")
@@ -11,8 +11,8 @@ _pitchPivot = NodePath("../View")
 
 [sub_resource type="Curve" id="Curve_u8k42"]
 _limits = [0.0, 4.5, 0.0, 14.660413]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.04827535, 4.5), 0.0, 0.0, 0, 0, Vector2(11.519383, 4.3082256), 0.0, 0.0, 0, 0, Vector2(14.660413, 1.0588655), 0.0, 0.0, 0, 0]
-point_count = 4
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(2.4899442, 4.4186873), 0.0, 0.0, 0, 0, Vector2(6.0999937, 3.2723665), 0.0, 0.0, 0, 0, Vector2(11.519383, 4.3082256), 0.0, 0.0, 0, 0, Vector2(14.660413, 1.0588655), 0.0, 0.0, 0, 0]
+point_count = 5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5o33p"]
 size = Vector3(1, 1.7770996, 0.5567627)

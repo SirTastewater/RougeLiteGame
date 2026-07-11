@@ -32,7 +32,7 @@ public partial class RoomLibraryGenerator : EditorScenePostImport
     private static void RegisterEntry(int index, Node child, MeshLibrary library)
     {
         Logger.Trace("Register {} as asset in the mesh library", child.Name);
-        if (child is not MeshInstance3D mesh || mesh.Mesh == null) { return; }
+        if (child.GetChild(0) is not MeshInstance3D mesh || mesh.Mesh == null) { return; }
         library.CreateItem(index);
         library.SetItemMesh(index, mesh.GetMesh());
         library.SetItemName(index, $"[{index}] {child.Name}");

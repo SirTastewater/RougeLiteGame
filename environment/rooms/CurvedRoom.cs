@@ -5,7 +5,7 @@ namespace RougeLiteGame.environment.rooms;
 
 public class CurvedRoom(Vector3I location, Direction from, Direction to) : IPathRoom
 {
-    public Vector3I Location { get; } = location;
+    public Vector3I[] Location { get; } = [location];
     public int Size => 1;
     public int AssetId => 2;
 
