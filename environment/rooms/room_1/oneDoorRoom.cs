@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 using RougeLiteGame.environment.rooms.room;
+using RougeLiteGame.environment.rooms.corridor;
 
 namespace RougeLiteGame.environment.rooms.room_1;
 public partial class OneDoorRoom : Room
@@ -77,5 +78,18 @@ public partial class OneDoorRoom : Room
         }
 
 		this.AddChild(tmp);
+
+        if(this.NextRoomDirection != DIRECTION.NONE)
+        {
+            Corridor tmpCorridor = new Corridor(this.X,this.Y,this.NextRoomDirection);
+
+            this.AddChild(tmpCorridor);
+
+            tmpCorridor.Init();
+
+            tmpCorridor.Rotate();
+
+            tmpCorridor.UpdatePosition();
+        }
     }
 }

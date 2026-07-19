@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://ccdlmbmcy0eaj" path="res://environment/dungeon/Dungeon.cs" id="1_jle14"]
 
-[node name="Dungeon" type="Node3D" node_paths=PackedStringArray("_roomContainer")]
+[node name="Dungeon" type="Node3D" node_paths=PackedStringArray("_roomContainer", "_corridorContainer")]
 script = ExtResource("1_jle14")
+_pathLength = 100000
 _roomContainer = NodePath("RoomContainer")
+_corridorContainer = NodePath("CorridorContainer")
 
 [node name="RoomContainer" type="Node3D" parent="."]
 

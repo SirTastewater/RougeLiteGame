@@ -5,6 +5,7 @@ using RougeLiteGame.environment.rooms.room;
 using RougeLiteGame.environment.rooms.room_2;
 using RougeLiteGame.environment.rooms.room_3;
 using RougeLiteGame.environment.rooms.room_1;
+using RougeLiteGame.environment.rooms.corridor;
 
 namespace RougeLiteGame.environment.dungeon;
 
@@ -16,6 +17,7 @@ public partial class Dungeon : Node
 	[Export] private int _pathLength = 10;
 	[Export] private int _maxSidePathLength = 3;
 	[Export] private Node3D _roomContainer;
+	[Export] private Node3D _corridorContainer;
 	private List<Room> _path = [];
 	private RandomNumberGenerator _randomNumberGenerator = new();
 	private readonly List<Vector2I> _directions = [new(1, 0), new(0, 1), new(-1, 0), new(0, -1)];

@@ -7,7 +7,7 @@ public enum DIRECTION {NORTH, EAST, SOUTH, WEST, NONE}
 
 public partial class Room : Node3D
 {
-    [Export] protected int _roomLength = 11;
+    [Export] public int _roomLength = 20;
     public int X;
     public int Y;
     public int Connections;
@@ -34,7 +34,7 @@ public partial class Room : Node3D
 
     public void UpdatePosition()
     {
-        this.Position = new(this.X * _roomLength, 0, this.Y * _roomLength);;
+        this.Position = new(this.X * _roomLength, 0, this.Y * _roomLength);
     }
 
     virtual public void Init()

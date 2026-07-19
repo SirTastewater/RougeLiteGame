@@ -1,5 +1,6 @@
 using Godot;
 using RougeLiteGame.environment.rooms.room;
+using RougeLiteGame.environment.rooms.corridor;
 
 namespace RougeLiteGame.environment.rooms.room_3;
 public partial class ThreeDoorRoom : Room
@@ -110,5 +111,25 @@ public partial class ThreeDoorRoom : Room
 
 		Node tmp = this._roomAssets[0].Instantiate();
 		this.AddChild(tmp);
+
+		Corridor tmpCorridor = new Corridor(this.X,this.Y,this.NextRoomDirection);
+
+        this.AddChild(tmpCorridor);
+
+        tmpCorridor.Init();
+
+        tmpCorridor.Rotate();
+
+        tmpCorridor.UpdatePosition();
+
+		tmpCorridor = new Corridor(this.X,this.Y,this.SideRoomDirection);
+
+        this.AddChild(tmpCorridor);
+
+        tmpCorridor.Init();
+
+        tmpCorridor.Rotate();
+
+        tmpCorridor.UpdatePosition();
     }
 }
